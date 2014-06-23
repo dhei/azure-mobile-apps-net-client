@@ -4,24 +4,30 @@
 
 using System.Linq;
 
-using Microsoft.WindowsAzure.MobileServices.Test.Functional;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
     [Tag("push")]
-    public class Push : FunctionalTestBase
+    public class PushFunctional : FunctionalTestBase
     {
+        readonly IPushTestUtility pushTestUtility;
+
+        public PushFunctional()
+        {
+            this.pushTestUtility = TestPlatform.Instance.PushTestUtility;
+        }
+
         [TestMethod]
         public void InitialUnregisterAllAsync()
         {
-            var channelUri = PushHelper.GetChannel();
+            var channelUri = this.pushTestUtility.GetPushHandle();
             var push = this.GetClient().GetPush();
             push.UnregisterAllAsync(channelUri).Wait();
             var registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(channelUri).Result;
             Assert.IsFalse(registrations.Any(), "Deleting all registrations for a channel should ensure no registrations are returned by List");
 
-            channelUri = PushHelper.GetUpdatedChannel();
+            channelUri = this.pushTestUtility.GetUpdatedPushHandle();
             push.UnregisterAllAsync(channelUri).Wait();
             registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(channelUri).Result;
             Assert.IsFalse(registrations.Any(), "Deleting all registrations for a channel should ensure no registrations are returned by List");
@@ -30,7 +36,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         [TestMethod]
         public void RegisterNativeAsyncUnregisterNativeAsync()
         {
-            var channelUri = PushHelper.GetChannel();
+            var channelUri = this.pushTestUtility.GetPushHandle();
             var push = this.GetClient().GetPush();
             push.RegisterNativeAsync(channelUri).Wait();
             var registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(channelUri).Result;
@@ -53,8 +59,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             var mobileClient = this.GetClient();
             var push = mobileClient.GetPush();
-            var template = PushHelper.GetTemplateRegistrationForToast();
-            PushHelper.ValidateTemplateRegistrationBeforeRegister(template);
+            var template = this.pushTestUtility.GetTemplateRegistrationForToast();
+            this.pushTestUtility.ValidateTemplateRegistrationBeforeRegister(template);
             push.RegisterAsync(template).Wait();
             var registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(template.PushHandle).Result;
             Assert.AreEqual(registrations.Count(), 1, "1 registration should exist after RegisterNativeAsync");
@@ -65,7 +71,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 push.RegistrationManager.LocalStorageManager.GetRegistration(template.Name).RegistrationId,
                 "Local storage should have the same RegistrationId as the one returned from service");
 
-            PushHelper.ValidateTemplateRegistrationAfterRegister(registrationAfter, mobileClient.applicationInstallationId);
+            this.pushTestUtility.ValidateTemplateRegistrationAfterRegister(registrationAfter, mobileClient.applicationInstallationId);
 
             push.UnregisterTemplateAsync(template.Name).Wait();
             registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(template.PushHandle).Result;
@@ -80,8 +86,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             var mobileClient = this.GetClient();
             var push = mobileClient.GetPush();
-            var template = PushHelper.GetTemplateRegistrationForToast();
-            PushHelper.ValidateTemplateRegistrationBeforeRegister(template);
+            var template = this.pushTestUtility.GetTemplateRegistrationForToast();
+            this.pushTestUtility.ValidateTemplateRegistrationBeforeRegister(template);
             push.RegisterAsync((Registration)template).Wait();
             var registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(template.PushHandle).Result;
             Assert.AreEqual(registrations.Count(), 1, "1 registration should exist after RegisterNativeAsync");
@@ -92,9 +98,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 push.RegistrationManager.LocalStorageManager.GetRegistration(template.Name).RegistrationId,
                 "Local storage should have the same RegistrationId as the one returned from service");
 
-            PushHelper.ValidateTemplateRegistrationAfterRegister(registrationAfter, mobileClient.applicationInstallationId);
+            this.pushTestUtility.ValidateTemplateRegistrationAfterRegister(registrationAfter, mobileClient.applicationInstallationId);
             push.RegistrationManager.LocalStorageManager.IsRefreshNeeded = true;
-            template.PushHandle = PushHelper.GetUpdatedChannel();
+            template.PushHandle = this.pushTestUtility.GetUpdatedPushHandle();
 
             push.RegisterAsync((Registration)template).Wait();
             registrations = push.RegistrationManager.PushHttpClient.ListRegistrationsAsync(template.PushHandle).Result;

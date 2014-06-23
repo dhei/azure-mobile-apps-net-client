@@ -2,15 +2,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ----------------------------------------------------------------------------
 
+using Microsoft.WindowsAzure.MobileServices.TestFramework;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.WindowsAzure.MobileServices.TestFramework;
-
-namespace Microsoft.WindowsAzure.MobileServices.Test.Functional
+namespace Microsoft.WindowsAzure.MobileServices.Test
 {
-    class PushHelper
+    class PushTestUtility : IPushTestUtility
     {
         const string BodyTemplate = "<wp:Notification xmlns:wp=\"WPNotification\"><wp:Toast><wp:Text1>$(message)</wp:Text1><wp:Text2>Test message</wp:Text2></wp:Toast></wp:Notification>";
         const string DefaultToastTemplateName = "templateForToast";
@@ -21,23 +23,23 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Functional
         static readonly ReadOnlyDictionary<string, string> DefaultHeaders = new ReadOnlyDictionary<string, string>(new Dictionary<string, string> { { "X-MessageID", "TestMessageID" } });
         static readonly ReadOnlyDictionary<string, string> DetectedHeaders = new ReadOnlyDictionary<string, string>(new Dictionary<string, string> { { "X-WindowsPhone-Target", "toast" }, { "X-NotificationClass", "2" } });
 
-        public static string GetChannel()
+        public string GetPushHandle()
         {
             return DefaultChannelUri;
         }
 
-        public static string GetUpdatedChannel()
+        public string GetUpdatedPushHandle()
         {
             return DefaultChannelUri.Replace('A', 'B');
         }
 
-        public static Registration GetTemplateRegistrationForToast()
+        public Registration GetTemplateRegistrationForToast()
         {
-            var channel = GetChannel();
+            var channel = GetPushHandle();
             return new MpnsTemplateRegistration(channel, BodyTemplate, DefaultToastTemplateName, DefaultTags, DefaultHeaders);
         }
 
-        static void ValidateTemplateRegistration(Registration registration)
+        public void ValidateTemplateRegistration(Registration registration)
         {
             var mpnsTemplateRegistration = (MpnsTemplateRegistration)registration;
             Assert.AreEqual(mpnsTemplateRegistration.BodyTemplate, BodyTemplate);
@@ -65,19 +67,29 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Functional
             Assert.AreEqual(mpnsTemplateRegistration.TemplateName, DefaultToastTemplateName);
         }
 
-        public static void ValidateTemplateRegistrationBeforeRegister(Registration registration)
+        public void ValidateTemplateRegistrationBeforeRegister(Registration registration)
         {
             ValidateTemplateRegistration(registration);
             Assert.AreEqual(registration.Tags.Count, DefaultTags.Length);
             Assert.IsNull(registration.RegistrationId);
         }
 
-        public static void ValidateTemplateRegistrationAfterRegister(Registration registration, string zumoInstallationId)
+        public void ValidateTemplateRegistrationAfterRegister(Registration registration, string zumoInstallationId)
         {
             ValidateTemplateRegistration(registration);
             Assert.IsNotNull(registration.RegistrationId);
             Assert.IsTrue(registration.Tags.Contains(zumoInstallationId));
             Assert.AreEqual(registration.Tags.Count, DefaultTags.Length + 1);
+        }
+
+        public Registration GetNewNativeRegistration(string deviceId, IEnumerable<string> tags)
+        {
+            return new MpnsRegistration(deviceId, tags);
+        }
+
+        public Registration GetNewTemplateRegistration(string deviceId, string bodyTemplate, string templateName)
+        {
+            return new MpnsTemplateRegistration(deviceId, bodyTemplate, templateName);
         }
     }
 }
