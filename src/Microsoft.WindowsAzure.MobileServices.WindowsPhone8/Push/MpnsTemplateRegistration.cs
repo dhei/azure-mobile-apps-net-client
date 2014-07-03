@@ -15,16 +15,16 @@ namespace Microsoft.WindowsAzure.MobileServices
     /// Registration is used to define a target that is registered for notifications. A TemplateRegistration allows the client application
     /// to define the format of the registration.
     /// </summary>
-    [JsonObject]
-    public sealed class TemplateRegistration : Registration
+    [JsonObject(MemberSerialization.OptIn)]
+    public sealed class MpnsTemplateRegistration : MpnsRegistration
     {
         /// <summary>
-        /// Name of the MpnsHeader key for Windows Phone Notification Target
+        /// Name of the <see cref="MpnsHeaders"/> key for Windows Phone Notification Target
         /// </summary>
         internal const string NotificationType = "X-WindowsPhone-Target";
 
         /// <summary>
-        /// Name of the MpnsHeader key for Windows Phone Notification Class
+        /// Name of the <see cref="MpnsHeaders"/> key for Windows Phone Notification Class
         /// </summary>
         internal const string NotificationClass = "X-NotificationClass";
 
@@ -36,7 +36,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         internal const string ToastClass = "2";
         internal const string RawClass = "3";
 
-        internal TemplateRegistration()
+        internal MpnsTemplateRegistration()
         {
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="channelUri">The channel uri</param>
         /// <param name="bodyTemplate">The template xml in string format</param>
         /// <param name="templateName">The template name</param>
-        public TemplateRegistration(string channelUri, string bodyTemplate, string templateName)
+        public MpnsTemplateRegistration(string channelUri, string bodyTemplate, string templateName)
             : this(channelUri, bodyTemplate, templateName, null, null)
         {
         }
@@ -58,7 +58,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="bodyTemplate">The template xml in string format</param>
         /// <param name="templateName">The template name</param>
         /// <param name="tags">The tags that restrict which notifications this registration will receive</param>
-        public TemplateRegistration(string channelUri, string bodyTemplate, string templateName, IEnumerable<string> tags)
+        public MpnsTemplateRegistration(string channelUri, string bodyTemplate, string templateName, IEnumerable<string> tags)
             : this(channelUri, bodyTemplate, templateName, tags, null)
         {
         }
@@ -71,7 +71,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="templateName">The template name</param>
         /// <param name="tags">The tags that restrict which notifications this registration will receive</param>
         /// <param name="additionalHeaders">Additional headers</param>
-        public TemplateRegistration(string channelUri, string bodyTemplate, string templateName, IEnumerable<string> tags, IEnumerable<KeyValuePair<string, string>> additionalHeaders)
+        public MpnsTemplateRegistration(string channelUri, string bodyTemplate, string templateName, IEnumerable<string> tags, IEnumerable<KeyValuePair<string, string>> additionalHeaders)
             : base(channelUri, tags)
         {
             if (string.IsNullOrWhiteSpace(templateName))
@@ -84,7 +84,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                 throw new ArgumentNullException("bodyTemplate");
             }
 
-            if (templateName.Equals(Registration.NativeRegistrationName))
+            if (templateName.Equals(MpnsRegistration.NativeRegistrationName))
             {
                 throw new ArgumentException(Resources.Push_ConflictWithReservedName);
             }
@@ -111,6 +111,12 @@ namespace Microsoft.WindowsAzure.MobileServices
             this.MpnsHeaders = new ReadOnlyDictionary<string, string>(this.MpnsHeaders);
         }
 
+        private enum TemplateRegistrationType
+        {
+            Toast,
+            Tile
+        }
+
         /// <summary>
         /// Gets headers that should be sent to WNS with the notification
         /// </summary>
@@ -128,6 +134,17 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </summary>
         [JsonProperty(PropertyName = "templateBody")]
         public string BodyTemplate { get; private set; }
+
+        /// <summary>
+        /// The name of the registration used in local storage.
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return this.TemplateName;
+            }
+        }
 
         private void DetectBodyType()
         {
@@ -192,20 +209,6 @@ namespace Microsoft.WindowsAzure.MobileServices
                         break;
                 }
             }
-        }
-
-        internal override string Name
-        {
-            get
-            {
-                return this.TemplateName;
-            }
-        }
-
-        enum TemplateRegistrationType
-        {
-            Toast,
-            Tile
-        }
+        }        
     }
 }

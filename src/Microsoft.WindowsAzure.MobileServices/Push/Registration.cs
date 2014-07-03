@@ -5,46 +5,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 using Newtonsoft.Json;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
     /// <summary>
-    /// Registration is used to define a target that is registered for notifications
+    /// RegistrationBase is used as the base class for common properties existing in all Registration types to define a target that is registered for notifications.
     /// </summary>
-    [KnownType(typeof(TemplateRegistration))]
     [JsonObject(MemberSerialization.OptIn)]
     public class Registration
     {
         internal const string NativeRegistrationName = "$Default";
-
-        internal const string PlatformConstant = "wns";
 
         internal Registration()
         {
         }
 
         /// <summary>
-        /// Create a default Registration for a channelUri
+        /// Common Registration constructor for common properties
         /// </summary>
-        /// <param name="channelUri">The channel uri</param>
-        public Registration(string channelUri)
-            : this(channelUri, null)
+        public Registration(string deviceId, IEnumerable<string> tags)
         {
-        }
-
-        /// <summary>
-        /// Create a default Registration for a channelUri with specific tags
-        /// </summary>
-        /// <param name="channelUri">The channel uri</param>
-        /// <param name="tags">The tags to register to receive notifications from</param>
-        public Registration(string channelUri, IEnumerable<string> tags)
-        {
-            if (string.IsNullOrWhiteSpace(channelUri))
+            if (string.IsNullOrWhiteSpace(deviceId))
             {
-                throw new ArgumentNullException("channelUri");
+                throw new ArgumentNullException("deviceId");
             }
 
             if (tags != null)
@@ -55,16 +40,19 @@ namespace Microsoft.WindowsAzure.MobileServices
                 }
             }
 
-            this.ChannelUri = channelUri;
+            this.PushHandle = deviceId;
             this.Tags = tags != null ? new HashSet<string>(tags) : new HashSet<string>();
         }
 
+        /// <summary>
+        /// The platform's name for its push notifcation system.
+        /// </summary>
         [JsonProperty(PropertyName = "platform")]
-        internal string Platform
+        public string Platform
         {
             get
             {
-                return PlatformConstant;
+                return Microsoft.WindowsAzure.MobileServices.Platform.Instance.PushUtility.GetPlatform();
             }
         }
 
@@ -73,26 +61,38 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// are annotated with one of the specified tags. Note that a tag with a comma in it will be split into two tags.
         /// </summary>
         [JsonProperty(PropertyName = "tags")]
-        public ISet<string> Tags { get; internal set; }
+        public IEnumerable<string> Tags { get; private set; }
 
         /// <summary>
-        /// The Uri of the Channel returned by the Push Notification Channel Manager.
+        /// The push handle used to address the device by the push notification service (Possibly nonunique)
         /// </summary>
         [JsonProperty(PropertyName = "deviceId")]
-        public string ChannelUri { get; set; }
+        public string PushHandle { get; internal set; }
 
         /// <summary>
         /// The registration id.
         /// </summary>
         [JsonProperty(PropertyName = "registrationId")]
-        public string RegistrationId { get; internal set; }
+        public string RegistrationId { get; internal set; }        
 
-        internal virtual string Name
+        /// <summary>
+        /// The name of the registration is stored locally with the registrationId
+        /// </summary>
+        public virtual string Name
         {
             get
             {
                 return NativeRegistrationName;
             }
+        }
+
+        /// <summary>
+        /// Internal--Helper method hinting to Json.Net that RegistrationId should not be serialized
+        /// </summary>
+        /// <returns>false</returns>
+        public bool ShouldSerializeRegistrationId()
+        {
+            return false;
         }
     }
 }
