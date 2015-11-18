@@ -193,14 +193,12 @@
     <Reference Include="Microsoft.Live">
       <HintPath>..\..\packages\LiveSDK.5.6.2\WindowsXAML\Microsoft.Live.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-2\lib\netcore45\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile">
+      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-3\lib\netcore45\Microsoft.WindowsAzure.Mobile.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-2\lib\netcore45\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext">
+      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-3\lib\netcore45\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.SQLiteStore">
