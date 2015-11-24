@@ -185,7 +185,7 @@
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.WinRT81, Version=3.8.9">
+    <SDKReference Include="SQLite.WinRT81, Version=3.9.2">
       <Name>SQLite for Windows Runtime %28Windows 8.1%29</Name>
     </SDKReference>
   </ItemGroup>
@@ -193,14 +193,12 @@
     <Reference Include="Microsoft.Live">
       <HintPath>..\..\packages\LiveSDK.5.6.2\WindowsXAML\Microsoft.Live.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-2\lib\netcore45\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile">
+      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-3\lib\netcore45\Microsoft.WindowsAzure.Mobile.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-2\lib\netcore45\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext">
+      <HintPath>..\..\packages\WindowsAzure.MobileServices.2.0.0-beta-3\lib\netcore45\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.SQLiteStore">
