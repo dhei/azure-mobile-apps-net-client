@@ -4,6 +4,8 @@
 
 using System;
 using System.Globalization;
+using System.Reflection;
+using System.Linq;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
@@ -77,6 +79,17 @@ namespace Microsoft.WindowsAzure.MobileServices
             get
             {
                 return false;
+            }
+        }
+
+        public string Version
+        {
+            get
+            {
+                var attribute = typeof(CurrentPlatform).Assembly
+                    .GetCustomAttributes(typeof(AssemblyFileVersionAttribute)).FirstOrDefault() as AssemblyFileVersionAttribute;
+
+                return attribute != null ? attribute.Version : string.Empty;
             }
         }
     }

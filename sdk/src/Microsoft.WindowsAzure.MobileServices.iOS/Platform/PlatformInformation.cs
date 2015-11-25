@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 #if __UNIFIED__
 using UIKit;
 #else
@@ -48,6 +49,17 @@ namespace Microsoft.WindowsAzure.MobileServices
             get
             {
                 return (UIDevice.CurrentDevice.Model.ToLower().Contains ("simulator"));
+            }
+        }
+
+        public string Version
+        {
+            get
+            {
+                var attribute = typeof(CurrentPlatform).GetTypeInfo().Assembly
+                    .GetCustomAttributes(typeof(AssemblyFileVersionAttribute)).FirstOrDefault() as AssemblyFileVersionAttribute;
+
+                return attribute != null ? attribute.Version : string.Empty;
             }
         }
     }
