@@ -38,10 +38,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             get
             {
-                var attribute = typeof(CurrentPlatform).GetTypeInfo().Assembly
-                    .GetCustomAttributes(typeof(AssemblyFileVersionAttribute)).FirstOrDefault() as AssemblyFileVersionAttribute;
-
-                return attribute != null ? attribute.Version : string.Empty;
+                return this.GetVersionFromAssemblyFileVersion();
             }
         }
     }
