@@ -335,7 +335,10 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                 await this.TryUpdateOperation(error, item);
                 if (error.OperationKind != MobileServiceTableOperationKind.Delete)
                 {
-                    await this.Store.UpsertAsync(error.TableName, item, fromServer: true);
+                    using (var trackedStore = StoreChangeTrackerFactory.CreateTrackedStore(this.Store, StoreOperationSource.LocalConflictResolution, this.storeTrackingOptions, this.client.EventManager, this.settings))
+                    {
+                        await trackedStore.UpsertAsync(error.TableName, item, fromServer: true);
+                    }
                 }
             });
         }
