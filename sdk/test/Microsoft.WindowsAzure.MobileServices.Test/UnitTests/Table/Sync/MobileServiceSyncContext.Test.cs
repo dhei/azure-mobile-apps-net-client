@@ -686,6 +686,56 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await ConflictOperation_WithNotificationsEnabled_UsesTheCorrectStoreOperationSource(
                 async (context, error) => await context.CancelAndUpdateItemAsync(error, new JObject() { { "id", string.Empty } }));
         }
+        
+        [AsyncTestMethod]
+        private async Task UpdateOperationAsync_ConflictOperation_WithNotificationsEnabled_UsesTheCorrectStoreSource()
+        {                        
+            var client = new MobileServiceClient("http://www.test.com");
+            var store = new MobileServiceLocalStoreMock();
+            var context = new MobileServiceSyncContext(client);
+            await context.InitializeAsync(store, StoreTrackingOptions.NotifyLocalConflictResolutionOperations);
+            var manualResetEvent = new ManualResetEventSlim();
+
+            string operationId = "abc";
+            string itemId = "def";
+            string tableName = "test";
+
+
+            store.TableMap[MobileServiceLocalSystemTables.SyncErrors] = new Dictionary<string, JObject>() { { operationId, new JObject() { { "id", operationId }, { "version", 1 } } } };
+            store.TableMap[MobileServiceLocalSystemTables.OperationQueue].Add(operationId, new JObject() { { "id", operationId }, { "version", 1 } });
+            store.TableMap.Add(tableName, new Dictionary<string, JObject>() { { itemId, new JObject() } });
+
+            // operation exists before cancel
+            Assert.IsNotNull(await store.LookupAsync(MobileServiceLocalSystemTables.OperationQueue, operationId));
+            // item exists before upsert
+            Assert.IsNotNull(await store.LookupAsync(tableName, itemId));
+
+
+            var error = new MobileServiceTableOperationError(operationId,
+                                                             1,
+                                                             MobileServiceTableOperationKind.Update,
+                                                             HttpStatusCode.Conflict,
+                                                             tableName,
+                                                             item: new JObject() { { "id", itemId } },
+                                                             rawResult: "{}",
+                                                             result: new JObject());
+            var item = new JObject() { { "id", itemId }, { "name", "unknown" } };                       
+            
+            bool sourceIsLocalConflict = false;
+            IDisposable subscription = client.EventManager.Subscribe<StoreOperationCompletedEvent>(o =>
+            {
+                sourceIsLocalConflict = o.Operation.Source == StoreOperationSource.LocalConflictResolution;
+                manualResetEvent.Set();
+            });
+
+            await context.UpdateOperationAsync(error, item);
+
+            bool resetEventSignaled = manualResetEvent.Wait(1000);
+            subscription.Dispose();
+
+            Assert.IsTrue(resetEventSignaled);
+            Assert.IsTrue(sourceIsLocalConflict);
+        }
 
         private async Task ConflictOperation_WithNotificationsEnabled_UsesTheCorrectStoreOperationSource(Func<MobileServiceSyncContext, MobileServiceTableOperationError, Task> handler)
         {
