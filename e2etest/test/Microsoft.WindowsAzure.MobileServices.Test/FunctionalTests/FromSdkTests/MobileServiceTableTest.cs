@@ -394,7 +394,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                 Assert.IsNotNull(exception);
                 Assert.AreEqual(exception.Response.StatusCode, HttpStatusCode.NotFound);
-                Assert.IsTrue(exception.Message.Contains(string.Format("Error: An item with id '{0}' does not exist.", testId)) ||
+                Assert.IsTrue(exception.Message == "The item does not exist" ||
                               exception.Message == "The request could not be completed.  (Not Found)");
             }
         }
@@ -602,19 +602,19 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             foreach (string testId in testIdData)
             {
                 // Filter
-                Exception exception = null;
+                MobileServiceInvalidOperationException exception = null;
                 try
                 {
                     IEnumerable<ToDoWithStringIdAgainstIntIdTable> results = await stringIdTable.Where(p => p.Id == testId).ToEnumerableAsync();
                     ToDoWithStringIdAgainstIntIdTable[] items = results.ToArray();
                 }
-                catch (Exception e)
+                catch (MobileServiceInvalidOperationException e)
                 {
                     exception = e;
                 }
 
                 Assert.IsNotNull(exception);
-                Assert.IsTrue(exception.Message.Contains("Bad request"));
+                Assert.Equals(exception.Response.StatusCode, HttpStatusCode.BadRequest);
 
                 // Refresh
                 exception = null;
@@ -623,28 +623,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     ToDoWithStringIdAgainstIntIdTable item = new ToDoWithStringIdAgainstIntIdTable() { Id = testId, Name = "Hey!" };
                     await stringIdTable.RefreshAsync(item);
                 }
-                catch (Exception e)
+                catch (MobileServiceInvalidOperationException e)
                 {
                     exception = e;
                 }
 
                 Assert.IsNotNull(exception);
-                Assert.IsTrue(exception.Message.Contains("Bad request"));
-
-                // Insert
-                exception = null;
-                try
-                {
-                    ToDoWithStringIdAgainstIntIdTable item = new ToDoWithStringIdAgainstIntIdTable() { Id = testId, Name = "Hey!" };
-                    await stringIdTable.InsertAsync(item);
-                }
-                catch (Exception e)
-                {
-                    exception = e;
-                }
-
-                Assert.IsNotNull(exception);
-                Assert.IsTrue(exception.Message.Contains("Error: A value cannot be specified for property 'id'"));
+                Assert.Equals(exception.Response.StatusCode, HttpStatusCode.BadRequest);
 
                 // Lookup
                 exception = null;
@@ -652,13 +637,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 {
                     await stringIdTable.LookupAsync(testId);
                 }
-                catch (Exception e)
+                catch (MobileServiceInvalidOperationException e)
                 {
                     exception = e;
                 }
 
                 Assert.IsNotNull(exception);
-                Assert.IsTrue(exception.Message.Contains("Error: The value specified for 'id' must be a number."));
+                Assert.Equals(exception.Response.StatusCode, HttpStatusCode.BadRequest);
 
                 // Update
                 exception = null;
@@ -667,13 +652,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     ToDoWithStringIdAgainstIntIdTable item = new ToDoWithStringIdAgainstIntIdTable() { Id = testId, Name = "Hey!" };
                     await stringIdTable.UpdateAsync(item);
                 }
-                catch (Exception e)
+                catch (MobileServiceInvalidOperationException e)
                 {
                     exception = e;
                 }
 
                 Assert.IsNotNull(exception);
-                Assert.IsTrue(exception.Message.Contains("Error: The value specified for 'id' must be a number."));
+                Assert.Equals(exception.Response.StatusCode, HttpStatusCode.BadRequest);
 
                 // Delete
                 exception = null;
@@ -682,13 +667,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     ToDoWithStringIdAgainstIntIdTable item = new ToDoWithStringIdAgainstIntIdTable() { Id = testId, Name = "Hey!" };
                     await stringIdTable.DeleteAsync(item);
                 }
-                catch (Exception e)
+                catch (MobileServiceInvalidOperationException e)
                 {
                     exception = e;
                 }
 
                 Assert.IsNotNull(exception);
-                Assert.IsTrue(exception.Message.Contains("Error: The value specified for 'id' must be a number."));
+                Assert.Equals(exception.Response.StatusCode, HttpStatusCode.BadRequest);
             }
 
             foreach (ToDoWithIntId integerIdItem in integerIdItems)
@@ -951,7 +936,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             await allSystemPropertiesTable.DeleteAsync(item);
         }
- 
+
         [AsyncTestMethod]
         public async Task AsyncFilterSelectOrderingOperationsNotImpactedBySystemProperties()
         {
