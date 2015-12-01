@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: ComVisible(false)]
 [assembly: GuidAttribute("02EEF75A-D824-4203-B243-C1B97B0D35A9")]
 #if Sign
