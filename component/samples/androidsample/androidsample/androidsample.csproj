@@ -17,7 +17,6 @@
     <AssemblyName>androidsample</AssemblyName>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
@@ -108,17 +107,6 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="RestorePackages">
-    <Exec Command="NuGet restore ..\androidsample.sln" />
-  </Target>
-  <Target Name="Build" DependsOnTargets="RestorePackages">
-    <MSBuild Targets="Build"
-             Projects="@(Solution)" />
-  </Target>
-  <Target Name="Rebuild" DependsOnTargets="RestorePackages">
-    <MSBuild Targets="Rebuild"
-             Projects="@(Solution)" />
-  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
