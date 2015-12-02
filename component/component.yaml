@@ -1,53 +1,22 @@
-﻿id: azure-mobile-services
-version: 1.2.1
-name: Azure Mobile Services
+﻿id: azure-mobile-client
+is_shell: true
+version: 2.0.0
+name: Azure Mobile Client SDK
 publisher: Microsoft
-publisher-url: http://www.windowsazure.com/en-us/develop/mobile/
+publisher-url: https://azure.microsoft.com/en-us/documentation/services/app-service/mobile/
 summary: Store data in the cloud, authenticate users, and send push notifications.
 license: LICENSE.md
 details: Details.md
+packages:
+  mobile: Microsoft.Azure.Mobile.Client, Version=2.0.0
 getting-started: GettingStarted.md
 icons:
-  - azure-mobile-services_512x512.png
-  - azure-mobile-services_128x128.png
-libraries:
-  ios: 
-    - ..\..\bin\Signed\Release\Managed\iOS-Classic\Microsoft.WindowsAzure.Mobile.dll
-    - ..\..\bin\Signed\Release\Managed\iOS-Classic\Microsoft.WindowsAzure.Mobile.Ext.dll    
-    - ..\..\bin\Signed\Release\Managed\iOS-Classic\Newtonsoft.Json.dll    
-    - ..\..\bin\Signed\Release\Managed\iOS-Classic\System.Net.Http.Extensions.dll
-    - ..\..\bin\Signed\Release\Managed\iOS-Classic\System.Net.Http.Primitives.dll
-  ios-unified: 
-    - ..\..\bin\Signed\Release\Managed\iOS\Microsoft.WindowsAzure.Mobile.dll
-    - ..\..\bin\Signed\Release\Managed\iOS\Microsoft.WindowsAzure.Mobile.Ext.dll    
-    - ..\..\bin\Signed\Release\Managed\iOS\Newtonsoft.Json.dll    
-    - ..\..\bin\Signed\Release\Managed\iOS\System.Net.Http.Extensions.dll
-    - ..\..\bin\Signed\Release\Managed\iOS\System.Net.Http.Primitives.dll
-  android:
-    - ..\..\bin\Signed\Release\Managed\Android\Microsoft.WindowsAzure.Mobile.dll
-    - ..\..\bin\Signed\Release\Managed\Android\Microsoft.WindowsAzure.Mobile.Ext.dll    
-    - ..\..\bin\Signed\Release\Managed\Android\Newtonsoft.Json.dll
-    - ..\..\bin\Signed\Release\Managed\Android\System.Net.Http.Extensions.dll
-    - ..\..\bin\Signed\Release\Managed\Android\System.Net.Http.Primitives.dll
-  mobile:
-    - ..\..\bin\Signed\Release\Managed\Portable\Microsoft.WindowsAzure.Mobile.dll
-    - ..\..\bin\Signed\Release\Managed\Portable\Newtonsoft.Json.dll
+  - azure-mobile-client_512x512.png
+  - azure-mobile-client_128x128.png
 samples:
-  - name: Android Sample
-    path: samples\androidsample\androidsample.sln
-  - name: iOS Unified API Sample
+  - name: Azure Mobile Apps Xamarin iOS Sample
     path: samples\iOSsample\iOSsample.sln
+  - name: Azure Mobile Apps Xamarin Android Sample
+    path: samples\androidsample\androidsample.sln
 screenshots:
-  - screenshots/WAMS-New.PNG
-  - screenshots/WAMS-SQLdb1.png
-  - screenshots/WAMS-SQLdb2.png
-  - screenshots/WAMS-userauth.png
-  - screenshots/WAMS-push1.png
-  - screenshots/WAMS-push2.png
-  - screenshots/WAMS-Create.png
-  - screenshots/WAMS-Script1.png
-  - screenshots/WAMS-Script2.png
-  - screenshots/WAMS-Scheduler2.png
-  - screenshots/WAMS-Keys.png
-  - screenshots/WAMS-EmptyData.png
-  - screenshots/WAMS-DataPermissions.png
+  - screenshots/azure-mobile-client.PNG

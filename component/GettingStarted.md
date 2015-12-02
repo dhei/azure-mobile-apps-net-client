@@ -2,27 +2,27 @@
 
 Follow the tutorial for the appropriate platform:
 
-- [Xamarin.iOS](https://www.windowsazure.com/en-us/develop/mobile/tutorials/get-started-xamarin-ios/)
-- [Xamarin.Android](https://www.windowsazure.com/en-us/develop/mobile/tutorials/get-started-xamarin-android/)
+- [Xamarin.iOS](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-xamarin-ios-get-started/)
+- [Xamarin.Android](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-xamarin-android-get-started/)
+- [Xamarin.Forms](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-xamarin-forms-get-started/)
 
 ### Source Code
 
-- GitHub: https://github.com/WindowsAzure/azure-mobile-services
+- GitHub: https://github.com/Azure/azure-mobile-apps-net-client
 
 ### Documentation
 
 - Tutorials: https://www.windowsazure.com/en-us/develop/mobile/resources/
-- Developer Center: http://www.windowsazure.com/mobile
-- API Library: http://msdn.microsoft.com/en-us/library/windowsazure/jj710108.aspx
-- Xamarin Mobile Services client framework GitHub Repo: https://github.com/xamarin/azure-mobile-services
+- Developer Center: https://azure.microsoft.com/en-us/documentation/services/app-service/mobile/
+- API Library: https://msdn.microsoft.com/en-us/library/azure/dn961176.aspx
 
 ### Contact
 
 - Developer Forum: http://social.msdn.microsoft.com/Forums/en-US/azuremobile/threads
-- Feature Requests: http://mobileservices.uservoice.com
+- Feature Requests: https://feedback.azure.com/forums/216254-mobile-apps-formerly-mobile-services
 - Contact: mobileservices@microsoft.com
-- Twitter: @paulbatum @joshtwist @cloudnick @chrisrisner @mlunes90
+- Twitter: @AzureMobile
 
 ###Legal 
 
-- Terms & Conditions: http://www.windowsazure.com/en-us/support/legal/
+- Terms & Conditions: https://azure.microsoft.com/en-us/support/legal/

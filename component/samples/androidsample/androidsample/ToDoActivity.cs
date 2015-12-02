@@ -55,7 +55,7 @@ namespace androidsample
 				CurrentPlatform.Init ();
 
 				// Create the Mobile Service Client instance, using the provided
-				// Mobile Service URL and key
+				// Mobile Service URL
 				client = new MobileServiceClient (
 					applicationURL,
 					progressHandler);

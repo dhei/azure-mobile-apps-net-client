@@ -19,7 +19,7 @@ namespace iOSsample
 		{
 			CurrentPlatform.Init ();
 
-			// Initialize the Mobile Service client with your URL and key
+			// Initialize the Mobile Service client with your URL
 			client = new MobileServiceClient (applicationURL, this);
 
 			// Create an MSTable instance to allow us to work with the TodoItem table
