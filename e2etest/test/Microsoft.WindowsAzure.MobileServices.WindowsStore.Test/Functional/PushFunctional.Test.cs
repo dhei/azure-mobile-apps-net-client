@@ -154,36 +154,36 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
         }
 
-        [AsyncTestMethod]
-        public async Task RegisterAsyncMultiple()
-        {
-            var channelUri = await this.GetChannelUri();
-            JObject templates = GetTemplates("foo");
-            var push = this.GetClient().GetPush();
+        //[AsyncTestMethod]
+        //public async Task RegisterAsyncMultiple()
+        //{
+        //    var channelUri = await this.GetChannelUri();
+        //    JObject templates = GetTemplates("foo");
+        //    var push = this.GetClient().GetPush();
 
-            await push.RegisterAsync(channelUri);
-            await push.RegisterAsync(channelUri, templates);
-            await push.RegisterAsync(channelUri);
+        //    await push.RegisterAsync(channelUri);
+        //    await push.RegisterAsync(channelUri, templates);
+        //    await push.RegisterAsync(channelUri);
 
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
-            {
-                {"channelUri", channelUri},
-            };
+        //    Dictionary<string, string> parameters = new Dictionary<string, string>()
+        //    {
+        //        {"channelUri", channelUri},
+        //    };
 
-            try
-            {
-                //Verifies templates are removed from the installation registration
-                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
-            }
-            finally
-            {
-                push.UnregisterAsync().Wait();
-            }
-        }
+        //    try
+        //    {
+        //        //Verifies templates are removed from the installation registration
+        //        await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
+        //    }
+        //    catch (MobileServiceInvalidOperationException)
+        //    {
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        push.UnregisterAsync().Wait();
+        //    }
+        //}
 
 
         [AsyncTestMethod]
