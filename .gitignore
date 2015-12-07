@@ -2,7 +2,6 @@
 xpkg
 *.suo
 lib
-*.suo
 *.csproj.user
 *.vbproj.user
 *.userprefs
@@ -13,3 +12,4 @@ packages
 .nuget/nuget.exe
 src/*/Strings/*
 Components
+*.pfx #certs are binary
