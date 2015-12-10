@@ -258,9 +258,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             var dummyUser = await mobileServiceClient.InvokeApiAsync("JwtTokenGenerator", HttpMethod.Get, null);
 
-            MobileServiceUser user = new MobileServiceUser((string)dummyUser["token"]["payload"]["uid"])
+            MobileServiceUser user = new MobileServiceUser((string)dummyUser["userId"])
             {
-                MobileServiceAuthenticationToken = (string)dummyUser["token"]["rawData"]
+                MobileServiceAuthenticationToken = (string)dummyUser["authenticationToken"]
             };
             return user;
         }
