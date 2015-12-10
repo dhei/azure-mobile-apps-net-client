@@ -9,6 +9,7 @@ license: LICENSE.md
 details: Details.md
 packages:
   mobile: Microsoft.Azure.Mobile.Client, Version=2.0.0
+  ios-unified: Microsoft.Azure.Mobile.Client, Version=2.0.0
 getting-started: GettingStarted.md
 icons:
   - azure-mobile-client_512x512.png
