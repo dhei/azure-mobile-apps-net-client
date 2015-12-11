@@ -64,14 +64,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             var push = this.GetClient().GetPush();
             await push.UnregisterAsync();
-            try
-            {
-                await this.GetClient().InvokeApiAsync("verifyUnregisterInstallationResult", HttpMethod.Get, null);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
-            }
+            await this.GetClient().InvokeApiAsync("verifyUnregisterInstallationResult", HttpMethod.Get, null);
         }
 
         [AsyncTestMethod]
@@ -125,7 +118,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 };
                 await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
             }
-
             finally
             {
                 push.UnregisterAsync().Wait();
@@ -138,10 +130,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             try
             {
                 await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
             }
             finally
             {
