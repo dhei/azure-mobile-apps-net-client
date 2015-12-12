@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices.Query;
 using Microsoft.WindowsAzure.MobileServices.Sync;
@@ -29,6 +30,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 
         private Dictionary<string, TableDefinition> tableMap = new Dictionary<string, TableDefinition>(StringComparer.OrdinalIgnoreCase);
         private SQLiteConnection connection;
+        private readonly SemaphoreSlim transactionSemaphore = new SemaphoreSlim(1, 1);
 
         protected MobileServiceSQLiteStore() { }
 
@@ -148,14 +150,14 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             return UpsertAsyncInternal(tableName, items, ignoreMissingColumns);
         }
 
-        private Task UpsertAsyncInternal(string tableName, IEnumerable<JObject> items, bool ignoreMissingColumns)
+        private async Task UpsertAsyncInternal(string tableName, IEnumerable<JObject> items, bool ignoreMissingColumns)
         {
             TableDefinition table = GetTable(tableName);
 
             var first = items.FirstOrDefault();
             if (first == null)
             {
-                return Task.FromResult(0);
+                return;
             }
 
             // Get the columns which we want to map into the database.
@@ -180,18 +182,24 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             if (columns.Count == 0)
             {
                 // no query to execute if there are no columns in the table
-                return Task.FromResult(0);
+                return;
             }
 
+            try
+            {
+                await this.transactionSemaphore.WaitAsync();
 
-            this.ExecuteNonQuery("BEGIN TRANSACTION", null);
+                this.ExecuteNonQuery("BEGIN TRANSACTION", null);
 
-            BatchInsert(tableName, items, columns.Where(c => c.Name.Equals(MobileServiceSystemColumns.Id)).Take(1).ToList());
-            BatchUpdate(tableName, items, columns);
+                BatchInsert(tableName, items, columns.Where(c => c.Name.Equals(MobileServiceSystemColumns.Id)).Take(1).ToList());
+                BatchUpdate(tableName, items, columns);
 
-            this.ExecuteNonQuery("COMMIT TRANSACTION", null);
-
-            return Task.FromResult(0);
+                this.ExecuteNonQuery("COMMIT TRANSACTION", null);
+            }
+            finally
+            {
+                this.transactionSemaphore.Release();
+            }
         }
 
         /// <summary>
