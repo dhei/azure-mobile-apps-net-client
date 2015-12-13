@@ -30,7 +30,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 
         private Dictionary<string, TableDefinition> tableMap = new Dictionary<string, TableDefinition>(StringComparer.OrdinalIgnoreCase);
         private SQLiteConnection connection;
-        private readonly SemaphoreSlim transactionSemaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim operationSemaphore = new SemaphoreSlim(1, 1);
 
         protected MobileServiceSQLiteStore() { }
 
@@ -109,22 +109,37 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             var formatter = new SqlQueryFormatter(query);
             string sql = formatter.FormatSelect();
 
-            IList<JObject> rows = this.ExecuteQuery(query.TableName, sql, formatter.Parameters);
-            JToken result = new JArray(rows.ToArray());
+            return this.operationSemaphore.WaitAsync()
+                .ContinueWith(t =>
+                {
+                    try
+                    {
+                        IList<JObject> rows = this.ExecuteQuery(query.TableName, sql, formatter.Parameters);
+                        JToken result = new JArray(rows.ToArray());
 
-            if (query.IncludeTotalCount)
-            {
-                sql = formatter.FormatSelectCount();
-                IList<JObject> countRows = this.ExecuteQuery(query.TableName, sql, formatter.Parameters);
-                long count = countRows[0].Value<long>("count");
-                result = new JObject() 
-                { 
-                    { "results", result },
-                    { "count", count}
-                };
-            }
+                        if (query.IncludeTotalCount)
+                        {
+                            sql = formatter.FormatSelectCount();
+                            IList<JObject> countRows = null;
 
-            return Task.FromResult(result);
+                            countRows = this.ExecuteQuery(query.TableName, sql, formatter.Parameters);
+
+
+                            long count = countRows[0].Value<long>("count");
+                            result = new JObject() 
+                            { 
+                                { "results", result }, 
+                                { "count", count } 
+                            };
+                        }
+
+                        return result;
+                    }
+                    finally
+                    {
+                        this.operationSemaphore.Release();
+                    }
+                });
         }
 
         /// <summary>
@@ -150,14 +165,14 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             return UpsertAsyncInternal(tableName, items, ignoreMissingColumns);
         }
 
-        private async Task UpsertAsyncInternal(string tableName, IEnumerable<JObject> items, bool ignoreMissingColumns)
+        private Task UpsertAsyncInternal(string tableName, IEnumerable<JObject> items, bool ignoreMissingColumns)
         {
             TableDefinition table = GetTable(tableName);
 
             var first = items.FirstOrDefault();
             if (first == null)
             {
-                return;
+                return Task.FromResult(0);
             }
 
             // Get the columns which we want to map into the database.
@@ -182,24 +197,26 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             if (columns.Count == 0)
             {
                 // no query to execute if there are no columns in the table
-                return;
+                return Task.FromResult(0);
             }
 
-            try
-            {
-                await this.transactionSemaphore.WaitAsync();
+            return this.operationSemaphore.WaitAsync()
+                .ContinueWith(t =>
+                {
+                    try
+                    {
+                        this.ExecuteNonQuery("BEGIN TRANSACTION", null);
 
-                this.ExecuteNonQuery("BEGIN TRANSACTION", null);
+                        BatchInsert(tableName, items, columns.Where(c => c.Name.Equals(MobileServiceSystemColumns.Id)).Take(1).ToList());
+                        BatchUpdate(tableName, items, columns);
 
-                BatchInsert(tableName, items, columns.Where(c => c.Name.Equals(MobileServiceSystemColumns.Id)).Take(1).ToList());
-                BatchUpdate(tableName, items, columns);
-
-                this.ExecuteNonQuery("COMMIT TRANSACTION", null);
-            }
-            finally
-            {
-                this.transactionSemaphore.Release();
-            }
+                        this.ExecuteNonQuery("COMMIT TRANSACTION", null);
+                    }
+                    finally
+                    {
+                        this.operationSemaphore.Release();
+                    }
+                });
         }
 
         /// <summary>
@@ -219,9 +236,18 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             var formatter = new SqlQueryFormatter(query);
             string sql = formatter.FormatDelete();
 
-            this.ExecuteNonQuery(sql, formatter.Parameters);
-
-            return Task.FromResult(0);
+            return this.operationSemaphore.WaitAsync()
+                .ContinueWith(t =>
+                {
+                    try
+                    {
+                        this.ExecuteNonQuery(sql, formatter.Parameters);
+                    }
+                    finally
+                    {
+                        this.operationSemaphore.Release();
+                    }
+                });
         }
 
         /// <summary>
@@ -258,8 +284,18 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 parameters.Add("@id" + (j++), id);
             }
 
-            this.ExecuteNonQuery(sql, parameters);
-            return Task.FromResult(0);
+            return this.operationSemaphore.WaitAsync()
+               .ContinueWith(t =>
+               {
+                   try
+                   {
+                       this.ExecuteNonQuery(sql, parameters);
+                   }
+                   finally
+                   {
+                       this.operationSemaphore.Release();
+                   }
+               });
         }
 
         /// <summary>
@@ -287,9 +323,19 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 {"@id", id}
             };
 
-            IList<JObject> results = this.ExecuteQuery(tableName, sql, parameters);
-
-            return Task.FromResult(results.FirstOrDefault());
+            return this.operationSemaphore.WaitAsync()
+                .ContinueWith(t =>
+                {
+                    try
+                    {
+                        IList<JObject> results = this.ExecuteQuery(tableName, sql, parameters);
+                        return results.FirstOrDefault();
+                    }
+                    finally
+                    {
+                        this.operationSemaphore.Release();
+                    }
+                });
         }
 
         private TableDefinition GetTable(string tableName)
