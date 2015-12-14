@@ -260,7 +260,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                 Assert.IsNotNull(exception);
                 Assert.AreEqual(exception.Response.StatusCode, HttpStatusCode.NotFound);
-                Assert.IsTrue(exception.Message.Contains(string.Format("Error: An item with id '{0}' does not exist.", testId)) ||
+                Assert.IsTrue(exception.Message == "The item does not exist" ||
                               exception.Message == "The request could not be completed.  (Not Found)");
             }
         }
@@ -431,7 +431,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                 Assert.IsNotNull(exception);
                 Assert.AreEqual(exception.Response.StatusCode, HttpStatusCode.NotFound);
-                Assert.IsTrue(exception.Message.Contains(string.Format("Error: An item with id '{0}' does not exist.", testId)) ||
+                Assert.IsTrue(exception.Message == "The item does not exist" ||
                               exception.Message == "The request could not be completed.  (Not Found)");
             }
         }
