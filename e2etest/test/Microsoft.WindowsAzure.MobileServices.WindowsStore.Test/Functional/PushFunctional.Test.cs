@@ -35,24 +35,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public async Task RegisterAsync()
         {
             string channelUri = await this.GetChannelUri();
-            Dictionary<string, string> channelUriParam = new Dictionary<string, string>()
+            Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 {"channelUri", channelUri}
             };
             var push = this.GetClient().GetPush();
             await push.RegisterAsync(channelUri);
-            try
-            {
-                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, channelUriParam);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
-            }
-            finally
-            {
-                push.UnregisterAsync().Wait();
-            }
+            await VerifyRegistration(parameters, push);
         }
 
         [AsyncTestMethod]
@@ -61,25 +50,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             string channelUri = await this.GetChannelUri();
             MobileServiceUser user = await Utilities.GetDummyUser(this.GetClient());
             this.GetClient().CurrentUser = user;
-            Dictionary<string, string> channelUriParam = new Dictionary<string, string>()
+            Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 {"channelUri", channelUri}
             };
             var push = this.GetClient().GetPush();
             await push.RegisterAsync(channelUri);
-            try
-            {
-                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, channelUriParam);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
-            }
-            finally
-            {
-                push.UnregisterAsync().Wait();
-                this.GetClient().CurrentUser = null;
-            }
+            await VerifyRegistration(parameters, push);
         }
 
         [AsyncTestMethod]
@@ -87,41 +64,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             var push = this.GetClient().GetPush();
             await push.UnregisterAsync();
-            try
-            {
-                await this.GetClient().InvokeApiAsync("verifyUnregisterInstallationResult", HttpMethod.Get, null);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
-            }
-        }
-
-        [AsyncTestMethod]
-        public async Task RegisterAsyncWithTemplates()
-        {
-            string channelUri = await this.GetChannelUri();
-            JObject templates = GetTemplates("foo");
-            var push = this.GetClient().GetPush();
-            push.RegisterAsync(channelUri, templates).Wait();
-            JObject expectedTemplates = GetTemplates(null);
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
-            {
-                {"channelUri", channelUri},
-                {"templates", JsonConvert.SerializeObject(expectedTemplates)}
-            };
-            try
-            {
-                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
-            }
-            finally
-            {
-                push.UnregisterAsync().Wait();
-            }
+            await this.GetClient().InvokeApiAsync("verifyUnregisterInstallationResult", HttpMethod.Get, null);
         }
 
         [AsyncTestMethod]
@@ -140,50 +83,60 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 {"templates", JsonConvert.SerializeObject(expectedTemplates)},
                 {"secondaryTiles", JsonConvert.SerializeObject(expectedSecondaryTiles)}
             };
+            await VerifyRegistration(parameters, push);
+        }
+
+        [AsyncTestMethod]
+        public async Task RegisterAsyncTemplatesAndOverride()
+        {
+            var channelUri = await this.GetChannelUri();
+            JObject templates = GetTemplates("foo");
+            JObject expectedTemplates = GetTemplates(null);
+            var push = this.GetClient().GetPush();
             try
             {
+                await push.RegisterAsync(channelUri);
+                Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                    {"channelUri", channelUri},
+                };
                 await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
-            }
-            catch (MobileServiceInvalidOperationException)
-            {
-                throw;
+
+                await push.RegisterAsync(channelUri, templates);
+                parameters = new Dictionary<string, string>()
+                {
+                    {"channelUri", channelUri},
+                    {"templates", JsonConvert.SerializeObject(expectedTemplates)},
+                };
+
+                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
+
+                await push.RegisterAsync(channelUri);
+                parameters = new Dictionary<string, string>()
+                {
+                    {"channelUri", channelUri},
+                };
+                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
             }
             finally
             {
                 push.UnregisterAsync().Wait();
+                this.GetClient().CurrentUser = null;
             }
         }
 
-        //[AsyncTestMethod]
-        //public async Task RegisterAsyncMultiple()
-        //{
-        //    var channelUri = await this.GetChannelUri();
-        //    JObject templates = GetTemplates("foo");
-        //    var push = this.GetClient().GetPush();
-
-        //    await push.RegisterAsync(channelUri);
-        //    await push.RegisterAsync(channelUri, templates);
-        //    await push.RegisterAsync(channelUri);
-
-        //    Dictionary<string, string> parameters = new Dictionary<string, string>()
-        //    {
-        //        {"channelUri", channelUri},
-        //    };
-
-        //    try
-        //    {
-        //        //Verifies templates are removed from the installation registration
-        //        await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
-        //    }
-        //    catch (MobileServiceInvalidOperationException)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        push.UnregisterAsync().Wait();
-        //    }
-        //}
+        private async Task VerifyRegistration(Dictionary<string, string> parameters, Push push)
+        {
+            try
+            {
+                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
+            }
+            finally
+            {
+                push.UnregisterAsync().Wait();
+                this.GetClient().CurrentUser = null;
+            }
+        }
 
 
         [AsyncTestMethod]
