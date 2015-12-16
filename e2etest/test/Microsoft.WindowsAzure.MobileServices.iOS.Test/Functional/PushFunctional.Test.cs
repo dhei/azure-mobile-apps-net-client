@@ -53,7 +53,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         [AsyncTestMethod]
         public async Task LoginRegisterAsync()
         {
-            MobileServiceUser user = await GetDummyUser();
+            MobileServiceUser user = await Utilities.GetDummyUser(this.GetClient());
             this.GetClient().CurrentUser = user;
             NSData channelUri = NSDataFromDescription(this.pushTestUtility.GetPushHandle());
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -141,17 +141,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             JObject templates = new JObject();
             templates["testApnsTemplate"] = templateBody;
             return templates;
-        }
-
-        private async Task<MobileServiceUser> GetDummyUser()
-        {
-            var dummyUser = await this.GetClient().InvokeApiAsync("JwtTokenGenerator", HttpMethod.Get, null);
-
-            MobileServiceUser user = new MobileServiceUser((string)dummyUser["userId"])
-            {
-                MobileServiceAuthenticationToken = (string)dummyUser["autheticationToken"]
-            };
-            return user;
         }
 
         internal static string TrimDeviceToken(string deviceToken)
