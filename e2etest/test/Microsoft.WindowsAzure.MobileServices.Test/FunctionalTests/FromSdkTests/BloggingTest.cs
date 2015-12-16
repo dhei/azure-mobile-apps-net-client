@@ -107,7 +107,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             catch (MobileServiceInvalidOperationException e)
             {
                 bool isValid = e.Message.Contains("The request could not be completed.  (Not Found)") ||
-                    e.Message.Contains("An item with id 'this_does_not_exist' does not exist.");
+                    e.Message.Contains("The item does not exist");
                 Assert.IsTrue(isValid, "Unexpected error message: " + e.Message);
             }
         }
