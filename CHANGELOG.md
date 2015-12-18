@@ -1,5 +1,14 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 2.0.1
+- Updated Error.UpdateAsync to use the tracked store [3673d02](https://github.com/Azure/azure-mobile-apps-net-client/commit/3673d02)
+- Fixing issues when using Xamarin linker [dc5a101](https://github.com/Azure/azure-mobile-apps-net-client/commit/dc5a101)
+- Serializing access to the transaction scope to prevent issues with SQLite [a91a095](https://github.com/Azure/azure-mobile-apps-net-client/commit/a91a095)
+- Nuget package updates [6bc545b](https://github.com/Azure/azure-mobile-apps-net-client/commit/6bc545b)
+
+### Version 2.0.0
+- Azure Mobile Apps release
+
 ### Version 2.0.0-beta
 - Support for Azure Mobile Apps
 
