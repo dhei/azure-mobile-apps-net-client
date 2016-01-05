@@ -14,7 +14,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             CurrentPlatform.Init();
 
             Harness = new TestHarness();
-            Harness.Platform = string.Format("Xamarin.Android|sdk v{0}|", TestPlatform.GetMobileServicesSdkVersion(typeof(App).GetTypeInfo().Assembly));
+            Harness.Platform = TestPlatform.XamarinAndroid;
 
             Harness.Reporter = Listener;
             Harness.LoadTestAssembly(typeof(FunctionalTestBase).Assembly);

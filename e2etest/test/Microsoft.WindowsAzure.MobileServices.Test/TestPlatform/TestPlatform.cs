@@ -19,6 +19,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public static readonly string WindowsStore = "WindowsStore";
         public static readonly string WindowsPhone8 = "WindowsPhone8";
         public static readonly string WindowsPhone81 = "WindowsPhone81";
+        public static readonly string XamarinAndroid = "XamarinAndroid";
+        public static readonly string XamariniOS = "XamariniOS";
 
         public static string GetMobileServicesSdkVersion(Assembly executingAssembly)
         {
