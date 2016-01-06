@@ -59,7 +59,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             if (client == null)
             {
                 string appUrl = null;
-                string appKey = null;
                 App.Harness.Settings.Custom.TryGetValue("MobileServiceRuntimeUrl", out appUrl);
 
                 client = new MobileServiceClient(appUrl);

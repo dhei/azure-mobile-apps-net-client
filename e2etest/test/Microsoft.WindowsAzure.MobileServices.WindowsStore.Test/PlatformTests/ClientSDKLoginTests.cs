@@ -62,7 +62,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             {
                 mobileServiceClient.AlternateLoginHost = new Uri(alternateLoginHost);
                 expectedRequestUri = alternateLoginHost + defaultLoginPrefix;
-                var result = mobileServiceClient.LoginWithMicrosoftAccountAsync(null);
+                var result = await mobileServiceClient.LoginWithMicrosoftAccountAsync(null);
             }
             catch (MobileServiceInvalidOperationException ex)
             {
@@ -90,7 +90,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             try
             {
                 expectedRequestUri = mobileServiceClient.MobileAppUri.ToString() + loginPrefix;
-                var result = mobileServiceClient.LoginWithMicrosoftAccountAsync(null);
+                var result = await mobileServiceClient.LoginWithMicrosoftAccountAsync(null);
             }
             catch (MobileServiceInvalidOperationException ex)
             {
