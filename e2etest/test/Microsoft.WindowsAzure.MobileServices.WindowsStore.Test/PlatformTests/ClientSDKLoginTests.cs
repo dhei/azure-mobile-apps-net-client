@@ -5,8 +5,8 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.MobileServices.TestFramework;
 using Microsoft.Live;
+using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
@@ -61,7 +61,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             try
             {
                 mobileServiceClient.AlternateLoginHost = new Uri(alternateLoginHost);
-                expectedRequestUri = alternateLoginHost + defaultLoginPrefix;
+                expectedRequestUri = alternateLoginHost + defaultLoginPrefix + "/microsoftaccount";
                 var result = await mobileServiceClient.LoginWithMicrosoftAccountAsync(null);
             }
             catch (MobileServiceInvalidOperationException ex)
@@ -86,10 +86,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             MobileServiceClient mobileServiceClient = GetClient();
             string expectedRequestUri = "";
             string loginPrefix = "foo/bar";
+            mobileServiceClient.LoginUriPrefix = loginPrefix;
 
             try
             {
-                expectedRequestUri = mobileServiceClient.MobileAppUri.ToString() + loginPrefix;
+                expectedRequestUri = mobileServiceClient.MobileAppUri.ToString() + loginPrefix + "/microsoftaccount";
                 var result = await mobileServiceClient.LoginWithMicrosoftAccountAsync(null);
             }
             catch (MobileServiceInvalidOperationException ex)
@@ -104,6 +105,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 mobileServiceClient.LoginUriPrefix = null;
             }
         }
+
         private bool VerifyRequestUri(MobileServiceInvalidOperationException ex, string expectedRequestUri)
         {
             string requestUri = ex.Response.RequestMessage.RequestUri.ToString();
@@ -112,7 +114,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 Log("Login request routed expected endpoint");
                 return true;
             }
-            Log(string.Format("Expected request Uri: {0} Acutual request Uri: {1}"),
+            Log("Expected request Uri: {0} Acutual request Uri: {1}",
                 expectedRequestUri,
                 requestUri);
 
