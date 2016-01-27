@@ -224,7 +224,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release' OR '$(Configuration)' == 'Signed' ">
+  <ItemGroup Condition=" '$(Configuration)' != 'SdkRel' ">
     <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices.SQLiteStore\Microsoft.WindowsAzure.Mobile.SQLiteStore.csproj">
       <Project>{4c20d49a-fe5e-4d9c-98b9-8125450074f5}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore</Name>

@@ -91,7 +91,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release' OR '$(Configuration)' == 'Signed' ">
+  <ItemGroup Condition=" '$(Configuration)' != 'SdkRel' ">
     <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices.WindowsPhone81\Microsoft.WindowsAzure.Mobile.Ext.WP81.csproj">
       <Project>{02eef75a-d824-4203-b243-c1b97b0d35a9}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.Ext.WP81</Name>

@@ -222,7 +222,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release' OR '$(Configuration)' == 'Signed' ">
+  <ItemGroup Condition=" '$(Configuration)' != 'SdkRel' ">
     <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices.WindowsPhone8.UI\Microsoft.WindowsAzure.Mobile.UI.WP8.csproj">
       <Project>{b1cca4c2-dedf-43af-b54d-067c5ac6a391}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.UI.WP8</Name>
