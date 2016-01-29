@@ -5,16 +5,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure.MobileServices.TestFramework;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Microsoft.WindowsAzure.MobileServices;
 using System.Net.Http;
 using System.Text;
-using System.Globalization;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices.TestFramework;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
@@ -22,9 +20,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     public class CustomAPITests : FunctionalTestBase
     {
         private const string AppApiName = "applicationPermission";
+
         public enum ApiPermissions { Public, Application, User, Admin }
+
         public enum TypedTestType { GetByTitle, GetByDate, PostByDuration, PostByYear }
+
         public enum DataFormat { Json, Xml, Other }
+
         private const string Letters = "abcdefghijklmnopqrstuvwxyz";
         private const string MovieFinderApiName = "movieFinder";
 
@@ -34,6 +36,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             DateTime now = DateTime.UtcNow;
             int seed = now.Year * 10000 + now.Month * 100 + now.Day;
             Random rndGen = new Random(seed);
+
+            // Log the seed for future repros.
+            Log("Seed: {0}", seed);
 
             IMobileServiceClient client = GetClient();
 
@@ -105,12 +110,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                         expectedResult = new Movie[] { inputTemplate };
                         actualResult = await client.InvokeApiAsync<AllMovies>(apiUrl, HttpMethod.Get, null);
                         break;
+
                     case TypedTestType.GetByDate:
                         var releaseDate = inputTemplate.ReleaseDate;
                         apiUrl = apiName + "/date/" + releaseDate.Year + "/" + releaseDate.Month + "/" + releaseDate.Day;
                         expectedResult = QueryTestData.TestMovies().Where(m => m.ReleaseDate == releaseDate).ToArray();
                         actualResult = await client.InvokeApiAsync<AllMovies>(apiUrl, HttpMethod.Get, null);
                         break;
+
                     case TypedTestType.PostByDuration:
                     case TypedTestType.PostByYear:
                         string orderBy = null;
@@ -119,9 +126,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                             case 0:
                                 orderBy = null;
                                 break;
+
                             case 1:
                                 orderBy = "id";
                                 break;
+
                             case 2:
                                 orderBy = "Title";
                                 break;
@@ -159,6 +168,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                         }
 
                         break;
+
                     default:
                         throw new ArgumentException("Invalid test type: " + testType);
                 }
@@ -222,6 +232,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                         case DataFormat.Other:
                             contentIsExpected = CompareJson(expectedResult, jsonResponse, errors);
                             break;
+
                         case DataFormat.Xml:
                             string expectedResultContent = JsonToXml(expectedResult);
 
@@ -278,10 +289,12 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                         // JSON
                         content = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
                         break;
+
                     case DataFormat.Xml:
                         textBody = JsonToXml(body);
                         content = new StringContent(textBody, Encoding.UTF8, "text/xml");
                         break;
+
                     default:
                         textBody = body.ToString().Replace("{", "<").Replace("}", ">").Replace("[", "__[__").Replace("]", "__]__");
                         content = new StringContent(textBody, Encoding.UTF8, "text/plain");
@@ -341,15 +354,19 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 case 1:
                 case 2:
                     return HttpMethod.Post;
+
                 case 3:
                 case 4:
                 case 5:
                 case 6:
                     return HttpMethod.Get;
+
                 case 7:
                     return HttpMethod.Put;
+
                 case 8:
                     return HttpMethod.Delete;
+
                 default:
                     return new HttpMethod("PATCH");
             }
@@ -361,22 +378,25 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             {
                 case JTokenType.Null:
                     return JToken.Parse("null");
+
                 case JTokenType.Boolean:
                 case JTokenType.String:
                 case JTokenType.Integer:
                 case JTokenType.Float:
                     return new JValue((JValue)body);
+
                 case JTokenType.Array:
                     JArray array = (JArray)body;
                     return new JArray(array.Select(jt => SanitizeJsonXml(jt)));
+
                 case JTokenType.Object:
                     JObject obj = (JObject)body;
                     return new JObject(
                         obj.Properties().Select((jp, i) =>
                             new JProperty("member" + i, SanitizeJsonXml(jp.Value))));
+
                 default:
                     throw new ArgumentException("Invalid type: " + body.Type);
-
             }
         }
 
@@ -401,16 +421,20 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 case JTokenType.Null:
                     sb.Append("null");
                     break;
+
                 case JTokenType.Boolean:
                     sb.Append(json.ToString().ToLowerInvariant());
                     break;
+
                 case JTokenType.Float:
                 case JTokenType.Integer:
                     sb.Append(json.ToString());
                     break;
+
                 case JTokenType.String:
                     sb.Append(json.ToObject<string>());
                     break;
+
                 case JTokenType.Array:
                     sb.Append("<array>");
                     JArray array = (JArray)json;
@@ -423,6 +447,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                     sb.Append("</array>");
                     break;
+
                 case JTokenType.Object:
                     JObject obj = (JObject)json;
                     var keys = obj.Properties().Select(p => p.Name).ToArray();
@@ -435,6 +460,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     }
 
                     break;
+
                 default:
                     throw new ArgumentException("Type " + json.Type + " is not supported");
             }
@@ -455,16 +481,21 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             {
                 case 0:
                     return true;
+
                 case 1:
                     return false;
+
                 case 2:
                     return rndGen.Next();
+
                 case 3:
                     return rndGen.Next() >> rndGen.Next(10);
+
                 case 4:
                 case 5:
                 case 6:
                     return CreateString(rndGen, 0, 10);
+
                 case 7:
                     if (canBeNull)
                     {
@@ -612,11 +643,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             {
                 case JTokenType.Boolean:
                     return expected.Value<bool>() == actual.Value<bool>();
+
                 case JTokenType.Null:
                     return true;
+
                 case JTokenType.String:
                 case JTokenType.Date:
                     return expected.Value<string>() == actual.Value<string>();
+
                 case JTokenType.Float:
                 case JTokenType.Integer:
                     double expectedNumber = expected.Value<double>();
@@ -652,6 +686,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     }
 
                     return true;
+
                 case JTokenType.Object:
                     JObject expectedObject = (JObject)expected;
                     Dictionary<string, string> expectedKeyMap = new Dictionary<string, string>();
@@ -700,6 +735,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     }
 
                     return true;
+
                 default:
                     throw new ArgumentException("Don't know how to compare JToken of type " + expected.Type);
             }
