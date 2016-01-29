@@ -100,6 +100,33 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget />
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'SdkRel|AnyCPU' ">
+    <OutputPath>bin\SdkRel\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'SdkRel|x86' ">
+    <OutputPath>bin\x86\SdkRel\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'SdkRel|ARM' ">
+    <OutputPath>bin\ARM\SdkRel\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UI\GroupDescription.cs">
       <Link>UI\GroupDescription.cs</Link>
@@ -181,6 +208,34 @@
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'SdkRel' ">
+    <Reference Include="Microsoft.WindowsAzure.Mobile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wp8\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wp8\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.UI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wp8\Microsoft.WindowsAzure.Mobile.UI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' != 'SdkRel' ">
+    <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices.WindowsPhone8.UI\Microsoft.WindowsAzure.Mobile.UI.WP8.csproj">
+      <Project>{b1cca4c2-dedf-43af-b54d-067c5ac6a391}</Project>
+      <Name>Microsoft.WindowsAzure.Mobile.UI.WP8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices.WindowsPhone8\Microsoft.WindowsAzure.Mobile.Ext.WP8.csproj">
+      <Project>{3114e433-7fc1-4056-8cf9-2406e32bb10d}</Project>
+      <Name>Microsoft.WindowsAzure.Mobile.Ext.WP8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
+      <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
+      <Name>Microsoft.WindowsAzure.Mobile</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.TestFramework\Microsoft.WindowsAzure.Mobile.TestFramework.csproj">
       <Project>{A2500BD2-A9A2-4085-9978-DEE3675B02DD}</Project>
@@ -195,33 +250,21 @@
     <Folder Include="Functional\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WindowsAzure.Mobile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wp8\Microsoft.WindowsAzure.Mobile.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wp8\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.UI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wp8\Microsoft.WindowsAzure.Mobile.UI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
@@ -234,9 +277,9 @@
   </Target>
   -->
   <ProjectExtensions />
-  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
 </Project>

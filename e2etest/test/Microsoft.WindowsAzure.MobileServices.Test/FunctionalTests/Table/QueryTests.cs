@@ -14,6 +14,7 @@ using System.Globalization;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
+#pragma warning disable 618 // for implementing obsolete ITotalCountProvider
     [Tag("Query")]
     public class QueryTests : FunctionalTestBase
     {
