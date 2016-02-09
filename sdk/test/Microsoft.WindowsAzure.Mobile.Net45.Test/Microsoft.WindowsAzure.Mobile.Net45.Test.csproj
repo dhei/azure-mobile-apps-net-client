@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7C1A9BC1-3E60-4673-AC08-AC8399032D49}</ProjectGuid>
+    <ProjectGuid>{BCF9BADC-8D46-4530-BF62-4C31C5DBB61F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.Test</RootNamespace>

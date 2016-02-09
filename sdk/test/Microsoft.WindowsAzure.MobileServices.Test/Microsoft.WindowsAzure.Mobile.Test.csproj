@@ -6,7 +6,7 @@
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D8BBC92A-B213-463B-911D-3A106F91D5F9}</ProjectGuid>
+    <ProjectGuid>{05B6709B-C25A-4C1D-8D61-9E05BEE0DB86}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.Test</RootNamespace>

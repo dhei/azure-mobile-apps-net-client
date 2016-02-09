@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7C1A9BC1-3E60-4673-AC08-AC8399032D49}</ProjectGuid>
+    <ProjectGuid>{1A8BCF31-2199-453C-A761-5AF2F8FD5B81}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test</RootNamespace>
@@ -172,11 +172,6 @@
   <ItemGroup>
     <Folder Include="PlatformTests\" />
     <Folder Include="UnitTests\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="sqlite3.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\SQLitePCL.3.8.7.2\build\net45\SQLitePCL.targets" Condition="Exists('..\..\..\packages\SQLitePCL.3.8.7.2\build\net45\SQLitePCL.targets')" />

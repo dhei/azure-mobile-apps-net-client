@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{574B5567-FF51-4B0F-A9ED-CC9F711E9156}</ProjectGuid>
+    <ProjectGuid>{B61DB8C1-F9D2-4647-A82D-1477093E62C4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test.Unit</RootNamespace>
