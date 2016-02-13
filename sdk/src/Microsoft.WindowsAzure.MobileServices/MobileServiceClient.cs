@@ -376,10 +376,12 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Log a user out.
         /// </summary>
+#pragma warning disable 1998 // TODO: remove this suppression once the async/await issue is fixed
         public async Task LogoutAsync()
         {
             this.CurrentUser = null;
         }
+#pragma warning restore 1998
 
         /// <summary>
         /// Invokes a user-defined custom API of a Microsoft Azure Mobile Service using an HTTP POST.
