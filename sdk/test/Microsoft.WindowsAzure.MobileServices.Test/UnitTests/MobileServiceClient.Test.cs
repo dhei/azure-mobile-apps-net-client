@@ -78,7 +78,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public void DoesNotRewireSingleWiredDelegatingHandler()
         {
             string appUrl = MobileAppUriValidator.DummyMobileApp;
-            string appKey = "secret...";
 
             TestHttpHandler innerHandler = new TestHttpHandler();
             DelegatingHandler wiredHandler = new TestHttpHandler();
@@ -93,7 +92,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public async Task MultipleHttpHandlerConstructor()
         {
             string appUrl = MobileAppUriValidator.DummyMobileApp;
-            string appKey = "secret...";
             TestHttpHandler hijack = new TestHttpHandler();
 
             string firstBeforeMessage = "Message before 1";
@@ -170,7 +168,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public async Task ErrorMessageConstruction()
         {
             string appUrl = MobileAppUriValidator.DummyMobileApp;
-            string appKey = "secret...";
             string collection = "tests";
             string query = "$filter=id eq 12";
 
