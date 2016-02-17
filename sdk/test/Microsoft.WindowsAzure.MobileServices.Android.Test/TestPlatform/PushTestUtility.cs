@@ -13,7 +13,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     class PushTestUtility : IPushTestUtility
     {
         private const string DefaultChannelUri = "17BA0791499DB908433B80F37C5FBC89B870084B";
-
+        const string DefaultToastTemplateName = "templateForToastGcm";
         public string GetPushHandle()
         {
             return DefaultChannelUri;
@@ -24,29 +24,33 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             return DefaultChannelUri.Replace('A', 'B');
         }
 
-        public JObject GetInstallation(string installationId, bool includeTemplates = false, string defaultChannelUri = null)
+        public JObject GetInstallation(string installationId, bool includeTemplates = false, bool templateBodyJson = false, string defaultChannelUri = null)
         {
             JObject installation = new JObject();
             installation[PushInstallationProperties.PUSHCHANNEL] = defaultChannelUri ?? DefaultChannelUri;
             installation[PushInstallationProperties.PLATFORM] = Platform.Instance.PushUtility.GetPlatform();
             if (includeTemplates)
             {
-                JObject msg = new JObject();
-                msg["msg"] = "$(message)";
-                JObject data = new JObject();
-                data["data"] = msg;
-                installation[PushInstallationProperties.TEMPLATES] = data;
+                installation[PushInstallationProperties.TEMPLATES] = GetTemplates(templateBodyJson);
             }
             return installation;
         }
 
-        public JObject GetTemplates()
+        public JObject GetTemplates(bool templateBodyJson = false)
         {
             JObject msg = new JObject();
             msg["msg"] = "$(message)";
             JObject data = new JObject();
             data["data"] = msg;
-            return data;
+            JObject templateBody = new JObject();
+            templateBody["body"] = data.ToString();
+            if (templateBodyJson)
+            {
+                templateBody["body"] = data;
+            }
+            JObject templates = new JObject();
+            templates[DefaultToastTemplateName] = templateBody;
+            return templates;
         }
     }
 }

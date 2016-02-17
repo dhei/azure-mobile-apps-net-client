@@ -19,14 +19,24 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidSupportedAbis />
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
+    <Debugger>Xamarin</Debugger>
+    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

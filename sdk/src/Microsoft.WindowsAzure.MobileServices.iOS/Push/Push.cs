@@ -77,7 +77,17 @@ namespace Microsoft.WindowsAzure.MobileServices
             installation[PushInstallationProperties.PLATFORM] = Platform.Instance.PushUtility.GetPlatform();
             if (templates != null)
             {
-                installation[PushInstallationProperties.TEMPLATES] = templates;
+                JObject templatesWithStringBody = templates;
+                foreach (JProperty template in templates.Properties())
+                {
+                    //Notification hub requires template body to be a string.Convert to string from JObject
+                    var templateBody = template.Value["body"];
+                    if (templateBody != null && templateBody.GetType() == typeof(JObject))
+                    {
+                        templatesWithStringBody[template.Name]["body"] = templateBody.ToString();
+                    }
+                }
+                installation[PushInstallationProperties.TEMPLATES] = templatesWithStringBody;
             }
             return this.PushHttpClient.CreateOrUpdateInstallationAsync(installation);
         }

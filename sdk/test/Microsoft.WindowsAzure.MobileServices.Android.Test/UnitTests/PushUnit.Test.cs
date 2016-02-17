@@ -48,7 +48,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             var mobileClient = new MobileServiceClient(DefaultServiceUri);
             string emptyRegistrationId = string.Empty;
             var exception = await AssertEx.Throws<ArgumentNullException>(() => mobileClient.GetPush().RegisterAsync(emptyRegistrationId));
-            Assert.AreEqual(exception.Message, "Argument cannot be null.\nParameter name: registrationId");
+            Assert.AreEqual(exception.Message, "Value cannot be null.\nParameter name: registrationId");
         }
 
         [AsyncTestMethod]
@@ -63,7 +63,21 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         [AsyncTestMethod]
-        public async Task RegisterAsync_WithTemplates()
+        public async Task RegisterAsync_WithTemplates_TemplateBodyJson()
+        {
+            MobileServiceClient mobileClient = new MobileServiceClient(DefaultServiceUri);
+
+            var expectedUri = string.Format("{0}{1}/{2}", DefaultServiceUri, InstallationsPath, mobileClient.GetPush().InstallationId);
+            JObject templates = this.pushTestUtility.GetTemplates(true);
+            string installationRegistration = JsonConvert.SerializeObject(this.pushTestUtility.GetInstallation(mobileClient.GetPush().InstallationId, true));
+            var hijack = TestHttpDelegatingHandler.CreateTestHttpHandler(expectedUri, HttpMethod.Put, null, HttpStatusCode.OK, expectedRequestContent: installationRegistration);
+
+            mobileClient = new MobileServiceClient(DefaultServiceUri, hijack);
+            await mobileClient.GetPush().RegisterAsync(this.registrationId, templates);
+        }
+
+        [AsyncTestMethod]
+        public async Task RegisterAsync_WithTemplates_TemplateBodyString()
         {
             MobileServiceClient mobileClient = new MobileServiceClient(DefaultServiceUri);
 

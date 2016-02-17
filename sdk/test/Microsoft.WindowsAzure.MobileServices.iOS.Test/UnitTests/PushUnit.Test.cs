@@ -17,7 +17,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 {
     [Tag("unit")]
     [Tag("push")]
-    
     public class PushUnit : TestBase
     {
         readonly string originalPushHandleDescription = "<f6e7cd2 80fc5b5 d488f8394baf216506bc1bba 864d5b483d>";
@@ -52,7 +51,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             NSData deviceToken = null;
             var exception = await AssertEx.Throws<ArgumentNullException>(
            () => mobileClient.GetPush().RegisterAsync(deviceToken));
-            Assert.AreEqual(exception.Message, "Argument cannot be null.\nParameter name: deviceToken");
+            Assert.AreEqual(exception.Message, "Value cannot be null.\nParameter name: deviceToken");
         }
 
         [AsyncTestMethod]
@@ -68,12 +67,26 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         [AsyncTestMethod]
-        public async Task RegisterAsync_WithTemplates()
+        public async Task RegisterAsync_WithTemplates_TemplateBodyString()
         {
             MobileServiceClient mobileClient = new MobileServiceClient(DefaultServiceUri);
 
             var expectedUri = string.Format("{0}{1}/{2}", DefaultServiceUri, InstallationsPath, mobileClient.GetPush().InstallationId);
             JObject templates = this.pushTestUtility.GetTemplates();
+            string installationRegistration = JsonConvert.SerializeObject(this.pushTestUtility.GetInstallation(mobileClient.GetPush().InstallationId, true));
+            var hijack = TestHttpDelegatingHandler.CreateTestHttpHandler(expectedUri, HttpMethod.Put, null, HttpStatusCode.OK, expectedRequestContent: installationRegistration);
+
+            mobileClient = new MobileServiceClient(DefaultServiceUri, hijack);
+            await mobileClient.GetPush().RegisterAsync(this.originalNSData, templates);
+        }
+
+        [AsyncTestMethod]
+        public async Task RegisterAsync_WithTemplates_TemplateBodyJSON()
+        {
+            MobileServiceClient mobileClient = new MobileServiceClient(DefaultServiceUri);
+
+            var expectedUri = string.Format("{0}{1}/{2}", DefaultServiceUri, InstallationsPath, mobileClient.GetPush().InstallationId);
+            JObject templates = this.pushTestUtility.GetTemplates(true);
             string installationRegistration = JsonConvert.SerializeObject(this.pushTestUtility.GetInstallation(mobileClient.GetPush().InstallationId, true));
             var hijack = TestHttpDelegatingHandler.CreateTestHttpHandler(expectedUri, HttpMethod.Put, null, HttpStatusCode.OK, expectedRequestContent: installationRegistration);
 

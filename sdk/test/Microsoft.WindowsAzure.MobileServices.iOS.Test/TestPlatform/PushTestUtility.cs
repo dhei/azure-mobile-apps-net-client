@@ -15,9 +15,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     {
         private const string DefaultDeviceToken =
             "<f6e7cd2 80fc5b5 d488f8394baf216506bc1bba 864d5b483d>";
-        const string BodyTemplate = "{\"aps\": {\"alert\":\"boo!\"}, \"extraprop\":\"($message)\"}";
         const string DefaultToastTemplateName = "templateForToastiOS";
-        readonly string[] DefaultTags = { "fooiOS", "bariOs" };
 
         public string GetPushHandle()
         {
@@ -29,29 +27,35 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             return DefaultDeviceToken.Replace('b', 'a').Replace('B', 'a');
         }
 
-        public JObject GetInstallation(string installationId, bool includeTemplates = false, string defaultChannelUri = null)
+        public JObject GetInstallation(string installationId, bool includeTemplates = false, bool templateBodyJson = false, string defaultChannelUri = null)
         {
             JObject installation = new JObject();
             installation[PushInstallationProperties.PUSHCHANNEL] = defaultChannelUri ?? TrimDeviceToken(DefaultDeviceToken);
             installation[PushInstallationProperties.PLATFORM] = Platform.Instance.PushUtility.GetPlatform();
             if (includeTemplates)
             {
-                installation[PushInstallationProperties.TEMPLATES] = GetTemplates();
+                installation[PushInstallationProperties.TEMPLATES] = GetTemplates(templateBodyJson);
             }
             return installation;
         }
 
-        public JObject GetTemplates()
+        public JObject GetTemplates(bool templateBodyJson = false)
         {
             JObject alert = new JObject();
             alert["alert"] = "$(message)";
             JObject aps = new JObject();
             aps["aps"] = alert;
+            JObject templateBody = new JObject();
+            templateBody["body"] = aps.ToString();
+            if (templateBodyJson)
+            {
+                templateBody["body"] = aps;
+            }
             JObject templates = new JObject();
-            templates[DefaultToastTemplateName] = aps;
+            templates[DefaultToastTemplateName] = templateBody;
             return templates;
         }
-        
+
         internal static string TrimDeviceToken(string deviceToken)
         {
             if (deviceToken == null)
