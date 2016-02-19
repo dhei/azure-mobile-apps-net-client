@@ -112,6 +112,29 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
         }
 
+        [AsyncTestMethod]
+        public async Task RegisterAsyncTemplatesWithJsonBody()
+        {
+            NSData channelUri = NSDataFromDescription(this.pushTestUtility.GetPushHandle());
+            JObject templates = GetTemplates("foo", true);
+            JObject expectedTemplates = GetTemplates(null);
+            var push = this.GetClient().GetPush();
+            try
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                     {"channelUri", TrimDeviceToken(channelUri.Description)},
+                     {"templates", JsonConvert.SerializeObject(expectedTemplates)}
+                };
+                await push.RegisterAsync(channelUri, templates);
+                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
+            }
+            finally
+            {
+                push.UnregisterAsync().Wait();
+            }
+        }
+
         private async Task VerifyRegistration(Dictionary<string, string> parameters, Push push)
         {
             try
@@ -125,16 +148,21 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
         }
 
-        private static JObject GetTemplates(string tag)
+        private static JObject GetTemplates(string tag, bool templateBodyJson = false)
         {
-            var toastTemplate = "{\"aps\": {\"alert\":\"boo!\"}, \"extraprop\":\"($message)\"}";
+            JObject alert = new JObject();
+            alert["alert"] = "$(message)";
+            JObject aps = new JObject();
+            aps["aps"] = alert;
             JObject templateBody = new JObject();
-            templateBody["body"] = toastTemplate;
-
+            templateBody["body"] = aps.ToString();
+            if (templateBodyJson)
+            {
+                templateBody["body"] = aps;
+            }
             if (tag != null)
             {
-                JArray tags = new JArray();
-                tags.Add("foo");
+                JArray tags = new JArray { tag };
                 templateBody["tags"] = tags;
             }
 
