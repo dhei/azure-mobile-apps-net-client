@@ -26,6 +26,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 		
 		public static void UpdateIdValues()
 		{
+			global::Gcm.Client.Resource.String.library_name = global::Microsoft.WindowsAzure.Mobile.Android.Test.Resource.String.library_name;
 		}
 		
 		public partial class Attribute
@@ -128,20 +129,23 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040003
-			public const int ApplicationName = 2130968579;
-			
 			// aapt resource value: 0x7f040004
-			public const int Login = 2130968580;
+			public const int ApplicationName = 2130968580;
 			
-			// aapt resource value: 0x7f040000
-			public const int MobileServiceUri = 2130968576;
-			
-			// aapt resource value: 0x7f040002
-			public const int RunTests = 2130968578;
+			// aapt resource value: 0x7f040005
+			public const int Login = 2130968581;
 			
 			// aapt resource value: 0x7f040001
-			public const int Tags = 2130968577;
+			public const int MobileServiceUri = 2130968577;
+			
+			// aapt resource value: 0x7f040003
+			public const int RunTests = 2130968579;
+			
+			// aapt resource value: 0x7f040002
+			public const int Tags = 2130968578;
+			
+			// aapt resource value: 0x7f040000
+			public const int library_name = 2130968576;
 			
 			static String()
 			{
