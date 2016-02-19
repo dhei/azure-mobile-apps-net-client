@@ -26,7 +26,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         public Task CreateOrUpdateInstallationAsync(JObject installation, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return this.client.HttpClient.RequestAsync(HttpMethod.Put, string.Format("push/installations/{0}", Uri.EscapeUriString(this.client.InstallationId)), this.client.CurrentUser, installation.ToString(), ensureResponseContent: false, cancellationToken: cancellationToken);
+            return this.client.HttpClient.RequestAsync(HttpMethod.Put, string.Format("push/installations/{0}", Uri.EscapeUriString(this.client.InstallationId)), this.client.CurrentUser, content: installation.ToString(), ensureResponseContent: false, cancellationToken: cancellationToken);
         }
     }
 }

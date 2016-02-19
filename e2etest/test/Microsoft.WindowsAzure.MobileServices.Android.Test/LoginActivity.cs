@@ -5,7 +5,9 @@ using Android.Content;
 using Android.OS;
 using Android.Preferences;
 using Android.Widget;
+using Gcm.Client;
 using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Test;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
 namespace Microsoft.WindowsAzure.Mobile.Android.Test
@@ -29,6 +31,16 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Login);
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
+
+            //Check to ensure everything's setup right
+            GcmClient.CheckDevice(this);
+            GcmClient.CheckManifest(this);
+
+            if (!GcmClient.IsRegisteredOnServer(this))
+            {
+                GcmClient.UnRegister(this);
+            }
+            GcmClient.Register(this, GcmBroadcastReceiver.SENDER_IDS);
 
             this.uriText = FindViewById<EditText>(Resource.Id.ServiceUri);
             this.tagsText = FindViewById<EditText>(Resource.Id.ServiceTags);
