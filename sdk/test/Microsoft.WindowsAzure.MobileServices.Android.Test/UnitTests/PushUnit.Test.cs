@@ -48,7 +48,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             var mobileClient = new MobileServiceClient(DefaultServiceUri);
             string emptyRegistrationId = string.Empty;
             var exception = await AssertEx.Throws<ArgumentNullException>(() => mobileClient.GetPush().RegisterAsync(emptyRegistrationId));
-            Assert.AreEqual(exception.Message, "Value cannot be null.\nParameter name: registrationId");
+            Assert.AreEqual(exception.ParamName, "registrationId");
         }
 
         [AsyncTestMethod]

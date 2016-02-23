@@ -44,9 +44,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public async Task RegisterAsync_ErrorEmptyChannelUri()
         {
             var mobileClient = new MobileServiceClient(DefaultServiceUri);
-            var exception = await AssertEx.Throws<ArgumentNullException>(
-           () => mobileClient.GetPush().RegisterAsync(""));
-            Assert.AreEqual(exception.Message, "Value cannot be null.\r\nParameter name: channelUri");
+            var exception = await AssertEx.Throws<ArgumentNullException>(() => mobileClient.GetPush().RegisterAsync(""));
+            Assert.AreEqual(exception.ParamName, "channelUri");
         }
 
         [AsyncTestMethod]

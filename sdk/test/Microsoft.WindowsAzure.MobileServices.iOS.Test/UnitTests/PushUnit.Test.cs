@@ -49,9 +49,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             var mobileClient = new MobileServiceClient(DefaultServiceUri);
             NSData deviceToken = null;
-            var exception = await AssertEx.Throws<ArgumentNullException>(
-           () => mobileClient.GetPush().RegisterAsync(deviceToken));
-            Assert.AreEqual(exception.Message, "Value cannot be null.\nParameter name: deviceToken");
+            var exception = await AssertEx.Throws<ArgumentNullException>(() => mobileClient.GetPush().RegisterAsync(deviceToken));
+            Assert.AreEqual(exception.ParamName, "deviceToken");
         }
 
         [AsyncTestMethod]
