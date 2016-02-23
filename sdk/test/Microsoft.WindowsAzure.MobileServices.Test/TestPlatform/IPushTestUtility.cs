@@ -15,10 +15,10 @@ namespace Microsoft.WindowsAzure.MobileServices
     {
         string GetPushHandle();
 
-        string GetUpdatedPushHandle();        
-        
-        JObject GetInstallation(string installationId, bool includeTemplates = false, string defaultChannelUri = null);
-        
-        JObject GetTemplates();
+        string GetUpdatedPushHandle();
+
+        JObject GetInstallation(string installationId, bool includeTemplates = false, bool templateBodyJson = false, string defaultChannelUri = null);
+
+        JObject GetTemplates(bool templateBodyJson = false);
     }
 }

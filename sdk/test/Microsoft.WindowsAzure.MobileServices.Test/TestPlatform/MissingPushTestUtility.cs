@@ -18,13 +18,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             throw new NotImplementedException();
         }
-       
-        public JObject GetInstallation(string installationId, bool includeTemplates = false, string defaultChannelUri = null)
+
+        public JObject GetInstallation(string installationId, bool includeTemplates = false, bool templateBodyJson = false, string defaultChannelUri = null)
         {
             throw new NotImplementedException();
         }
 
-        public JObject GetTemplates()
+        public JObject GetTemplates(bool templateBodyJson)
         {
             throw new NotImplementedException();
         }

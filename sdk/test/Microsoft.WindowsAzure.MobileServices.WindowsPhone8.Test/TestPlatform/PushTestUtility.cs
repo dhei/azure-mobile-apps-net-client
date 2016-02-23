@@ -32,19 +32,19 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             return DefaultChannelUri.Replace('A', 'B');
         }
 
-        public JObject GetInstallation(string installationId, bool includeTemplates = false, string defaultChannelUri = null)
+        public JObject GetInstallation(string installationId, bool includeTemplates = false, bool templateBodyJson = false, string defaultChannelUri = null)
         {
             JObject installation = new JObject();
             installation[PushInstallationProperties.PUSHCHANNEL] = defaultChannelUri ?? DefaultChannelUri;
             installation[PushInstallationProperties.PLATFORM] = Platform.Instance.PushUtility.GetPlatform();
             if (includeTemplates)
             {
-                installation[PushInstallationProperties.TEMPLATES] = GetTemplates();
+                installation[PushInstallationProperties.TEMPLATES] = GetTemplates(templateBodyJson);
             }
             return installation;
         }
 
-        public JObject GetTemplates()
+        public JObject GetTemplates(bool templateBodyJson = false)
         {
             JObject templateHeaders = new JObject();
             templateHeaders["X-WindowsPhone-Target"] = "mpns/toast";

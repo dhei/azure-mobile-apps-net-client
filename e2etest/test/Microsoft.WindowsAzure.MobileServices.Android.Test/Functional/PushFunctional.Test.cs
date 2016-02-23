@@ -103,6 +103,29 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         [AsyncTestMethod]
+        public async Task RegisterAsyncTemplatesWithTemplateBodyJson()
+        {
+            string registrationId = this.pushTestUtility.GetPushHandle();
+            JObject templates = GetTemplates("bar", true);
+            JObject expectedTemplates = GetTemplates(null);
+            var push = this.GetClient().GetPush();
+            try
+            {
+                await push.RegisterAsync(registrationId, templates);
+                var parameters = new Dictionary<string, string>()
+                {
+                    {"channelUri", registrationId},
+                    {"templates", JsonConvert.SerializeObject(expectedTemplates)}
+                };
+                await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
+            }
+            finally
+            {
+                push.UnregisterAsync().Wait();
+            }
+        }
+
+        [AsyncTestMethod]
         public async Task PushGcmTest()
         {
             var push = this.GetClient().GetPush();
@@ -142,20 +165,23 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
         }
 
-        private static JObject GetTemplates(string tag)
+        private static JObject GetTemplates(string tag, bool templateBodyJson = false)
         {
-            var toastTemplate = "{\"first prop\":\"first value\", \"second prop\":\"($message)\"}";
+            JObject msg = new JObject();
+            msg["msg"] = "$(message)";
+            JObject data = new JObject();
+            data["data"] = msg;
             JObject templateBody = new JObject();
-            templateBody["body"] = toastTemplate;
-
+            templateBody["body"] = data.ToString();
+            if (templateBodyJson)
+            {
+                templateBody["body"] = data;
+            }
             if (tag != null)
             {
-                JArray tags = new JArray();
-                tags.Add("foo");
-                tags.Add(tag);
+                JArray tags = new JArray() { tag };
                 templateBody["tags"] = tags;
             }
-
             JObject templates = new JObject();
             templates["testGcmTemplate"] = templateBody;
             return templates;
