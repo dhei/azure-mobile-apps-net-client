@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4864F1AA-A4B9-4F32-B319-A9BAC7D1B200}</ProjectGuid>
+    <ProjectGuid>{9220B6E2-0E5E-41E5-A990-98823F74C209}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test</RootNamespace>
@@ -196,7 +196,7 @@
     <SDKReference Include="Microsoft.VCLibs, version=11.0">
       <Name>Microsoft Visual C++ Runtime Package</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.WinRT, Version=3.8.8.1">
+    <SDKReference Include="SQLite.WinRT, Version=3.11.0">
       <Name>SQLite for Windows Runtime</Name>
     </SDKReference>
   </ItemGroup>

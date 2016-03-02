@@ -90,10 +90,10 @@
     <AndroidResource Include="Resources\Layout\ListedGroup.axml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Microsoft.WindowsAzure.MobileServices.iOS.Test\readme.txt">
+    <None Include="..\Microsoft.WindowsAzure.MobileServices.iOS.Test\readme.txt">
       <Link>readme.txt</Link>
-    </Content>
-    <Content Include="Properties\AndroidManifest.xml" />
+    </None>
+    <None Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Drawable\Icon.png" />
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>

@@ -16,3 +16,5 @@ Components
 e2etest/**/Package.appxmanifest
 e2etest/**/Package.StoreAssociation.xml
 e2etest/**/AppPackages/*
+e2etest/output/*
+sdk/**/AppPackages/*
