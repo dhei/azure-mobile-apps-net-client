@@ -29,22 +29,22 @@ as a Nuget package or you can download the source using the instructions above. 
 
 The SDK requires Visual Studio 2013.
 
-###Building and Referencing the SDK
+### Building and Referencing the SDK
 
 The managed portable library solution includes a core portable assembly and platform-specific assemblies for each of the supported platforms: Windows 8,
 Windows Phone 8 and .NET 4.5. The core portable platform project is ```Microsoft.WindowsAzure.Mobile```. The platform-specific assembly projects are
 named using a ```Microsoft.WindowsAzure.Mobile.Ext.<Platform>``` convention. The Windows Phone 8 platform also
 include a ```Microsoft.WindowsAzure.Mobile.UI.<Platform>``` project that contain UI components. To build the Managed Portable Libray:
 
-1. Open the ```sdk\Managed\Microsoft.WindowsAzure.Mobile.Managed.sln``` solution file in Visual Studio 2012.
+1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` solution file in Visual Studio 2013.
 2. Press F6 to build the solution.
 
 ### Running the Tests
 
-The managed portable library ```Microsoft.WindowsAzure.Mobile.Managed.sln``` has a test application for each of the supported platforms: Windows 8,
+The managed portable library ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` has a test application for each of the supported platforms: Windows 8,
 Windows Phone 8 and .NET 4.5.
 
-1. Open the ```sdk\Managed\Microsoft.WindowsAzure.Mobile.Managed.sln``` solution file in Visual Studio 2012.
+1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` solution file in Visual Studio 2013.
 2. Right-click on the test project for a given platform in the Solution Explorer and select ```Set as StartUp Project```.
 3. Press F5 to run the application in debug mode.
 4. An application will appear with a prompt for a runtime Uri and Tags. You can safely ignore this prompt and just click the Start button.
@@ -62,4 +62,4 @@ Windows Phone 8 and .NET 4.5.
 
 If you would like to become an active contributor to this project please follow the instructions provided in [Microsoft Azure Projects Contribution Guidelines](http://azure.github.com/guidelines.html).
 
-If you encounter any bugs with the library please file an issue in the [Issues](https://github.com/Azure/azure-mobile-services/issues) section of the project.
+If you encounter any bugs with the library please file an issue in the [Issues](https://github.com/Azure/azure-mobile-apps-net-client/issues) section of the project.
