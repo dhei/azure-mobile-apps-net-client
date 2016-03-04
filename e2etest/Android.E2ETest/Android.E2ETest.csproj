@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GCM.Client">
-      <HintPath>..\..\..\Components\GCMClient-1.0\lib\android\GCM.Client.dll</HintPath>
+      <HintPath>..\..\Components\GCMClient-1.0\lib\android\GCM.Client.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
