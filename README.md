@@ -6,7 +6,7 @@ With Microsoft Azure Mobile Apps you can add a scalable backend to your connecte
 
 If you are new to Mobile Services, you can get started by following our tutorials for connecting your Mobile
 Services cloud backend to [Windows Store apps](http://azure.microsoft.com/en-us/documentation/articles/mobile-services-windows-store-get-started/),
-and [Windows Phone 8 apps](http://azure.microsoft.com/en-us/documentation/articles/mobile-services-windows-phone-get-started/).
+and Windows Phone 8 apps.
 
 ## Download Source Code
 
@@ -53,7 +53,7 @@ Windows Phone 8 and .NET 4.5.
 ## Useful Resources
 
 * [Quickstarts](https://github.com/Azure/azure-mobile-services-quickstarts)
-* [E2E Test Suite](https://github.com/Azure/azure-mobile-services-test)
+* [E2E Test Suite](e2etest)
 * [Samples](https://github.com/Azure/mobile-services-samples)
 * Tutorials and product overview are available at [Microsoft Azure Mobile Services Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
 * Our product team actively monitors the [Mobile Services Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) to assist you with any troubles.
