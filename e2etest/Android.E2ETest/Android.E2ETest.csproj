@@ -123,7 +123,7 @@
     <AndroidResource Include="Resources\Layout\ListedGroup.axml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Microsoft.WindowsAzure.MobileServices.iOS.Test\readme.txt">
+    <None Include="..\iOS.E2ETest\readme.txt">
       <Link>readme.txt</Link>
     </None>
     <None Include="Properties\AndroidManifest.xml" />
