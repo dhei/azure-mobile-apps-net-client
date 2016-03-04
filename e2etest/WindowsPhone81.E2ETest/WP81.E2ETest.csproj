@@ -82,11 +82,11 @@
   </PropertyGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'SdkRel' ">
     <Reference Include="Microsoft.WindowsAzure.Mobile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wpa81\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wpa81\Microsoft.WindowsAzure.Mobile.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wpa81\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.0.0\lib\wpa81\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -95,7 +95,7 @@
       <Project>{02eef75a-d824-4203-b243-c1b97b0d35a9}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.Ext.WP81</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\sdk\src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
+    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
       <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
       <Name>Microsoft.WindowsAzure.Mobile</Name>
     </ProjectReference>
@@ -111,22 +111,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\Functional\PushFunctional.Test.cs">
+    <Compile Include="..\WindowsStore.E2ETest\Functional\PushFunctional.Test.cs">
       <Link>Functional\PushFunctional.Test.cs</Link>
     </Compile>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\TestPlatform\CurrentTestPlatform.cs">
+    <Compile Include="..\WindowsStore.E2ETest\TestPlatform\CurrentTestPlatform.cs">
       <Link>TestPlatform\CurrentTestPlatform.cs</Link>
     </Compile>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\PlatformTests\LoginTests.cs">
+    <Compile Include="..\WindowsStore.E2ETest\PlatformTests\LoginTests.cs">
       <Link>PlatformTests\LoginTests.cs</Link>
     </Compile>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UI\GroupDescription.cs">
+    <Compile Include="..\WindowsStore.E2ETest\UI\GroupDescription.cs">
       <Link>UI\GroupDescription.cs</Link>
     </Compile>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UI\TestDescription.cs">
+    <Compile Include="..\WindowsStore.E2ETest\UI\TestDescription.cs">
       <Link>UI\TestDescription.cs</Link>
     </Compile>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UI\TestPage.xaml.cs">
+    <Compile Include="..\WindowsStore.E2ETest\UI\TestPage.xaml.cs">
       <Link>UI\TestPage.xaml.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
@@ -165,12 +165,12 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\Common\StandardStyles.xaml">
+    <Page Include="..\WindowsStore.E2ETest\Common\StandardStyles.xaml">
       <Link>Common\StandardStyles.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UI\TestPage.xaml">
+    <Page Include="..\WindowsStore.E2ETest\UI\TestPage.xaml">
       <Link>UI\TestPage.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -187,15 +187,15 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\wpa81\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
@@ -239,7 +239,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\$(TargetPlatformVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
