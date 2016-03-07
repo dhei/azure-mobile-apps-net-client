@@ -57,6 +57,7 @@ Windows Phone 8 and .NET 4.5.
 * [Samples](https://github.com/Azure/mobile-services-samples)
 * Tutorials and product overview are available at [Microsoft Azure Mobile Services Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
 * Our product team actively monitors the [Mobile Services Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) to assist you with any troubles.
+* Our product team publishes symbols to SymbolSource for an improved debugging experience. Instructions on enabling VisualStudio to load symbols from SymbolSource [here](http://www.symbolsource.org/Public/Wiki/Using) 
 
 ## Contribute Code or Provide Feedback
 
