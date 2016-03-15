@@ -19,9 +19,10 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         {
             public const string MobileServiceUri = "MobileServiceUri";
             public const string TagExpression = "TagExpression";
-
             public const string AutoStart = "AutoStart";
             public const string RuntimeVersion = "RuntimeVersion";
+            public const string StorageUrl = "storageUrl";
+            public const string StorageSasToken = "storageSasToken";
         }
 
         private EditText uriText, keyText, tagsText;
@@ -58,7 +59,9 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
                 {
                     MobileServiceRuntimeUrl = ReadSettingFromIntentOrDefault(Keys.MobileServiceUri),
                     RuntimeVersion = ReadSettingFromIntentOrDefault(Keys.RuntimeVersion),
-                    TagExpression = ReadSettingFromIntentOrDefault(Keys.TagExpression)
+                    TagExpression = ReadSettingFromIntentOrDefault(Keys.TagExpression),
+                    TestFrameworkStorageContainerUrl = ReadSettingFromIntentOrDefault(Keys.StorageUrl),
+                    TestFrameworkStorageContainerSasToken = ReadSettingFromIntentOrDefault(Keys.StorageSasToken)
                 };
                 App.Harness.SetAutoConfig(config);
                 RunTests();
