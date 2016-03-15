@@ -42,7 +42,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                 tileId = PrimaryChannelId;
             }
 
-            MobileServiceClient internalClient = (MobileServiceClient)client;
+            MobileServiceClient internalClient = client as MobileServiceClient;
             if (internalClient == null)
             {
                 throw new ArgumentException("Client must be a MobileServiceClient object");
