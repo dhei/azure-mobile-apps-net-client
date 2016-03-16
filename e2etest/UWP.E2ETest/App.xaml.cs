@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.MobileServices.TestFramework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -22,6 +24,15 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     /// </summary>
     sealed partial class App : Application
     {
+
+        private string _TestTags = string.Empty;
+        public static MobileServiceClient LoginMobileService;
+
+        /// <summary>
+        /// Gets the test harness used by the application
+        /// </summary>
+        public static TestHarness Harness { get; private set; }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,14 +41,20 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            Harness = new TestHarness
+            {
+                Platform = TestPlatform.UniversalWindowsPlatform
+            };
+            Harness.LoadTestAssembly(typeof(FunctionalTestBase).GetTypeInfo().Assembly);
+            Harness.LoadTestAssembly(typeof(LoginTests).GetTypeInfo().Assembly);
         }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
-        /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        /// <param name="args">Details about the launch request and process.</param>
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
 
 #if DEBUG
@@ -58,11 +75,21 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
                 }
 
+                Harness.SetAutoConfig(args.Arguments);
+
+                if(Harness.Settings.ManualMode)
+                {
+                    rootFrame.Navigate(typeof(MainPage));
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(TestPage));
+                }
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
@@ -72,7 +99,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                rootFrame.Navigate(typeof(MainPage), args.Arguments);
             }
             // Ensure the current window is active
             Window.Current.Activate();

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,6 +26,43 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public MainPage()
         {
             this.InitializeComponent();
+            string mobileServiceRuntimeUrl = ApplicationData.Current.LocalSettings.Values["MobileServiceRuntimeUrl"] as string;
+            string tags = ApplicationData.Current.LocalSettings.Values["MobileServiceTags"] as string;
+
+            _RuntimeUriTextbox.Text = mobileServiceRuntimeUrl ?? "";
+            _TagsTextBox.Text = tags ?? "";
+
+            this.Loaded += (s, e) => _UnitTestsButton.Focus(FocusState.Keyboard);
+        }
+
+        /// <summary>
+        /// Execute the login tests on button click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void LoginTestsButton_Click(object sender, RoutedEventArgs e)
+        {
+            App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = _RuntimeUriTextbox.Text;
+            ApplicationData.Current.LocalSettings.Values["MobileServiceRuntimeUrl"] = _RuntimeUriTextbox.Text;
+
+            Frame.Navigate(typeof(LoginPage));
+        }
+
+        /// <summary>
+        /// Execute unit tests on button click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UnitTestsButton_Click(object sender, RoutedEventArgs e)
+        {
+            App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = _RuntimeUriTextbox.Text;
+            App.Harness.Settings.TagExpression = _TagsTextBox.Text;
+
+            ApplicationData.Current.LocalSettings.Values["MobileServiceRuntimeUrl"] = _RuntimeUriTextbox.Text;
+            ApplicationData.Current.LocalSettings.Values["MobileServiceTags"] = _TagsTextBox.Text;
+
+            Frame.Navigate(typeof(TestPage));
         }
     }
 }
