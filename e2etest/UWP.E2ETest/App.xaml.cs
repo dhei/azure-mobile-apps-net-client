@@ -1,21 +1,15 @@
-﻿using Microsoft.WindowsAzure.MobileServices.TestFramework;
+﻿// ----------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// ----------------------------------------------------------------------------
+
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
@@ -24,8 +18,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     /// </summary>
     sealed partial class App : Application
     {
-
-        private string _TestTags = string.Empty;
         public static MobileServiceClient LoginMobileService;
 
         /// <summary>
