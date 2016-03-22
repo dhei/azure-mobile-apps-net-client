@@ -28,7 +28,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisAdditionalOptions>
       /assemblyCompareMode:StrongNameIgnoringVersion
     </CodeAnalysisAdditionalOptions>
