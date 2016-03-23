@@ -199,7 +199,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\WideLogo.png" />
-    <Content Include="TestInput\input.txt" />
+    <Content Include="TestInput\e2e_test_storage_sas_token.txt" />
+    <Content Include="TestInput\e2e_test_storage_url.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">
