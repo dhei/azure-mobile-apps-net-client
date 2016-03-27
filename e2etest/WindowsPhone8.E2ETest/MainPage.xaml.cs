@@ -69,7 +69,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private static async Task<TestConfig> DownloadInputFromStorageAsync(string storageUrl, string storageSasToken, string inputFilePath)
         {
-            string storageSasUrl = TestHarness.GetBlobStorageSasUrl(storageUrl, inputFilePath, storageSasToken);
+            string storageSasUrl = TestHarness.GetBlobStorageSasUrl(storageUrl, storageSasToken, inputFilePath);
             string inputFileContent = await TestHarness.ReadFileFromBlobStorageAsync(storageSasUrl);
 
             return TestHarness.GenerateTestConfigFromInputFile(storageSasToken, inputFileContent);

@@ -131,7 +131,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private static TestConfig DownloadInputFromStorage(string storageUrl, string storageSasToken, string inputFilePath)
         {
-            string storageSasUrl = TestHarness.GetBlobStorageSasUrl(storageUrl, inputFilePath, storageSasToken);
+            string storageSasUrl = TestHarness.GetBlobStorageSasUrl(storageUrl, storageSasToken, inputFilePath);
 
             HttpClient client = new HttpClient();
             var response = client.GetAsync(storageSasUrl).Result;
