@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Net.Http;
 using System.Reflection;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Phone.UI.Input;
@@ -24,6 +25,10 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         /// Gets the test harness used by the application.
         /// </summary>
         public static TestHarness Harness { get; private set; }
+
+        private const string E2E_TEST_BLOB_STORAGE_CONTAINER = @"TestInput\e2e_test_storage_url.txt";
+        private const string E2E_TEST_BLOB_STORAGE_CONTAINER_SAS_TOKEN = @"TestInput\e2e_test_storage_sas_token.txt";
+        private const string INPUT_PARAM_FILE = "windows_client_input.json";
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -110,14 +115,29 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             // Ensure the current window is active
             Window.Current.Activate();
 
-            var configString = ReadFile(@"TestInput\input.txt");
+            string storageBlobContainerUrl = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER);
+            string storageSasTokenBase64Encoded = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER_SAS_TOKEN);
 
-            if (!String.IsNullOrEmpty(configString))
+            if (!String.IsNullOrEmpty(storageSasTokenBase64Encoded))
             {
-                TestConfig config = JsonConvert.DeserializeObject<TestConfig>(configString);
-                App.Harness.SetAutoConfig(config);
+                // Automated testing
+                string storageSasToken = TestHarness.DecodeBase64String(storageSasTokenBase64Encoded);
+
+                var testConfig = DownloadInputFromStorage(storageBlobContainerUrl, storageSasToken, INPUT_PARAM_FILE);
+                App.Harness.SetAutoConfig(testConfig);
                 rootFrame.Navigate(typeof(TestPage), e.Arguments);
             }
+        }
+
+        private static TestConfig DownloadInputFromStorage(string storageUrl, string storageSasToken, string inputFilePath)
+        {
+            string storageSasUrl = TestHarness.GetBlobStorageSasUrl(storageUrl, storageSasToken, inputFilePath);
+
+            HttpClient client = new HttpClient();
+            var response = client.GetAsync(storageSasUrl).Result;
+            var inputFileContent = response.Content.ReadAsStringAsync().Result;
+
+            return TestHarness.GenerateTestConfigFromInputFile(storageSasToken, inputFileContent);
         }
 
         public string ReadFile(string filePath)

@@ -5,12 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
-using System.Xml.Linq;
 using System.Threading.Tasks;
-using System.Net.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.WindowsAzure.MobileServices.TestFramework
 {
@@ -210,7 +210,7 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                                         this.Settings.Custom["TestFrameworkStorageContainerSasToken"],
                                         relativeFilePath);
 
-                                    await this.UploadToBlobContainer(blobStorageSasUrl, LogDump.ToString());
+                                    await UploadToBlobContainerAsync(blobStorageSasUrl, LogDump.ToString());
 
                                     // record the test result
                                     var testResult = new TestResult()
@@ -291,7 +291,7 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                                 this.Settings.Custom["TestFrameworkStorageContainerSasToken"],
                                 this.Platform + "-detail.json");
                             string fileContent = JsonConvert.SerializeObject(testRun.TestResults.ToList(), Formatting.Indented);
-                            await this.UploadToBlobContainer(blobStorageSasUrl, fileContent);
+                            await UploadToBlobContainerAsync(blobStorageSasUrl, fileContent);
 
                             // upload test result summary to blob container
                             var masterResult = new MasterTestResult()
@@ -312,7 +312,7 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                                 this.Settings.Custom["TestFrameworkStorageContainerSasToken"],
                                 this.Platform + "-master.json");
                             fileContent = JsonConvert.SerializeObject(masterResult, Formatting.Indented);
-                            await this.UploadToBlobContainer(blobStorageSasUrl, fileContent);
+                            await UploadToBlobContainerAsync(blobStorageSasUrl, fileContent);
                         }
                         // Otherwise if we've finished the entire test run
 
@@ -330,7 +330,7 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
             await testLoop();
         }
 
-        public async Task<bool> UploadToBlobContainer(string blobStorageSasUrl, string fileContent)
+        public static async Task<bool> UploadToBlobContainerAsync(string blobStorageSasUrl, string fileContent)
         {
             HttpClient c = new HttpClient();
             c.DefaultRequestHeaders.Add("x-ms-blob-type", "BlockBlob");
@@ -343,13 +343,38 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
             }
         }
 
-        private static string GetBlobStorageSasUrl(string storageContainerUrl, string storageContainerSasToken, string filePath)
+        public static async Task<string> ReadFileFromBlobStorageAsync(string blobStorageSasUrl)
         {
-            // Decode blob storage container Sas token URL
+            HttpClient client = new HttpClient();
+
+            var response = await client.GetAsync(blobStorageSasUrl);
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public static TestConfig GenerateTestConfigFromInputFile(string storageSasToken, string inputFileContent)
+        {
+            JObject inputFileJson = JObject.Parse(inputFileContent);
+            return new TestConfig()
+            {
+                MobileServiceRuntimeUrl = (string)inputFileJson["mobileAppUrl"],
+                TestFrameworkStorageContainerSasToken = storageSasToken,
+                TestFrameworkStorageContainerUrl = (string)inputFileJson["storageUrl"],
+                RuntimeVersion = (string)inputFileJson["runTimeVersion"],
+                TagExpression = (string)inputFileJson["tags"]
+            };
+        }
+
+        public static string GetBlobStorageSasUrl(string storageContainerUrl, string storageContainerSasToken, string filePath)
+        {
+            return GetBlobStorageUrl(storageContainerUrl, filePath) + "?" + storageContainerSasToken;
+        }
+
+        public static string DecodeBase64String(string storageContainerSasToken)
+        {
             byte[] data = Convert.FromBase64String(storageContainerSasToken);
             string decodedSasToken = Encoding.UTF8.GetString(data, 0, data.Length);
-
-            return GetBlobStorageUrl(storageContainerUrl, filePath) + "?" + decodedSasToken;
+            return decodedSasToken;
         }
 
         private static string GetBlobStorageUrl(string storageContainerUrl, string filePath)

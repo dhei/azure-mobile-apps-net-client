@@ -12,7 +12,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Phone.Controls;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
@@ -22,6 +21,10 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         private ObservableCollection<GroupDescription> _groups;
         private GroupDescription _currentGroup = null;
         private TestDescription _currentTest = null;
+
+        private const string E2E_TEST_BLOB_STORAGE_CONTAINER = @"TestInput\e2e_test_storage_url.txt";
+        private const string E2E_TEST_BLOB_STORAGE_CONTAINER_SAS_TOKEN = @"TestInput\e2e_test_storage_sas_token.txt";
+        private const string INPUT_PARAM_FILE = "windows_client_input.json";
 
         // Constructor
         public MainPage()
@@ -36,22 +39,43 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             _groups = new ObservableCollection<GroupDescription>();
             unitTests.ItemsSource = _groups;
 
-            var configString = ReadFile(@"TestInput\input.txt");
-            txtRuntimeUri.Text = ""; // Set the default URI here
-            txtTags.Text = ""; // Set the default tags here
+            string storageBlobContainerUrl = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER);
+            string storageSasTokenBase64Encoded = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER_SAS_TOKEN);
 
-            if (!String.IsNullOrEmpty(configString))
+            if (string.IsNullOrEmpty(storageSasTokenBase64Encoded))
             {
-                TestConfig config = JsonConvert.DeserializeObject<TestConfig>(configString);
-                App.Harness.SetAutoConfig(config);
-                txtRuntimeUri.Text = App.Harness.Settings.Custom["MobileServiceRuntimeUrl"];
-                txtTags.Text = App.Harness.Settings.TagExpression; // Set the default tags here    
-                ExecuteUnitTests(null, null);
+                // Manual testing
+                txtRuntimeUri.Text = ""; // Set the default URI here
+                txtTags.Text = ""; // Set the default tags here
+            }
+            else
+            {
+                // Automated testing
+                string storageSasToken = TestHarness.DecodeBase64String(storageSasTokenBase64Encoded);
+
+                DownloadInputFromStorageAsync(storageBlobContainerUrl, storageSasToken, INPUT_PARAM_FILE).ContinueWith(task =>
+                {
+                    var testConfig = task.Result;
+                    App.Harness.SetAutoConfig(testConfig);
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        txtRuntimeUri.Text = App.Harness.Settings.Custom["MobileServiceRuntimeUrl"];
+                        txtTags.Text = App.Harness.Settings.TagExpression;
+                        ExecuteUnitTests(null, null);
+                    });
+                });
             }
         }
 
+        private static async Task<TestConfig> DownloadInputFromStorageAsync(string storageUrl, string storageSasToken, string inputFilePath)
+        {
+            string storageSasUrl = TestHarness.GetBlobStorageSasUrl(storageUrl, storageSasToken, inputFilePath);
+            string inputFileContent = await TestHarness.ReadFileFromBlobStorageAsync(storageSasUrl);
 
-        public static string ReadFile(string filePath)
+            return TestHarness.GenerateTestConfigFromInputFile(storageSasToken, inputFileContent);
+        }
+
+        private static string ReadFile(string filePath)
         {
             var resrouceStream = Application.GetResourceStream(new Uri(filePath, UriKind.Relative));
             if (resrouceStream == null) return "";
