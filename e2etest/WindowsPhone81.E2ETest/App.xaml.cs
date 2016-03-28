@@ -116,7 +116,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Window.Current.Activate();
 
             string storageBlobContainerUrl = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER);
-            string storageSasTokenBase64Encoded = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER);
+            string storageSasTokenBase64Encoded = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER_SAS_TOKEN);
 
             if (!String.IsNullOrEmpty(storageSasTokenBase64Encoded))
             {
