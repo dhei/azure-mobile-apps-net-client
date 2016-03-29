@@ -48,6 +48,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             // Start a test run
             App.Harness.Reporter = this;
+            App.Harness.Settings.Custom["TestFrameworkStorageContainerSasToken"] = TestHarness.DecodeBase64String(App.Harness.Settings.Custom["TestFrameworkStorageContainerSasToken"]);
             Task.Factory.StartNew(() => App.Harness.RunAsync());
         }
 
