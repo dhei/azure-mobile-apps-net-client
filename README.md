@@ -50,6 +50,13 @@ Windows Phone 8 and .NET 4.5.
 4. An application will appear with a prompt for a runtime Uri and Tags. You can safely ignore this prompt and just click the Start button.
 5. The test suite will run and display the results.
 
+### Running the Xamarin.iOS E2E test using Xamarin Studio
+1. Open the client folder in Console or Terminal and execute the following:  
+   
+   ```git submodule init```  
+   ```git submodule update```  
+2. Open the ```e2etest/iOS.E2ETest/iOS.E2ETest.csproj``` file in Xamarin Studio, build and run.
+
 ## Useful Resources
 
 * [Quickstarts](https://github.com/Azure/azure-mobile-services-quickstarts)
