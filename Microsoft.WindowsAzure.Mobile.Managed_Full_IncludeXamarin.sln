@@ -26,6 +26,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2ETestFramework", "e2etest
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win8.E2ETest", "e2etest\WindowsStore.E2ETest\Win8.E2ETest.csproj", "{4864F1AA-A4B9-4F32-B319-A9BAC7D1B200}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C20D49A-FE5E-4D9C-98B9-8125450074F5} = {4C20D49A-FE5E-4D9C-98B9-8125450074F5}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP8.E2ETest", "e2etest\WindowsPhone8.E2ETest\WP8.E2ETest.csproj", "{46AE537A-1143-48A4-B9A4-4B2C7BD9AB1D}"
 EndProject
