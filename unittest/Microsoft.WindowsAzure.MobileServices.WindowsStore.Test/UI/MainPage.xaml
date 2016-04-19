@@ -79,13 +79,7 @@
                         Grid.Row="3"
                         Grid.Column="1"
                         HorizontalAlignment="Right" Orientation="Horizontal">
-                        
-                        <Button
-                          x:Name="btnLoginTests"                         
-                          Content="Login Tests"
-                          MinWidth="100"
-                          Click="ExecuteLoginTests" />
-                    
+
                         <Button
                           x:Name="btnUnitTests"
                           Content="Unit Tests"
