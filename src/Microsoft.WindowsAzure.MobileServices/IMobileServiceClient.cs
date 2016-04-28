@@ -169,6 +169,14 @@ namespace Microsoft.WindowsAzure.MobileServices
         Task LogoutAsync();
 
         /// <summary>
+        /// Refreshes access token with the identity provider for the logged in user.
+        /// </summary>
+        /// <returns>
+        /// Task that will complete when the user has finished refreshing access token
+        /// </returns>
+        Task<MobileServiceUser> RefreshUserAsync();
+
+        /// <summary>
         /// Invokes a user-defined custom API of a Microsoft Azure Mobile Service using an HTTP POST.
         /// </summary>
         /// <typeparam name="T">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>    

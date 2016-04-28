@@ -39,7 +39,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Style="{StaticResource SubheaderStyle}">Microsoft Azure Mobile Services</TextBlock>
-            <TextBlock Grid.Row="1"  Style="{StaticResource HeaderStyle}">C# Client Library Tests</TextBlock>
+            <TextBlock Grid.Row="1"  Style="{StaticResource HeaderStyle}">C# Client Library Tests (Win 8.1)</TextBlock>
             <Border Grid.Row="2" Style="{StaticResource DialogStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -78,18 +78,16 @@
                         Grid.Row="3"
                         Grid.Column="1"
                         HorizontalAlignment="Right" Orientation="Horizontal">
-                        
                         <Button
-                          x:Name="btnLoginTests"                         
-                          Content="Login Tests"
+                          x:Name="btnE2ETests"
+                          Content="E2E Tests"
+                          MinWidth="100"
+                          Click="ExecuteE2ETests" />
+                        <Button
+                          x:Name="btnLoginTests"
+                          Content="Login/Refresh Tests"
                           MinWidth="100"
                           Click="ExecuteLoginTests" />
-                    
-                        <Button
-                          x:Name="btnUnitTests"
-                          Content="Unit Tests"
-                          MinWidth="100"
-                          Click="ExecuteUnitTests" />
                     </StackPanel>
                 </Grid>
             </Border>

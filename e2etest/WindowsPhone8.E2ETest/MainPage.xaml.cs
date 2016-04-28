@@ -37,7 +37,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             // Setup the groups data source
             _groups = new ObservableCollection<GroupDescription>();
-            unitTests.ItemsSource = _groups;
+            E2ETests.ItemsSource = _groups;
 
             string storageBlobContainerUrl = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER);
             string storageSasTokenBase64Encoded = ReadFile(E2E_TEST_BLOB_STORAGE_CONTAINER_SAS_TOKEN);
@@ -61,7 +61,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     {
                         txtRuntimeUri.Text = App.Harness.Settings.Custom["MobileServiceRuntimeUrl"];
                         txtTags.Text = App.Harness.Settings.TagExpression;
-                        ExecuteUnitTests(null, null);
+                        ExecuteE2ETests(null, null);
                     });
                 });
             }
@@ -105,43 +105,41 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Button buttonClicked = sender as Button;
             if (buttonClicked != null)
             {
-                String testName = null;
+                String testName = string.Empty;
                 MobileServiceAuthenticationProvider provider =
                     MobileServiceAuthenticationProvider.MicrosoftAccount;
 
-                if (buttonClicked.Name.Contains("MicrosoftAccount"))
+                switch (buttonClicked.Name)
                 {
-                    provider = MobileServiceAuthenticationProvider.MicrosoftAccount;
-                    testName = "Microsoft Account Login";
-                }
-                else if (buttonClicked.Name.Contains("Facebook"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Facebook;
-                    testName = "Facebook Login";
-                }
-                else if (buttonClicked.Name.Contains("Twitter"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Twitter;
-                    testName = "Twitter Login";
-                }
-                else if (buttonClicked.Name.Contains("Google"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Google;
-                    testName = "Google Login";
-                }
-                else if (buttonClicked.Name.Contains("AzureActiveDirectory"))
-                {
-                    provider = MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory;
-                    testName = "Azure Active Directory Login";
+                    case "MicrosoftAccountButton":
+                        provider = MobileServiceAuthenticationProvider.MicrosoftAccount;
+                        testName = "Microsoft Account Login and Refresh User";
+                        break;
+                    case "FacebookButton":
+                        provider = MobileServiceAuthenticationProvider.Facebook;
+                        testName = "Facebook Login and Refresh User";
+                        break;
+                    case "TwitterButton":
+                        provider = MobileServiceAuthenticationProvider.Twitter;
+                        testName = "Twitter Login and Refresh User";
+                        break;
+                    case "GoogleButton":
+                        provider = MobileServiceAuthenticationProvider.Google;
+                        testName = "Google Login and Refresh User";
+                        break;
+                    case "AzureActiveDirectoryButton":
+                        provider = MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory;
+                        testName = "AAD Login and Refresh User";
+                        break;
+                    default:
+                        break;
                 }
 
-                bool useProviderStringOverload = UseProviderStringOverloadCheckBox.IsChecked.Value;
-
-                TestResultsTextBlock.Text = await LoginTests.ExecuteTest(testName, () => LoginTests.TestLoginAsync(provider, useProviderStringOverload));
+                TestResultsTextBlock.Text = await LoginTests.ExecuteTest(testName, () => LoginTests.TestRefreshUserAsync(provider));
             }
         }
 
-        private void ExecuteUnitTests(object sender, RoutedEventArgs e)
+        private void ExecuteE2ETests(object sender, RoutedEventArgs e)
         {
             // Get the test settings from the UI
             App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = txtRuntimeUri.Text;
@@ -162,8 +160,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             // Display Status UI
             lblStatus.Visibility = Visibility.Visible;
-            unitTests.Visibility = Visibility.Visible;
-            unitTestResults.Visibility = Visibility.Visible;
+            E2ETests.Visibility = Visibility.Visible;
+            E2ETestResults.Visibility = Visibility.Visible;
 
             // Start a test run
             App.Harness.Reporter = this;
@@ -245,7 +243,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                 Dispatcher.BeginInvoke(() =>
                 {
-                    unitTests.ScrollTo(testDescription);
+                    E2ETests.ScrollTo(testDescription);
                 });
             });
         }
@@ -272,10 +270,10 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         public void Log(string message)
         {
-            //Dispatcher.BeginInvoke(() =>
-            //{
-            //    _currentTest.Details.Add(message);
-            //});
+            Dispatcher.BeginInvoke(() =>
+            {
+                _currentTest.Details.Add(message);
+            });
         }
 
         public void Error(string errorDetails)

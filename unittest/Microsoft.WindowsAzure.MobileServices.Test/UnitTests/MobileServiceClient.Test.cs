@@ -868,5 +868,159 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await operation(service);
             Assert.IsTrue(validationDone);
         }
+
+        [AsyncTestMethod]
+        public async Task LoginAsync_UserEnumTypeProvider()
+        {
+            await LoginAsync_Setup(useProviderStringOverload: false);
+        }
+
+        [AsyncTestMethod]
+        public async Task LoginAsync_UserStringTypeProvider()
+        {
+            await LoginAsync_Setup(useProviderStringOverload: true);
+        }
+
+        private async Task LoginAsync_Setup(bool useProviderStringOverload)
+        {
+            JObject token = new JObject();
+            string appUrl = MobileAppUriValidator.DummyMobileApp;
+            MobileServiceAuthenticationProvider provider = MobileServiceAuthenticationProvider.MicrosoftAccount;
+            string expectedUri = appUrl + ".auth/login/microsoftaccount";
+
+            TestHttpHandler hijack = new TestHttpHandler();
+            hijack.Response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
+            MobileServiceClient client = new MobileServiceClient(appUrl, hijack);
+
+            if (useProviderStringOverload)
+            {
+                await client.LoginAsync(provider.ToString(), token);
+            }
+            else
+            {
+                await client.LoginAsync(provider, token);
+            }
+
+            Assert.AreEqual(expectedUri, hijack.Request.RequestUri.OriginalString);
+        }
+
+        [AsyncTestMethod]
+        public async Task RefreshUserAsync_Throws_WhenMobileServiceUserIsNotSet()
+        {
+            string appUrl = MobileAppUriValidator.DummyMobileApp;
+
+            TestHttpHandler hijack = new TestHttpHandler();
+
+            MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
+            MobileServiceClient client = new MobileServiceClient(appUrl, hijack);
+            client.CurrentUser = null;
+            InvalidOperationException exception = await AssertEx.Throws<InvalidOperationException>(() => client.RefreshUserAsync());
+
+            Assert.AreEqual("MobileServiceUser must be set before calling refresh", exception.Message);
+        }
+
+        [AsyncTestMethod]
+        public async Task RefreshUserAsync_Throws_WhenMobileServiceUserHasNoAuthToken()
+        {
+            string appUrl = MobileAppUriValidator.DummyMobileApp;
+            string userId = "sid:xxxxxxxxxxxxxxxxx";
+
+            TestHttpHandler hijack = new TestHttpHandler();
+
+            MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
+            MobileServiceClient client = new MobileServiceClient(appUrl, hijack);
+            client.CurrentUser = new MobileServiceUser(userId);
+            InvalidOperationException exception = await AssertEx.Throws<InvalidOperationException>(() => client.RefreshUserAsync());
+
+            Assert.AreEqual("MobileServiceUser must be set before calling refresh", exception.Message);
+        }
+
+        [AsyncTestMethod]
+        public async Task RefreshUserAsync_NonAlternateLoginUri()
+        {
+            await RefreshUserAsync_Setup();
+        }
+
+        [AsyncTestMethod]
+        public async Task RefreshUserAsync_AlternateLoginUri()
+        {
+            await RefreshUserAsync_Setup(alternateLoginUri: "https://www.testalternatelogin.com/");
+        }
+
+        private static async Task RefreshUserAsync_Setup(string alternateLoginUri = null)
+        {
+            string appUrl = MobileAppUriValidator.DummyMobileApp;
+            string newAuthToken = "new-auth-token";
+            string userId = "sid:xxxxxxxxxxxxxxxxx";
+            string responseContent = "{\"authenticationToken\":\"" + newAuthToken + "\",\"user\":{\"userId\":\"" + userId + "\"}}";
+
+            TestHttpHandler hijack = new TestHttpHandler();
+            hijack.Response = new HttpResponseMessage(HttpStatusCode.OK);
+            hijack.Response.Content = new StringContent(responseContent);
+
+            MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
+            MobileServiceClient client = new MobileServiceClient(appUrl, hijack);
+            client.CurrentUser = new MobileServiceUser(userId)
+            {
+                MobileServiceAuthenticationToken = "auth-token"
+            };
+
+            string refreshUrl;
+            if (!string.IsNullOrEmpty(alternateLoginUri))
+            {
+                refreshUrl = alternateLoginUri + ".auth/refresh";
+                client.AlternateLoginHost = new Uri(alternateLoginUri);
+            }
+            else
+            {
+                refreshUrl = appUrl + ".auth/refresh";
+            }
+            MobileServiceUser user = await client.RefreshUserAsync();
+
+            Assert.AreEqual(hijack.Request.RequestUri.OriginalString, refreshUrl);
+            Assert.AreEqual(newAuthToken, user.MobileServiceAuthenticationToken);
+            Assert.AreEqual(userId, user.UserId);
+        }
+
+        [AsyncTestMethod]
+        public async Task RefreshUserAsync_ThrowsOnExceptions()
+        {
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.BadRequest, "Failed to refresh access token because of a 400 Bad Request error. Refresh token must be supported by your identity provider and user is logged in with sufficient permission.");
+
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.Unauthorized, "Failed to refresh access token because of a 401 Unauthorized error, possibly due to absence or expiry of access token. A MobileServiceUser must be set before calling refresh.");
+
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.Forbidden, "Failed to refresh access token because of a 403 Forbidden error, possibly due to revocation of access token or refresh token. A MobileServiceUser must be set before calling refresh.");
+
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.InternalServerError, "Failed to refresh access token because of an unexpected error.");
+        }
+
+        private static async Task RefreshUserAsync_ThrowsOnException(HttpStatusCode statusCode, string message)
+        {
+            string appUrl = MobileAppUriValidator.DummyMobileApp;
+            string refreshUrl = appUrl + ".auth/refresh";
+            string userId = "sid:xxxxxxxxxxxxxxxxx";
+
+            TestHttpHandler hijack = new TestHttpHandler();
+            var request = new HttpRequestMessage(HttpMethod.Get, refreshUrl);
+            var response = new HttpResponseMessage(statusCode);
+            hijack.OnSendingRequest = req =>
+            {
+                throw new MobileServiceInvalidOperationException("error message from Mobile Apps refresh endpoint", request, response);
+            };
+
+            MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
+            MobileServiceClient client = new MobileServiceClient(appUrl, hijack);
+            client.CurrentUser = new MobileServiceUser(userId)
+            {
+                MobileServiceAuthenticationToken = "auth-token"
+            };
+
+            MobileServiceInvalidOperationException exception = await AssertEx.Throws<MobileServiceInvalidOperationException>(() => client.RefreshUserAsync());
+            Assert.AreEqual(message, exception.Message);
+            Assert.IsNotNull(exception.Request);
+            Assert.AreEqual(statusCode, exception.Response.StatusCode);
+        }
     }
 }

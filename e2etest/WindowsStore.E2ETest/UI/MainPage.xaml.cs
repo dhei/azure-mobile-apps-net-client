@@ -27,15 +27,15 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             txtRuntimeUri.Text = mobileServiceRuntimeURL ?? "";
             txtTags.Text = tags ?? "";
 
-            Loaded += (s, e) => btnUnitTests.Focus(FocusState.Keyboard);
+            Loaded += (s, e) => btnE2ETests.Focus(FocusState.Keyboard);
         }
 
         /// <summary>
-        /// Start the unit test run.
+        /// Start the end to end test run.
         /// </summary>
         /// <param name="sender">Start button.</param>
         /// <param name="e">Event arguments.</param>
-        private void ExecuteUnitTests(object sender, RoutedEventArgs e)
+        private void ExecuteE2ETests(object sender, RoutedEventArgs e)
         {
             // Get the test settings from the UI
             App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = txtRuntimeUri.Text;

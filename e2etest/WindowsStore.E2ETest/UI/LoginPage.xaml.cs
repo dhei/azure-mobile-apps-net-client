@@ -20,40 +20,39 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Button buttonClicked = sender as Button;
             if (buttonClicked != null)
             {
-                String testName = null;
+                String testName = string.Empty;
                 MobileServiceAuthenticationProvider provider =
                     MobileServiceAuthenticationProvider.MicrosoftAccount;
 
-                if (buttonClicked.Name.Contains("MicrosoftAccount"))
-                {
-                    provider = MobileServiceAuthenticationProvider.MicrosoftAccount;
-                    testName = "Microsoft Account Login";
-                }
-                else if (buttonClicked.Name.Contains("Facebook"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Facebook;
-                    testName = "Facebook Login";
-                }
-                else if (buttonClicked.Name.Contains("Twitter"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Twitter;
-                    testName = "Twitter Login";
-                }
-                else if (buttonClicked.Name.Contains("Google"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Google;
-                    testName = "Google Login";
-                }
-                else if (buttonClicked.Name.Contains("AzureActiveDirectory"))
-                {
-                    provider = MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory;
-                    testName = "Azure Active Directory Login";
-                }
-
                 bool useSingleSignOn = UseSingleSignOnCheckBox.IsChecked.Value;
-                bool useStringProviderOverload = UseStringProviderOverloadCheckBox.IsChecked.Value;
 
-                TestResultsTextBlock.Text = await LoginTests.ExecuteTest(testName, () => LoginTests.TestLoginAsync(provider, useSingleSignOn, useStringProviderOverload));
+                switch (buttonClicked.Name)
+                {
+                    case "MicrosoftAccountButton":
+                        provider = MobileServiceAuthenticationProvider.MicrosoftAccount;
+                        testName = "Microsoft Account Login and Refresh User";
+                        break;
+                    case "FacebookButton":
+                        provider = MobileServiceAuthenticationProvider.Facebook;
+                        testName = "Facebook Login and Refresh Refresh User";
+                        break;
+                    case "TwitterButton":
+                        provider = MobileServiceAuthenticationProvider.Twitter;
+                        testName = "Twitter Login and Refresh User";
+                        break;
+                    case "GoogleButton":
+                        provider = MobileServiceAuthenticationProvider.Google;
+                        testName = "Google Login and Refresh User";
+                        break;
+                    case "AzureActiveDirectoryButton":
+                        provider = MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory;
+                        testName = "AAD Login and Refresh User";
+                        break;
+                    default:
+                        break;
+                }
+
+                TestResultsTextBlock.Text = await LoginTests.ExecuteTest(testName, () => LoginTests.TestRefreshUserAsync(provider, useSingleSignOn));
             }
         }
     }
