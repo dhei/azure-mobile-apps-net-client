@@ -31,6 +31,26 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
+        /// Log a user into a Mobile Services application given a provider name.
+        /// </summary>
+        /// <param name="client">
+        /// The client.
+        /// </param>
+        /// <param name="provider">
+        /// Authentication provider to use.
+        /// </param>
+        /// <param name="parameters">
+        /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
+        /// </param>
+        /// <returns>
+        /// Task that will complete when the user has finished authentication.
+        /// </returns>
+        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
+        {
+            return LoginAsync(client, provider.ToString(), parameters);
+        }
+
+        /// <summary>
         /// Finishes the login process initiated by the LoginAsync() call, should be called from the App OnActivated event
         /// when it is triggered due to the Web Authentication Broker
         /// </summary>
