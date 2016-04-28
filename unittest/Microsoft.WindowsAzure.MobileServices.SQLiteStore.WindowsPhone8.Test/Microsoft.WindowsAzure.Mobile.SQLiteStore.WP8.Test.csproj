@@ -181,11 +181,11 @@
       <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.TestFramework\Microsoft.WindowsAzure.Mobile.TestFramework.csproj">
-      <Project>{A2500BD2-A9A2-4085-9978-DEE3675B02DD}</Project>
+      <Project>{3cffb62f-3384-4d71-badc-7542d5c31a9e}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.TestFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.Test\Microsoft.WindowsAzure.Mobile.Test.csproj">
-      <Project>{D8BBC92A-B213-463B-911D-3A106F91D5F9}</Project>
+      <Project>{05b6709b-c25a-4c1d-8d61-9e05bee0db86}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.Test</Name>
     </ProjectReference>
   </ItemGroup>
