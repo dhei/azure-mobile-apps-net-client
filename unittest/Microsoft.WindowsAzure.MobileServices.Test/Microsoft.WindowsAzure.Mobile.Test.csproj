@@ -128,7 +128,7 @@
       <Name>Microsoft.WindowsAzure.Mobile</Name>
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.TestFramework\Microsoft.WindowsAzure.Mobile.TestFramework.csproj">
-      <Project>{a2500bd2-a9a2-4085-9978-dee3675b02dd}</Project>
+      <Project>{3cffb62f-3384-4d71-badc-7542d5c31a9e}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.TestFramework</Name>
     </ProjectReference>
   </ItemGroup>
