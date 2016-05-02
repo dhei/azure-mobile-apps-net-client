@@ -34,7 +34,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             Harness = new TestHarness();
             Harness.LoadTestAssembly(typeof(MobileServiceSerializerTests).Assembly);
-            Harness.LoadTestAssembly(typeof(LoginTests).Assembly);
         }
 
         /// <summary>

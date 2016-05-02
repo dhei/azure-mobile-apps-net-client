@@ -41,59 +41,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             txtTags.Text = ""; // Set the default tags here
         }
 
-        private void ExecuteLoginTests(object sender, RoutedEventArgs e)
-        {
-            // Get the test settings from the UI
-            App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = txtRuntimeUri.Text;
-
-            // Hide Test Settings UI
-            testSettings.Visibility = Visibility.Collapsed;
-
-            // Make the Login Test UI visible
-            loginTests.Visibility = Visibility.Visible;
-        }
-
-        private async void LoginButtonClicked(object sender, RoutedEventArgs e)
-        {
-            Button buttonClicked = sender as Button;
-            if (buttonClicked != null)
-            {
-                String testName = null;
-                MobileServiceAuthenticationProvider provider =
-                    MobileServiceAuthenticationProvider.MicrosoftAccount;
-
-                if (buttonClicked.Name.Contains("MicrosoftAccount"))
-                {
-                    provider = MobileServiceAuthenticationProvider.MicrosoftAccount;
-                    testName = "Microsoft Account Login";
-                }
-                else if (buttonClicked.Name.Contains("Facebook"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Facebook;
-                    testName = "Facebook Login";
-                }
-                else if (buttonClicked.Name.Contains("Twitter"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Twitter;
-                    testName = "Twitter Login";
-                }
-                else if (buttonClicked.Name.Contains("Google"))
-                {
-                    provider = MobileServiceAuthenticationProvider.Google;
-                    testName = "Google Login";
-                }
-                else if (buttonClicked.Name.Contains("AzureActiveDirectory"))
-                {
-                    provider = MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory;
-                    testName = "Azure Active Directory Login";
-                }
-
-                bool useProviderStringOverload = UseProviderStringOverloadCheckBox.IsChecked.Value;
-
-                TestResultsTextBlock.Text = await LoginTests.ExecuteTest(testName, () => LoginTests.TestLoginAsync(provider, useProviderStringOverload));
-            }
-        }
-
         private void ExecuteUnitTests(object sender, RoutedEventArgs e)
         {
             // Get the test settings from the UI

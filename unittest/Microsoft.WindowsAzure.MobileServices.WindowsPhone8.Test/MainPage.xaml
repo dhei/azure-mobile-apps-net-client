@@ -31,7 +31,6 @@
                 <TextBlock VerticalAlignment="Center" Style="{StaticResource PhoneTextNormalStyle}" Text="Tags:"/>
                 <TextBox x:Name="txtTags" FontSize="20"  BorderThickness="0" Padding="0" />
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Button x:Name="btnLoginTests" Content="Login Tests" MinWidth="100" Click="ExecuteLoginTests" />
                     <Button x:Name="btnUnitTests" Content="Unit Tests" MinWidth="100" Click="ExecuteUnitTests" />
                 </StackPanel>
             </StackPanel>
@@ -66,44 +65,8 @@
                     </DataTemplate>
                 </phone:LongListSelector.ItemTemplate>
             </phone:LongListSelector>
-            <StackPanel x:Name="loginTests" Visibility="Collapsed">
-                <Button x:Name="MicrosoftAccountButton"
-                        Content="Microsoft Account" 
-                        Click="LoginButtonClicked"/>
-                <Button x:Name="FacebookButton"
-                        Content="Facebook" 
-                        Click="LoginButtonClicked"/>
-                <Button x:Name="TwitterButton"
-                        Content="Twitter" 
-                        Click="LoginButtonClicked"/>
-                <Button x:Name="GoogleButton"
-                        Content="Google" 
-                        Click="LoginButtonClicked"/>
-                <Button x:Name="AzureActiveDirectoryButton"
-                        Content="Microsoft Azure Active Directory" 
-                        Click="LoginButtonClicked"/>
-                <CheckBox x:Name="UseProviderStringOverloadCheckBox"
-                          Content="Use overload with string provider"
-                          IsChecked="false"/>
-                <TextBlock HorizontalAlignment="Left" 
-            	        TextWrapping="Wrap" 
-            	        Height="20" 
-            	        Width="200"
-                        Margin="0,20"
-                        Text="Test Result:"
-                        FontSize="15">
-                </TextBlock>
-                <TextBlock x:Name="TestResultsTextBlock"
-                        HorizontalAlignment="Left" 
-            	        TextWrapping="Wrap" 
-            	        Height="400" 
-            	        Width="600"
-                        Text=""
-                        FontSize="15">
-                </TextBlock>
-            </StackPanel>
         </StackPanel>
-
+        
         <StackPanel x:Name="unitTestResults" Grid.Row="2" Margin="12,0,12,0" Visibility="Collapsed">
             <ProgressBar x:Name="progress"/>
             <StackPanel Orientation="Horizontal">

@@ -64,19 +64,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Loads the login test page.
-        /// </summary>
-        /// <param name="sender">Login button.</param>
-        /// <param name="e">Event arguments.</param>
-        private void ExecuteLoginTests(object sender, RoutedEventArgs e)
-        {
-            App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = txtRuntimeUri.Text;
-            ApplicationData.Current.LocalSettings.Values["MobileServiceRuntimeUrl"] = txtRuntimeUri.Text;
-
-            Frame.Navigate(typeof(LoginPage));
-        }
-
-        /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.  The Parameter
