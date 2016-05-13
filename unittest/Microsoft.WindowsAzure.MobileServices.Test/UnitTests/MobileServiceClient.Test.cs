@@ -340,7 +340,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             IntType expected = await service.InvokeApiAsync<IntType>("calculator/add?a=1&b=2");
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
-            Assert.Contains(hijack.Request.RequestUri.Query, "a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.AreEqual(3, expected.Id);
         }
 
@@ -355,7 +355,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             JToken expected = await service.InvokeApiAsync("calculator/add?a=1&b=2");
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.AreEqual(3, (int)expected["id"]);
         }
 
@@ -430,7 +430,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             IntType expected = await service.InvokeApiAsync<IntType>("calculator/add?a=1&b=2", HttpMethod.Get, null);
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
-            Assert.Contains(hijack.Request.RequestUri.Query, "a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.AreEqual(3, expected.Id);
         }
 
@@ -444,7 +444,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await service.InvokeApiAsync<IntType>("/calculator/add?a=1&b=2", HttpMethod.Get, null);
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, "/calculator/add");
-            Assert.Contains(hijack.Request.RequestUri.Query, "a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
         }
 
         [AsyncTestMethod]
@@ -458,7 +458,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             JToken expected = await service.InvokeApiAsync("calculator/add?a=1&b=2", HttpMethod.Get, null);
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.AreEqual(3, (int)expected["id"]);
         }
 
@@ -472,7 +472,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             var myParams = new Dictionary<string, string>() { { "a", "1" }, { "b", "2" } };
             IntType expected = await service.InvokeApiAsync<IntType>("calculator/add", HttpMethod.Get, myParams);
 
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
         }
 
         [AsyncTestMethod]
@@ -485,7 +485,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             var myParams = new Dictionary<string, string>() { { "a", "1" }, { "b", "2" } };
             JToken expected = await service.InvokeApiAsync("calculator/add", HttpMethod.Get, myParams);
 
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
         }
 
         [AsyncTestMethod]
@@ -525,7 +525,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             var body = "{\"test\" : \"one\"}";
             IntType expected = await service.InvokeApiAsync<string, IntType>("calculator/add", body, HttpMethod.Post, myParams);
 
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.IsNotNull(hijack.Request.Content);
         }
 
@@ -540,7 +540,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             JObject body = JToken.Parse("{\"test\":\"one\"}") as JObject;
             JToken expected = await service.InvokeApiAsync("calculator/add", body, HttpMethod.Post, myParams);
 
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.IsNotNull(hijack.Request.Content);
         }
 
@@ -557,7 +557,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             HttpResponseMessage response = await service.InvokeApiAsync("calculator/add?a=1&b=2", null, HttpMethod.Post, null, null);
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.Contains(response.Content.ReadAsStringAsync().Result, "{\"id\":\"2\"}");
         }
 
@@ -576,7 +576,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             HttpResponseMessage response = await service.InvokeApiAsync("calculator/add", null, HttpMethod.Post, null, myParams);
 
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.IsNull(hijack.Request.Content);
             Assert.Contains(response.Content.ReadAsStringAsync().Result, "{\"id\":\"2\"}");
         }
@@ -604,7 +604,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Assert.AreEqual(hijack.Request.RequestUri.LocalPath, mobileAppUriValidator.GetApiUriPath("calculator/add"));
             Assert.AreEqual(hijack.Request.Headers.GetValues("x-zumo-test").First(), "test");
             Assert.IsNotNull(hijack.Request.Content);
-            Assert.Contains(hijack.Request.RequestUri.Query, "?a=1&b=2");
+            Assert.AreEqual(hijack.Request.RequestUri.Query, "?a=1&b=2");
             Assert.Contains(response.Content.ReadAsStringAsync().Result, "{\"id\":\"2\"}");
         }
 
