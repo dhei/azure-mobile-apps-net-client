@@ -987,13 +987,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         [AsyncTestMethod]
         public async Task RefreshUserAsync_ThrowsOnExceptions()
         {
-            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.BadRequest, "Failed to refresh access token because of a 400 Bad Request error. Refresh token must be supported by your identity provider and user is logged in with sufficient permission.");
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.BadRequest, "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.");
 
-            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.Unauthorized, "Failed to refresh access token because of a 401 Unauthorized error, possibly due to absence or expiry of access token. A MobileServiceUser must be set before calling refresh.");
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.Unauthorized, "Refresh failed with a 401 Unauthorized error. Credentials are no longer valid.");
 
-            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.Forbidden, "Failed to refresh access token because of a 403 Forbidden error, possibly due to revocation of access token or refresh token. A MobileServiceUser must be set before calling refresh.");
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.Forbidden, "Refresh failed with a 403 Forbidden error. The refresh token was revoked or expired.");
 
-            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.InternalServerError, "Failed to refresh access token because of an unexpected error.");
+            await RefreshUserAsync_ThrowsOnException(HttpStatusCode.InternalServerError, "Refresh failed due to an unexpected error.");
         }
 
         private static async Task RefreshUserAsync_ThrowsOnException(HttpStatusCode statusCode, string message)

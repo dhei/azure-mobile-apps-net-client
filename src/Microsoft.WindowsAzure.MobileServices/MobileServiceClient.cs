@@ -418,16 +418,16 @@ namespace Microsoft.WindowsAzure.MobileServices
                     switch (ex.Response.StatusCode)
                     {
                         case HttpStatusCode.BadRequest:
-                            message = "Failed to refresh access token because of a 400 Bad Request error. Refresh token must be supported by your identity provider and user is logged in with sufficient permission.";
+                            message = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
                             break;
                         case HttpStatusCode.Unauthorized:
-                            message = "Failed to refresh access token because of a 401 Unauthorized error, possibly due to absence or expiry of access token. A MobileServiceUser must be set before calling refresh.";
+                            message = "Refresh failed with a 401 Unauthorized error. Credentials are no longer valid.";
                             break;
                         case HttpStatusCode.Forbidden:
-                            message = "Failed to refresh access token because of a 403 Forbidden error, possibly due to revocation of access token or refresh token. A MobileServiceUser must be set before calling refresh.";
+                            message = "Refresh failed with a 403 Forbidden error. The refresh token was revoked or expired.";
                             break;
                         default:
-                            message = "Failed to refresh access token because of an unexpected error.";
+                            message = "Refresh failed due to an unexpected error.";
                             break;
                     }
                     throw new MobileServiceInvalidOperationException(message, innerException: ex, request: ex.Request, response: ex.Response);
