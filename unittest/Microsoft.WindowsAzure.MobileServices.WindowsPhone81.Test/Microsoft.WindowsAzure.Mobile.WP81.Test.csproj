@@ -114,6 +114,9 @@
     <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UI\TestPage.xaml.cs">
       <Link>UI\TestPage.xaml.cs</Link>
     </Compile>
+    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UnitTests\AuthenticationBroker.Test.cs">
+      <Link>UnitTests\AuthenticationBroker.Test.cs</Link>
+    </Compile>
     <Compile Include="..\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\UnitTests\Collections\IncrementalLoadingMobileServiceCollection.Test.cs">
       <Link>UnitTests\Collections\IncrementalLoadingMobileServiceCollection.Test.cs</Link>
     </Compile>

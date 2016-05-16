@@ -6,7 +6,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
 using Windows.Security.Authentication.Web;
 
 namespace Microsoft.WindowsAzure.MobileServices
@@ -218,7 +217,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// includes in the query string of the URL the <paramref name="queryParameter"/>
         /// with the value given by <paramref name="queryValue"/>.
         /// </returns>
-        private Uri GetUrlWithQueryStringParameter(Uri url, string queryParameter, string queryValue)
+        internal Uri GetUrlWithQueryStringParameter(Uri url, string queryParameter, string queryValue)
         {
             Debug.Assert(url != null);
             Debug.Assert(queryParameter != null);
@@ -228,22 +227,20 @@ namespace Microsoft.WindowsAzure.MobileServices
             string queryValueEscaped = Uri.EscapeDataString(queryValue);
 
             UriBuilder uriBuilder = new UriBuilder(url);
-            
+
+            string queryToAppend = string.Format(CultureInfo.InvariantCulture, "{0}={1}", queryParameterEscaped, queryValueEscaped);
             string query = uriBuilder.Query;
-            if (string.IsNullOrEmpty(query))
+
+            // Must strip off "?" prefix of query before setting it back to avoid "??" in the query.
+            // Because UriBuild.Query property (https://msdn.microsoft.com/en-us/library/system.uribuilder.query) 
+            // getter starts with "?", but property setter starts without "?".
+            if (!string.IsNullOrEmpty(query) && query.Length > 1)
             {
-                query = string.Format(CultureInfo.InvariantCulture,
-                                      "{0}={1}",
-                                      queryParameterEscaped,
-                                      queryValueEscaped);
+                query = query.Substring(1) + "&" + queryToAppend;
             }
             else
             {
-                query = string.Format(CultureInfo.InvariantCulture,
-                                      "{0}&{1}={2}",
-                                      query,
-                                      queryParameterEscaped,
-                                      queryValueEscaped);
+                query = queryToAppend;
             }
 
             uriBuilder.Query = query;
