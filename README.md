@@ -59,7 +59,7 @@ Windows Phone 8 and .NET 4.5.
 
 ## Useful Resources
 
-* [Quickstarts](https://github.com/Azure/azure-mobile-services-quickstarts)
+* [Quickstarts](https://github.com/Azure/azure-mobile-apps-quickstarts)
 * [E2E Test Suite](e2etest)
 * [Samples](https://github.com/Azure/mobile-services-samples)
 * Tutorials and product overview are available at [Microsoft Azure Mobile Services Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
