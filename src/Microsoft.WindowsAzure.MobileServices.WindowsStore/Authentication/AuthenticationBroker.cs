@@ -199,9 +199,18 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </returns>
         internal Uri GetUrlWithQueryStringParameter(Uri url, string queryParameter, string queryValue)
         {
-            Debug.Assert(url != null);
-            Debug.Assert(queryParameter != null);
-            Debug.Assert(queryValue != null);
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+            if (queryParameter == null)
+            {
+                throw new ArgumentNullException("queryParameter");
+            }
+            if (queryValue == null)
+            {
+                throw new ArgumentNullException("queryValue");
+            }
 
             string queryParameterEscaped = Uri.EscapeDataString(queryParameter);
             string queryValueEscaped = Uri.EscapeDataString(queryValue);

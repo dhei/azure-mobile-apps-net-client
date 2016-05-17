@@ -41,6 +41,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 expectedResult: "https://foobar.azurewebsites.net/.auth/login/aad?param1=value1&param2=value2&param3=value3");
         }
 
+        [TestMethod]
+        public void GetUrlWithQueryStringParameter_Throws_WhenArgumentIsNull()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => new AuthenticationBroker().GetUrlWithQueryStringParameter(url: null, queryParameter: "param", queryValue: "value"));
+            AssertEx.Throws<ArgumentNullException>(() => new AuthenticationBroker().GetUrlWithQueryStringParameter(url: new Uri("https://foobar.azurewebsites.net/.auth/login/aad"), queryParameter: null, queryValue: "value"));
+            AssertEx.Throws<ArgumentNullException>(() => new AuthenticationBroker().GetUrlWithQueryStringParameter(url: new Uri("https://foobar.azurewebsites.net/.auth/login/aad"), queryParameter: "param", queryValue: null));
+        }
+
         private static void GetUrlWithQueryStringParameter_Setup(string startUrl, string param, string paramValue, string expectedResult)
         {
             Uri result = new AuthenticationBroker().GetUrlWithQueryStringParameter(new Uri(startUrl), param, paramValue);
