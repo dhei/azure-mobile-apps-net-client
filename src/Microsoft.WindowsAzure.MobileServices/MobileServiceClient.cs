@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,6 +31,11 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// installation ID.
         /// </summary>
         private const string ConfigureAsyncApplicationIdKey = "applicationInstallationId";
+
+        /// <summary>
+        /// Relative URI fragment of the refresh user endpoint.
+        /// </summary>
+        private const string RefreshUserAsyncUriFragment = "/.auth/refresh";
 
         private static HttpMethod defaultHttpMethod = HttpMethod.Post;
 
@@ -380,6 +386,63 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             this.CurrentUser = null;
             return Task.FromResult(0);
+        }
+
+        /// <summary>
+        /// Refreshes access token with the identity provider for the logged in user.
+        /// </summary>
+        /// <returns>
+        /// Task that will complete when the user has finished refreshing access token
+        /// </returns>
+        public async Task<MobileServiceUser> RefreshUserAsync()
+        {
+            if (this.CurrentUser == null || string.IsNullOrEmpty(this.CurrentUser.MobileServiceAuthenticationToken))
+            {
+                throw new InvalidOperationException("MobileServiceUser must be set before calling refresh");
+            }
+            string response = null;
+            MobileServiceHttpClient client = this.HttpClient;
+            if (this.AlternateLoginHost != null)
+            {
+                client = this.AlternateAuthHttpClient;
+            }
+            try
+            {
+                response = await client.RequestWithoutHandlersAsync(HttpMethod.Get, RefreshUserAsyncUriFragment, this.CurrentUser);
+            }
+            catch (MobileServiceInvalidOperationException ex)
+            {
+                string message = string.Empty;
+                if (ex.Response != null)
+                {
+                    switch (ex.Response.StatusCode)
+                    {
+                        case HttpStatusCode.BadRequest:
+                            message = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
+                            break;
+                        case HttpStatusCode.Unauthorized:
+                            message = "Refresh failed with a 401 Unauthorized error. Credentials are no longer valid.";
+                            break;
+                        case HttpStatusCode.Forbidden:
+                            message = "Refresh failed with a 403 Forbidden error. The refresh token was revoked or expired.";
+                            break;
+                        default:
+                            message = "Refresh failed due to an unexpected error.";
+                            break;
+                    }
+                    throw new MobileServiceInvalidOperationException(message, innerException: ex, request: ex.Request, response: ex.Response);
+                }
+                throw;
+            }
+
+            if (!string.IsNullOrEmpty(response))
+            {
+                JToken authToken = JToken.Parse(response);
+
+                this.CurrentUser.MobileServiceAuthenticationToken = (string)authToken["authenticationToken"];
+            }
+
+            return this.CurrentUser;
         }
 
         /// <summary>

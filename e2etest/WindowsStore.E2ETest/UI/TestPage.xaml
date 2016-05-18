@@ -42,7 +42,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Style="{StaticResource SubheaderStyle}">Microsoft Azure Mobile Services</TextBlock>
             <TextBlock Grid.Row="1"  Style="{StaticResource HeaderStyle}">C# Client Library Tests</TextBlock>
-            <TextBlock x:Name="lblStatus" Grid.Row="2" Style="{StaticResource StatusStyle}">Unit Test Run</TextBlock>
+            <TextBlock x:Name="lblStatus" Grid.Row="2" Style="{StaticResource StatusStyle}">E2E Test Run</TextBlock>
             <ListView
               x:Name="lstTests"
               Grid.Row="3"

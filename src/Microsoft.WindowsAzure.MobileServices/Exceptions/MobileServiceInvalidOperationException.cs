@@ -57,6 +57,29 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
+        /// Initializes a new instance of the
+        /// MobileServiceInvalidOperationException class.
+        /// </summary>
+        /// <param name="message">
+        /// The exception message.
+        /// </param>
+        /// <param name="innerException">
+        /// The inner exception of this exception
+        /// </param>
+        /// <param name="request">
+        /// The originating service request.
+        /// </param>
+        /// <param name="response">
+        /// The returned service response.
+        /// </param>
+        public MobileServiceInvalidOperationException(string message, Exception innerException, HttpRequestMessage request, HttpResponseMessage response)
+            : base(message, innerException)
+        {
+            this.Request = request;
+            this.Response = response;
+        }
+
+        /// <summary>
         /// Gets the originating service request.
         /// </summary>
         public HttpRequestMessage Request { get; private set; }

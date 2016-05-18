@@ -36,14 +36,15 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
                 },
 
                 new Section {
-                   new AccessibleStringElement ("Run Tests", RunTests, accessibilityId: "RunTests")                
+                   new AccessibleStringElement ("E2E Tests", RunTests, accessibilityId: "RunTests")                
                 },
 
                 new Section{
-                    new StringElement("Login with Microsoft", () => Login(MobileServiceAuthenticationProvider.MicrosoftAccount)),
+                    new StringElement("Login and Refresh with Microsoft Account", () => LoginAndRefresh(MobileServiceAuthenticationProvider.MicrosoftAccount)),
                     new StringElement("Login with Facebook", () => Login(MobileServiceAuthenticationProvider.Facebook)),
                     new StringElement("Login with Twitter", () => Login(MobileServiceAuthenticationProvider.Twitter)),
-                    new StringElement("Login with Google", () => Login(MobileServiceAuthenticationProvider.Google))
+                    new StringElement("Login with Google", () => Login(MobileServiceAuthenticationProvider.Google)),
+                    new StringElement("Login with AAD", () => Login(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory))
                 }
             };
         }
@@ -91,6 +92,19 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
             var client = new MobileServiceClient(this.uriEntry.Value);
             var user = await client.LoginAsync(this, provider);
             var alert = new UIAlertView("Welcome", "Your userId is: " + user.UserId, null, "OK");
+            alert.Show();
+        }
+
+        private async void LoginAndRefresh(MobileServiceAuthenticationProvider provider)
+        {
+            var client = new MobileServiceClient(this.uriEntry.Value);
+            MobileServiceUser user = await client.LoginAsync(this, provider);
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(user.MobileServiceAuthenticationToken, refreshedUser.MobileServiceAuthenticationToken);
+
+            var alert = new UIAlertView("Welcome", "Login and Refresh User succeeded. Your userId is: " + user.UserId, null, "OK");
             alert.Show();
         }
     }

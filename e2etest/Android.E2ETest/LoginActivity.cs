@@ -50,7 +50,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             this.tagsText.Text = prefs.GetString(Keys.TagExpression, null);
 
             FindViewById<Button>(Resource.Id.RunTests).Click += OnClickRunTests;
-            FindViewById<Button>(Resource.Id.Login).Click += OnClickLogin;
+            FindViewById<Button>(Resource.Id.Login).Click += OnClickLoginAndRefresh;
 
             string autoStart = ReadSettingFromIntentOrDefault(Keys.AutoStart, "false");
             if (autoStart != null && autoStart.ToLower() == "true")
@@ -112,11 +112,17 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             StartActivity(intent);
         }
 
-        private async void OnClickLogin(object sender, EventArgs eventArgs)
+        private async void OnClickLoginAndRefresh(object sender, EventArgs eventArgs)
         {
             var client = new MobileServiceClient(this.uriText.Text);
             var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount);
-            System.Diagnostics.Debug.WriteLine(user.UserId);
+
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(user.MobileServiceAuthenticationToken, refreshedUser.MobileServiceAuthenticationToken);
+
+            System.Diagnostics.Debug.WriteLine("LoginAsync succeeded and RefreshAsync succeeded. UserId: " + user.UserId);
         }
     }
 }

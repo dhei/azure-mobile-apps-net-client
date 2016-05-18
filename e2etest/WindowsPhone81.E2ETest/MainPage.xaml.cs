@@ -1,18 +1,6 @@
-﻿using Microsoft.WindowsAzure.MobileServices.Test;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -34,15 +22,15 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             txtRuntimeUri.Text = mobileServiceRuntimeURL ?? "";
             txtTags.Text = tags ?? "";
 
-            Loaded += (s, e) => btnUnitTests.Focus(FocusState.Keyboard);
+            Loaded += (s, e) => btnE2ETests.Focus(FocusState.Keyboard);
         }
 
         /// <summary>
-        /// Start the unit test run.
+        /// Start the end to end test run.
         /// </summary>
         /// <param name="sender">Start button.</param>
         /// <param name="e">Event arguments.</param>
-        private void ExecuteUnitTests(object sender, RoutedEventArgs e)
+        private void ExecuteE2ETests(object sender, RoutedEventArgs e)
         {
             // Get the test settings from the UI
             App.Harness.Settings.Custom["MobileServiceRuntimeUrl"] = txtRuntimeUri.Text;

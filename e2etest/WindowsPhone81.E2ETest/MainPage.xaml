@@ -43,7 +43,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Style="{StaticResource SubheaderStyle}">Microsoft Azure Mobile Services</TextBlock>
-        <TextBlock Grid.Row="1"  Style="{StaticResource HeaderStyle}">C# Client Library Tests</TextBlock>
+        <TextBlock Grid.Row="1"  Style="{StaticResource SubheaderTextBlockStyle}">C# Client Library Tests (WP8.1)</TextBlock>
         <Border Grid.Row="2" Style="{StaticResource DialogStyle}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -60,7 +60,7 @@
                       Grid.Row="0"
                       Grid.Column="0"
                       Style="{StaticResource LabelStyle}"
-                      Text="Mobile Service Uri:" />
+                      Text="Mobile Service Uri: (Required)" />
                 <TextBox
                       x:Name="txtRuntimeUri"
                       Grid.Row="1"
@@ -70,7 +70,7 @@
                       Grid.Row="4"
                       Grid.Column="0"
                       Style="{StaticResource LabelStyle}"
-                      Text="Tags:" />
+                      Text="Tags: (Optional)" />
                 <TextBox
                       x:Name="txtTags"
                       Grid.Row="5"
@@ -80,17 +80,15 @@
                 <StackPanel
                         Grid.Row="6"
                         Grid.Column="0"
-                        HorizontalAlignment="Right" Orientation="Horizontal">
+                        HorizontalAlignment="Center" Orientation="Horizontal">
                     <Button
-                          x:Name="btnLoginTests"                         
-                          Content="Login Tests"
-                          MinWidth="100"
+                          x:Name="btnE2ETests"
+                          Content="E2E Tests"
+                          Click="ExecuteE2ETests" />
+                    <Button
+                          x:Name="btnLoginTests"
+                          Content="Login/Refresh Tests"
                           Click="ExecuteLoginTests" />
-                    <Button
-                          x:Name="btnUnitTests"
-                          Content="Unit Tests"
-                          MinWidth="100"
-                          Click="ExecuteUnitTests" />
                 </StackPanel>
             </Grid>
         </Border>

@@ -140,7 +140,7 @@
       <Link>TestPlatform\CurrentTestPlatform.cs</Link>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
-    <Compile Include="PlatformTests\LoginTests.cs" />
+    <Compile Include="Functional\LoginTests.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -246,9 +246,7 @@
       <Name>Microsoft.WindowsAzure.Mobile.Test</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Functional\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

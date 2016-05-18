@@ -2,8 +2,8 @@
 <resources>
   <string name="MobileServiceUri">Mobile Service URI</string>
 	<string name="Tags">Tags</string>
-	<string name="RunTests">Run Tests</string>
+	<string name="RunTests">E2E Tests</string>
 	<string name="ApplicationName">Microsoft.WindowsAzure.Mobile.Android.Test</string>
-  <string name="Login">Login</string>
+  <string name="Login">Login/Refresh Tests</string>
   <string name="library_name"></string>
 </resources>

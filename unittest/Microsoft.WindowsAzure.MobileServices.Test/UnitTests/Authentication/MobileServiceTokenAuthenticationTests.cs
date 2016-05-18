@@ -34,7 +34,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.UnitTests
             hijack = new TestHttpHandler();
             hijack.SetResponseContent(String.Empty);
 
-            var originalFactory = MobileServiceHttpClient.DefaultHandlerFactory;
             MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
             client = new MobileServiceClient(appUrl, hijack);
             client.LoginUriPrefix = loginPrefix;
@@ -42,7 +41,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.UnitTests
             {
                 client.AlternateLoginHost = new Uri(alternateLoginUri);
             }
-            MobileServiceHttpClient.DefaultHandlerFactory = originalFactory;
         }
 
         [TestMethod]

@@ -23,27 +23,27 @@
         
         <StackPanel Grid.Row="0">
             <TextBlock Text="Microsoft Azure Mobile Services" Style="{StaticResource PhoneTextNormalStyle}" FontSize="20" FontWeight="Bold"/>
-            <TextBlock Text="C# Client Library Tests" Style="{StaticResource PhoneTextAccentStyle}" Foreground="#0094ff" FontSize="30" />
+            <TextBlock Text="C# Client Library Tests (WP8)" Style="{StaticResource PhoneTextAccentStyle}" Foreground="#0094ff" FontSize="30" />
             <TextBlock TextWrapping="Wrap" Visibility="Collapsed" x:Name="lblStatus" Text="Status pending..."  Style="{StaticResource PhoneTextNormalStyle}"/>
             <StackPanel x:Name="testSettings">
-                <TextBlock VerticalAlignment="Center" Style="{StaticResource PhoneTextNormalStyle}" Text="Mobile Service Uri:" />
+                <TextBlock VerticalAlignment="Center" Style="{StaticResource PhoneTextNormalStyle}" Text="Mobile Service Uri: (Required)" />
                 <TextBox x:Name="txtRuntimeUri" BorderThickness="0" Padding="0" FontSize="20"/>
-                <TextBlock VerticalAlignment="Center" Style="{StaticResource PhoneTextNormalStyle}" Text="Tags:"/>
+                <TextBlock VerticalAlignment="Center" Style="{StaticResource PhoneTextNormalStyle}" Text="Tags: (Optional)"/>
                 <TextBox x:Name="txtTags" FontSize="20"  BorderThickness="0" Padding="0" />
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Button x:Name="btnLoginTests" Content="Login Tests" MinWidth="100" Click="ExecuteLoginTests" />
-                    <Button x:Name="btnUnitTests" Content="Unit Tests" MinWidth="100" Click="ExecuteUnitTests" />
+                    <Button x:Name="btnE2ETests" Content="E2E Tests" MinWidth="100" Click="ExecuteE2ETests" />
+                    <Button x:Name="btnLoginTests" Content="Login/Refresh Tests" MinWidth="100" Click="ExecuteLoginTests" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>
 
         <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,12,12,12">
             <phone:LongListSelector
-        		Height="560" 
-        		Width="456"
-        		x:Name="unitTests"               
-        		IsGroupingEnabled="True" 
-        		BorderBrush="Red"
+                Height="560" 
+                Width="456"
+                x:Name="E2ETests"
+                IsGroupingEnabled="True" 
+                BorderBrush="Red"
                 BorderThickness="2" 
                 Visibility="Collapsed">
                 <phone:LongListSelector.GroupHeaderTemplate>
@@ -82,29 +82,26 @@
                 <Button x:Name="AzureActiveDirectoryButton"
                         Content="Microsoft Azure Active Directory" 
                         Click="LoginButtonClicked"/>
-                <CheckBox x:Name="UseProviderStringOverloadCheckBox"
-                          Content="Use overload with string provider"
-                          IsChecked="false"/>
                 <TextBlock HorizontalAlignment="Left" 
-            	        TextWrapping="Wrap" 
-            	        Height="20" 
-            	        Width="200"
+                        TextWrapping="Wrap" 
+                        Height="20" 
+                        Width="200"
                         Margin="0,20"
                         Text="Test Result:"
                         FontSize="15">
                 </TextBlock>
                 <TextBlock x:Name="TestResultsTextBlock"
                         HorizontalAlignment="Left" 
-            	        TextWrapping="Wrap" 
-            	        Height="400" 
-            	        Width="600"
+                        TextWrapping="Wrap" 
+                        Height="400" 
+                        Width="600"
                         Text=""
                         FontSize="15">
                 </TextBlock>
             </StackPanel>
         </StackPanel>
 
-        <StackPanel x:Name="unitTestResults" Grid.Row="2" Margin="12,0,12,0" Visibility="Collapsed">
+        <StackPanel x:Name="E2ETestResults" Grid.Row="2" Margin="12,0,12,0" Visibility="Collapsed">
             <ProgressBar x:Name="progress"/>
             <StackPanel x:Name="ProgresStackPanel" Orientation="Horizontal">
                 <TextBlock Text="Zumo tests " Style="{StaticResource PhoneTextNormalStyle}"/>
