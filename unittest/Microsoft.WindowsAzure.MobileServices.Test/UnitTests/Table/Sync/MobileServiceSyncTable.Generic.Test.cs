@@ -86,9 +86,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             using (var cts = new CancellationTokenSource())
             {
-                // now pull
-                Task pullTask = table.PullAsync(null, null, null, cancellationToken: cts.Token);
+                // make sure cancellationToken is cancelled before calling PullAsync
                 cts.Cancel();
+                Task pullTask = table.PullAsync(null, null, null, cancellationToken: cts.Token);
 
                 var ex = await ThrowsAsync<Exception>(() => pullTask);
 
