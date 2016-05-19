@@ -1003,12 +1003,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             string userId = "sid:xxxxxxxxxxxxxxxxx";
 
             TestHttpHandler hijack = new TestHttpHandler();
-            var request = new HttpRequestMessage(HttpMethod.Get, refreshUrl);
-            var response = new HttpResponseMessage(statusCode);
-            hijack.OnSendingRequest = req =>
-            {
-                throw new MobileServiceInvalidOperationException("error message from Mobile Apps refresh endpoint", request, response);
-            };
+            hijack.Response = TestHttpHandler.CreateResponse("error message from Mobile Apps refresh endpoint", statusCode);
 
             MobileServiceHttpClient.DefaultHandlerFactory = () => hijack;
             MobileServiceClient client = new MobileServiceClient(appUrl, hijack);
