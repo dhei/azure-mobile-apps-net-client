@@ -68,5 +68,11 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </summary>
         [EnumValue("LH")]
         ReadWithLinkHeader = 0x100,
+
+        /// <summary>
+        /// Feature header value for refresh token
+        /// </summary>
+        [EnumValue("RT")]
+        RefreshToken = 0x200,
     }
 }

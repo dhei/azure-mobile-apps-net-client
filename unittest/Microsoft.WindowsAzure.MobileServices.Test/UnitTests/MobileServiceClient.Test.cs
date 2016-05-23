@@ -979,6 +979,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
             MobileServiceUser user = await client.RefreshUserAsync();
 
+            Assert.AreEqual(EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken), 
+                hijack.Request.Headers.GetValues(MobileServiceHttpClient.ZumoFeaturesHeader).FirstOrDefault());
             Assert.AreEqual(hijack.Request.RequestUri.OriginalString, refreshUrl);
             Assert.AreEqual(newAuthToken, user.MobileServiceAuthenticationToken);
             Assert.AreEqual(userId, user.UserId);
@@ -1013,6 +1015,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             };
 
             MobileServiceInvalidOperationException exception = await AssertEx.Throws<MobileServiceInvalidOperationException>(() => client.RefreshUserAsync());
+
+            Assert.AreEqual(EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken),
+                hijack.Request.Headers.GetValues(MobileServiceHttpClient.ZumoFeaturesHeader).FirstOrDefault());
             Assert.AreEqual(message, exception.Message);
             Assert.IsNotNull(exception.Request);
             Assert.AreEqual(statusCode, exception.Response.StatusCode);
