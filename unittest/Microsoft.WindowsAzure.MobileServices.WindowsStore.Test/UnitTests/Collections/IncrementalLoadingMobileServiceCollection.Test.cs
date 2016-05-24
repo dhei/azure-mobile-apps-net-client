@@ -31,7 +31,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             query.EnumerableAsyncThrowsException = true;
 
             MobileServiceIncrementalLoadingCollection<Book, Book> collection = new MobileServiceIncrementalLoadingCollection<Book, Book>(query);
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
 
             Exception ex = null;
 
@@ -56,7 +55,6 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             ExceptionHandlingdMobileServiceIncrementalLoadingCollection collection = 
                 new ExceptionHandlingdMobileServiceIncrementalLoadingCollection(query);
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
 
             Exception ex = null;
 
