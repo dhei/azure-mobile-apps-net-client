@@ -19,7 +19,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     /// </summary>
     public class LoginTests
     {
-        private const string RefreshUser400ErrorMessage = "Failed to refresh access token because of a 400 Bad Request error. Refresh token must be supported by your identity provider and user is logged in with sufficient permission.";
+        private const string RefreshUser400ErrorMessage = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
 
         private const string GoogleTokenRevocationURI = @"https://accounts.google.com/o/oauth2/revoke?token={0}";
 
