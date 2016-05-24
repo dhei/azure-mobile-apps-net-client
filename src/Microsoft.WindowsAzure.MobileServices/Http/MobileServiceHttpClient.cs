@@ -706,7 +706,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Helper class to create the HTTP headers used for sending feature usage to the service.
         /// </summary>
-        static class FeaturesHelper
+        internal static class FeaturesHelper
         {
             /// <summary>
             /// Existing features which can be sent for telemetry purposes to the server.
