@@ -62,7 +62,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Facebook
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Facebook
         /// </summary>
         /// <returns>
         /// The UserId and MobileServiceAuthentication token obtained after refresh
@@ -80,7 +80,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 Assert.IsNotNull(ex.InnerException);
                 Assert.AreEqual(HttpStatusCode.BadRequest, ex.Response.StatusCode);
                 Assert.AreEqual(RefreshUser400ErrorMessage, ex.Message);
-                return "User Login succeeded. User Refresh is not supported by Facebook as expected.";
+                return string.Format("User Login succeeded. User Refresh is not supported by Facebook. UserId: {0} Token: {1}", user.UserId, user.MobileServiceAuthenticationToken);
             }
 
             Assert.Fail("RefreshAsync() should throw 400 error on Facebook account.");
@@ -88,7 +88,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Twitter
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Twitter
         /// </summary>
         /// <returns>
         /// The UserId and MobileServiceAuthentication token obtained after refresh
@@ -106,7 +106,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 Assert.IsNotNull(ex.InnerException);
                 Assert.AreEqual(HttpStatusCode.BadRequest, ex.Response.StatusCode);
                 Assert.AreEqual(RefreshUser400ErrorMessage, ex.Message);
-                return "User Login succeeded. User Refresh is not supported by Twitter as expected.";
+                return string.Format("User Login succeeded. User Refresh is not supported by Twitter. UserId: {0} Token: {1}", user.UserId, user.MobileServiceAuthenticationToken);
             }
 
             Assert.Fail("RefreshAsync() should throw 400 error on Twitter account.");
@@ -114,7 +114,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of MicrosoftAccount
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> 
+        /// functionality of MicrosoftAccount
         /// </summary>
         /// <returns>
         /// The UserId and MobileServiceAuthentication token obtained after refresh
@@ -134,7 +135,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of WindowsAzureActiveDirectory
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of WindowsAzureActiveDirectory
         /// </summary>
         /// <returns>
         /// The UserId and MobileServiceAuthentication token obtained after refresh
@@ -157,7 +158,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Google
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Google
         /// </summary>
         /// <returns>
         /// The UserId and MobileServiceAuthentication token obtained after refresh
