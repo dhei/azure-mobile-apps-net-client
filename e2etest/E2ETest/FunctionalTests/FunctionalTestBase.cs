@@ -2,6 +2,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ----------------------------------------------------------------------------
 
+using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +28,17 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             if (staticClient == null)
             {
                 string runtimeUrl = this.GetTestSetting("MobileServiceRuntimeUrl");
+                
                 staticClient = new MobileServiceClient(runtimeUrl, new LoggingHttpHandler(this));
+
+                // Uncomment this and replace proxyUri with your Android device IP address to enable debugging in Fiddler
+                /*
+                string proxyUri = "YOUR_DEVICE_IP_ADDRESS";
+                staticClient = new MobileServiceClient(runtimeUrl, new HttpClientHandler
+                {
+                    Proxy = new Microsoft.WindowsAzure.MobileServices.Test.FunctionalTests.WebProxy(new System.Uri(proxyUri))
+                });
+                */
             }
             return staticClient;
         }
@@ -47,6 +59,38 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
             Test.Log("    <<< {0} {1} {2}", response.StatusCode, response.ReasonPhrase, response.Content);
             return response;
+        }
+    }
+
+    class WebProxy : IWebProxy
+    {
+        private readonly Uri uri;
+
+        public WebProxy(Uri uri)
+        {
+            this.uri = uri;
+        }
+
+        public ICredentials Credentials
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Uri GetProxy(Uri destination)
+        {
+            return uri;
+        }
+
+        public bool IsBypassed(Uri host)
+        {
+            return false;
         }
     }
 }
