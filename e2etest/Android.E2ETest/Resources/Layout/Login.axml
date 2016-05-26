@@ -21,8 +21,33 @@
         p1:layout_height="wrap_content"
         p1:id="@+id/RunTests" />
     <Button
-        p1:text="@string/Login"
+        p1:text="@string/MSALogin"
         p1:layout_width="fill_parent"
         p1:layout_height="wrap_content"
-        p1:id="@+id/Login" />
+        p1:id="@+id/MSALogin" />
+    <Button
+        p1:text="@string/AADLogin"
+        p1:layout_width="fill_parent"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/AADLogin" />
+    <Button
+        p1:text="@string/GoogleLogin"
+        p1:layout_width="fill_parent"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/GoogleLogin" />
+    <Button
+        p1:text="@string/FacebookLogin"
+        p1:layout_width="fill_parent"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/FacebookLogin" />
+    <Button
+        p1:text="@string/TwitterLogin"
+        p1:layout_width="fill_parent"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/TwitterLogin" />
+    <TextView
+        p1:text="@string/LoginTestResult"
+        p1:layout_width="wrap_content"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/LoginTestResult" />
 </LinearLayout>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -25,7 +27,10 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             public const string StorageSasToken = "storageSasToken";
         }
 
-        private EditText uriText, keyText, tagsText;
+        private const string RefreshUser400ErrorMessage = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
+
+        private EditText uriText, tagsText;
+        private TextView loginTestResult;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -45,12 +50,17 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 
             this.uriText = FindViewById<EditText>(Resource.Id.ServiceUri);
             this.tagsText = FindViewById<EditText>(Resource.Id.ServiceTags);
+            this.loginTestResult = FindViewById<TextView>(Resource.Id.LoginTestResult);
 
             this.uriText.Text = prefs.GetString(Keys.MobileServiceUri, null);
             this.tagsText.Text = prefs.GetString(Keys.TagExpression, null);
 
             FindViewById<Button>(Resource.Id.RunTests).Click += OnClickRunTests;
-            FindViewById<Button>(Resource.Id.Login).Click += OnClickLoginAndRefresh;
+            FindViewById<Button>(Resource.Id.MSALogin).Click += OnClickMicrosoftAccountLoginAndRefresh;
+            FindViewById<Button>(Resource.Id.AADLogin).Click += OnClickAADLoginAndRefresh;
+            FindViewById<Button>(Resource.Id.GoogleLogin).Click += OnClickGoogleLoginAndRefresh;
+            FindViewById<Button>(Resource.Id.FacebookLogin).Click += OnClickFacebookLoginAndRefresh;
+            FindViewById<Button>(Resource.Id.TwitterLogin).Click += OnClickTwitterLoginAndRefresh;
 
             string autoStart = ReadSettingFromIntentOrDefault(Keys.AutoStart, "false");
             if (autoStart != null && autoStart.ToLower() == "true")
@@ -112,17 +122,117 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             StartActivity(intent);
         }
 
-        private async void OnClickLoginAndRefresh(object sender, EventArgs eventArgs)
+        private async void OnClickMicrosoftAccountLoginAndRefresh(object sender, EventArgs eventArgs)
         {
+            this.loginTestResult.Text = string.Empty;
+
             var client = new MobileServiceClient(this.uriText.Text);
             var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount);
+            string authToken = user.MobileServiceAuthenticationToken;
+            this.loginTestResult.Text = "MicrosoftAccount LoginAsync succeeded. UserId: " + user.UserId;
 
             MobileServiceUser refreshedUser = await client.RefreshUserAsync();
 
             Assert.AreEqual(user.UserId, refreshedUser.UserId);
-            Assert.AreNotEqual(user.MobileServiceAuthenticationToken, refreshedUser.MobileServiceAuthenticationToken);
+            Assert.AreNotEqual(authToken, refreshedUser.MobileServiceAuthenticationToken);
 
-            System.Diagnostics.Debug.WriteLine("LoginAsync succeeded and RefreshAsync succeeded. UserId: " + user.UserId);
+            string message = "MicrosoftAccount LoginAsync succeeded. MicrosoftAccount RefreshAsync succeeded. UserId: " + user.UserId;
+            this.loginTestResult.Text = message;
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+
+        private async void OnClickAADLoginAndRefresh(object sender, EventArgs eventArgs)
+        {
+            this.loginTestResult.Text = string.Empty;
+
+            var client = new MobileServiceClient(this.uriText.Text);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, 
+                new Dictionary<string, string>()
+                {
+                    { "response_type", "code id_token" }
+                });
+            string authToken = user.MobileServiceAuthenticationToken;
+            this.loginTestResult.Text = "AAD LoginAsync succeeded. UserId: " + user.UserId;
+
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(authToken, refreshedUser.MobileServiceAuthenticationToken);
+
+            string message = "AAD LoginAsync succeeded. AAD RefreshAsync succeeded. UserId: " + user.UserId;
+            this.loginTestResult.Text = message;
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+
+        private async void OnClickGoogleLoginAndRefresh(object sender, EventArgs eventArgs)
+        {
+            this.loginTestResult.Text = string.Empty;
+
+            var client = new MobileServiceClient(this.uriText.Text);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google,
+                new Dictionary<string, string>()
+                {
+                    { "access_type", "offline" },
+                    { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                });
+            string authToken = user.MobileServiceAuthenticationToken;
+            this.loginTestResult.Text = "Google LoginAsync succeeded. UserId: " + user.UserId;
+
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(authToken, refreshedUser.MobileServiceAuthenticationToken);
+
+            string message = "Google LoginAsync succeeded. Google RefreshAsync succeeded. UserId: " + user.UserId;
+            this.loginTestResult.Text = message;
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+
+        private async void OnClickFacebookLoginAndRefresh(object sender, EventArgs eventArgs)
+        {
+            this.loginTestResult.Text = string.Empty;
+
+            var client = new MobileServiceClient(this.uriText.Text);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook);
+            this.loginTestResult.Text = "Facebook LoginAsync succeeded. UserId: " + user.UserId;
+
+            try
+            {
+                await client.RefreshUserAsync();
+            }
+            catch (MobileServiceInvalidOperationException ex)
+            {
+                Assert.IsNotNull(ex.InnerException);
+                Assert.AreEqual(HttpStatusCode.BadRequest, ex.Response.StatusCode);
+                Assert.AreEqual(RefreshUser400ErrorMessage, ex.Message);
+                string message = "Facebook LoginAsync succeeded. RefreshAsync is not supported by Facebook. UserId: " + user.UserId;
+                this.loginTestResult.Text = message;
+                System.Diagnostics.Debug.WriteLine(message);
+            }
+
+            Assert.Fail("RefreshAsync() should throw 400 error on Facebook account.");
+        }
+
+        private async void OnClickTwitterLoginAndRefresh(object sender, EventArgs eventArgs)
+        {
+            var client = new MobileServiceClient(this.uriText.Text);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Twitter);
+
+            try
+            {
+                await client.RefreshUserAsync();
+            }
+            catch (MobileServiceInvalidOperationException ex)
+            {
+                Assert.IsNotNull(ex.InnerException);
+                Assert.AreEqual(HttpStatusCode.BadRequest, ex.Response.StatusCode);
+                Assert.AreEqual(RefreshUser400ErrorMessage, ex.Message);
+                string message = "Twitter LoginAsync succeeded. RefreshAsync is not supported by Twitter. UserId: " + user.UserId;
+                this.loginTestResult.Text = message;
+                System.Diagnostics.Debug.WriteLine(message);
+            }
+
+            Assert.Fail("RefreshAsync() should throw 400 error on Twitter account.");
         }
     }
 }

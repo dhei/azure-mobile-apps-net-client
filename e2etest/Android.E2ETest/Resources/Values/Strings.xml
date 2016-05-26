@@ -4,6 +4,11 @@
 	<string name="Tags">Tags</string>
 	<string name="RunTests">E2E Tests</string>
 	<string name="ApplicationName">Microsoft.WindowsAzure.Mobile.Android.Test</string>
-  <string name="Login">Login/Refresh Tests</string>
+  <string name="MSALogin">Login/Refresh MSA</string>
+  <string name="AADLogin">Login/Refresh AAD</string>
+  <string name="GoogleLogin">Login/Refresh Google</string>
+  <string name="FacebookLogin">Login/Refresh Facebook</string>
+  <string name="TwitterLogin">Login/Refresh Twitter</string>
+  <string name="LoginTestResult"></string>
   <string name="library_name"></string>
 </resources>
