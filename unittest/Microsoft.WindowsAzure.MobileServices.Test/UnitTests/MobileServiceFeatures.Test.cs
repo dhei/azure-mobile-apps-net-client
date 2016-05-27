@@ -33,6 +33,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Assert.AreEqual("TC", EnumValueAttribute.GetValue(MobileServiceFeatures.TableCollection));
             Assert.AreEqual("OL", EnumValueAttribute.GetValue(MobileServiceFeatures.Offline));
             Assert.AreEqual("QS", EnumValueAttribute.GetValue(MobileServiceFeatures.AdditionalQueryParameters));
+            Assert.AreEqual("RT", EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken));
             Assert.IsNull(EnumValueAttribute.GetValue(MobileServiceFeatures.None));
         }
     }

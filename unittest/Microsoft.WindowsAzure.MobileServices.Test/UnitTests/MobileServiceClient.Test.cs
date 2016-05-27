@@ -979,6 +979,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
             MobileServiceUser user = await client.RefreshUserAsync();
 
+            Assert.AreEqual(EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken), 
+                hijack.Request.Headers.GetValues(MobileServiceHttpClient.ZumoFeaturesHeader).FirstOrDefault());
             Assert.AreEqual(hijack.Request.RequestUri.OriginalString, refreshUrl);
             Assert.AreEqual(newAuthToken, user.MobileServiceAuthenticationToken);
             Assert.AreEqual(userId, user.UserId);
@@ -1013,9 +1015,55 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             };
 
             MobileServiceInvalidOperationException exception = await AssertEx.Throws<MobileServiceInvalidOperationException>(() => client.RefreshUserAsync());
+
+            Assert.AreEqual(EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken),
+                hijack.Request.Headers.GetValues(MobileServiceHttpClient.ZumoFeaturesHeader).FirstOrDefault());
             Assert.AreEqual(message, exception.Message);
             Assert.IsNotNull(exception.Request);
             Assert.AreEqual(statusCode, exception.Response.StatusCode);
+        }
+
+        [TestMethod]
+        public void AddFeaturesHeader_RequestHeadersIsNull()
+        {
+            IDictionary<string, string> requestedHeaders = null;
+            requestedHeaders = MobileServiceHttpClient.FeaturesHelper.AddFeaturesHeader(requestHeaders: requestedHeaders, features: MobileServiceFeatures.None);
+            Assert.IsNull(requestedHeaders);
+
+            requestedHeaders = null;
+            requestedHeaders = MobileServiceHttpClient.FeaturesHelper.AddFeaturesHeader(requestHeaders: requestedHeaders, features: MobileServiceFeatures.RefreshToken);
+            Assert.AreEqual(EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken), requestedHeaders[MobileServiceHttpClient.ZumoFeaturesHeader]);
+        }
+
+        [TestMethod]
+        public void AddFeaturesHeader_RequestHeadersIsNotNull()
+        {
+            IDictionary<string, string> requestedHeaders = new Dictionary<string, string>();
+            requestedHeaders.Add("key1", "value1");
+            requestedHeaders.Add("key2", "value2");
+            Assert.AreEqual(2, requestedHeaders.Count);
+
+            requestedHeaders = MobileServiceHttpClient.FeaturesHelper.AddFeaturesHeader(requestHeaders: requestedHeaders, features: MobileServiceFeatures.None);
+            Assert.AreEqual(2, requestedHeaders.Count);
+
+            requestedHeaders = MobileServiceHttpClient.FeaturesHelper.AddFeaturesHeader(requestHeaders: requestedHeaders, features: MobileServiceFeatures.RefreshToken | MobileServiceFeatures.Offline);
+            Assert.AreEqual(3, requestedHeaders.Count);
+            Assert.AreEqual("OL,RT", requestedHeaders[MobileServiceHttpClient.ZumoFeaturesHeader]);
+        }
+
+        [TestMethod]
+        public void AddFeaturesHeader_ZumoFeaturesHeaderAlreadyExists()
+        {
+            IDictionary<string, string> requestedHeaders = new Dictionary<string, string>();
+            requestedHeaders.Add("key1", "value1");
+            requestedHeaders.Add("key2", "value2");
+            requestedHeaders.Add(MobileServiceHttpClient.ZumoFeaturesHeader, EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken));
+            Assert.AreEqual(3, requestedHeaders.Count);
+
+            // AddFeaturesHeader won't add anything because ZumoFeaturesHeader already exists
+            requestedHeaders = MobileServiceHttpClient.FeaturesHelper.AddFeaturesHeader(requestHeaders: requestedHeaders, features: MobileServiceFeatures.Offline);
+            Assert.AreEqual(3, requestedHeaders.Count);
+            Assert.AreEqual(EnumValueAttribute.GetValue(MobileServiceFeatures.RefreshToken), requestedHeaders[MobileServiceHttpClient.ZumoFeaturesHeader]);
         }
     }
 }

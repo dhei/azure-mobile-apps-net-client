@@ -408,7 +408,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
             try
             {
-                response = await client.RequestWithoutHandlersAsync(HttpMethod.Get, RefreshUserAsyncUriFragment, this.CurrentUser);
+                response = await client.RequestWithoutHandlersAsync(HttpMethod.Get, RefreshUserAsyncUriFragment, this.CurrentUser, null, MobileServiceFeatures.RefreshToken);
             }
             catch (MobileServiceInvalidOperationException ex)
             {

@@ -160,12 +160,16 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="content">
         /// Optional content to send to the resource.
         /// </param>
+        /// <param name="features">
+        /// Optional MobileServiceFeatures used for telemetry purpose.
+        /// </param>>
         /// <returns>
         /// The content of the response as a string.
         /// </returns>
-        public async Task<string> RequestWithoutHandlersAsync(HttpMethod method, string uriPathAndQuery, MobileServiceUser user, string content = null)
+        public async Task<string> RequestWithoutHandlersAsync(HttpMethod method, string uriPathAndQuery, MobileServiceUser user, string content = null, MobileServiceFeatures features = MobileServiceFeatures.None)
         {
-            MobileServiceHttpResponse response = await this.RequestAsync(false, method, uriPathAndQuery, user, content, false);
+            IDictionary<string, string> requestHeaders = FeaturesHelper.AddFeaturesHeader(requestHeaders: null, features: features);
+            MobileServiceHttpResponse response = await this.RequestAsync(false, method, uriPathAndQuery, user, content, false, requestHeaders);
             return response.Content;
         }
 
@@ -702,7 +706,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Helper class to create the HTTP headers used for sending feature usage to the service.
         /// </summary>
-        static class FeaturesHelper
+        internal static class FeaturesHelper
         {
             /// <summary>
             /// Existing features which can be sent for telemetry purposes to the server.
