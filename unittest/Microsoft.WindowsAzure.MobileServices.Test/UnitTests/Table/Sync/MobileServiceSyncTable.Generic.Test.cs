@@ -78,17 +78,21 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             var handler = new MobileServiceSyncHandlerMock();
             handler.TableOperationAction = op => Task.Delay(TimeSpan.MaxValue).ContinueWith<JObject>(t => null); // long slow operation
-
-            IMobileServiceClient service = new MobileServiceClient(MobileAppUriValidator.DummyMobileApp);
+            var hijack = new TestHttpHandler();
+            hijack.OnSendingRequest = async req =>
+            {
+                await Task.Delay(1000);
+                return req;
+            };
+            IMobileServiceClient service = new MobileServiceClient(MobileAppUriValidator.DummyMobileApp, hijack);
             await service.SyncContext.InitializeAsync(store, handler);
 
             IMobileServiceSyncTable table = service.GetSyncTable("someTable");
 
             using (var cts = new CancellationTokenSource())
             {
-                // make sure cancellationToken is cancelled before calling PullAsync
-                cts.Cancel();
                 Task pullTask = table.PullAsync(null, null, null, cancellationToken: cts.Token);
+                cts.Cancel();
 
                 var ex = await ThrowsAsync<Exception>(() => pullTask);
 
