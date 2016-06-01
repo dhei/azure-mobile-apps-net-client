@@ -32,21 +32,41 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         private EditText uriText, tagsText;
         private TextView loginTestResult;
 
+        /// <summary>
+        /// Detect if on Android emulator or real device 
+        /// </summary>
+        private bool onEmulator
+        {
+            get 
+            {
+                if (Build.Fingerprint != null)
+                {
+                    if (Build.Fingerprint.Contains("vsemu") || Build.Fingerprint.Contains("vbox") || Build.Fingerprint.Contains("generic"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Login);
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
 
-            //Check to ensure everything's setup right
-            GcmClient.CheckDevice(this);
-            GcmClient.CheckManifest(this);
-
-            if (!GcmClient.IsRegisteredOnServer(this))
+            if (!onEmulator)
             {
-                GcmClient.UnRegister(this);
+                GcmClient.CheckDevice(this);
+                GcmClient.CheckManifest(this);
+
+                if (!GcmClient.IsRegisteredOnServer(this))
+                {
+                    GcmClient.UnRegister(this);
+                }
+                GcmClient.Register(this, GcmBroadcastReceiver.SENDER_IDS);
             }
-            GcmClient.Register(this, GcmBroadcastReceiver.SENDER_IDS);
 
             this.uriText = FindViewById<EditText>(Resource.Id.ServiceUri);
             this.tagsText = FindViewById<EditText>(Resource.Id.ServiceTags);
