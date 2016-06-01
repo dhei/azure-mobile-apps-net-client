@@ -356,10 +356,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
 
             // Attempt to read data
+            JObject updatedItem = null;
             try
             {
-                var item2 = await table.LookupAsync(id, queryParameters);
-                Debug.WriteLine(string.Format("Retrieved item via lookup: {0}", item2));
+                updatedItem = (JObject)await table.LookupAsync(id, queryParameters);
+                Debug.WriteLine(string.Format("Retrieved item via lookup: {0}", updatedItem));
             }
             catch (MobileServiceInvalidOperationException e)
             {
@@ -386,8 +387,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             // Attempt to delete the data
             try
             {
-                JToken deletedItem = await table.DeleteAsync(item, queryParameters);
-                Debug.WriteLine(string.Format("Deleted item: {0}", item));
+                var itemToDelete = updatedItem ?? item; 
+                JToken deletedItem = await table.DeleteAsync(itemToDelete, queryParameters);
+                Debug.WriteLine(string.Format("Deleted item: {0}", itemToDelete));
             }
             catch (MobileServiceInvalidOperationException e)
             {
