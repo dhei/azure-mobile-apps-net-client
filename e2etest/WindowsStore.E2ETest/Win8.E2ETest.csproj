@@ -16,7 +16,6 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Microsoft.WindowsAzure.Mobile.Win8.Test_StoreKey.pfx</PackageCertificateKeyFile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <PackageCertificateThumbprint>D7DB574C84D9DBE9670915559FC7882D63C8FB42</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <NuGetPackageImportStamp>df4d01e1</NuGetPackageImportStamp>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
