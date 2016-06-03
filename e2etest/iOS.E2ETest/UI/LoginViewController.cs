@@ -1,7 +1,8 @@
+using System.Collections.Generic;
+using Foundation;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 using MonoTouch.Dialog;
-using Foundation;
 using UIKit;
 
 namespace Microsoft.WindowsAzure.Mobile.iOS.Test
@@ -40,11 +41,11 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
                 },
 
                 new Section{
-                    new StringElement("Login and Refresh with Microsoft Account", () => LoginAndRefresh(MobileServiceAuthenticationProvider.MicrosoftAccount)),
+                    new StringElement("Login and Refresh with Microsoft Account", () => LoginAndRefreshWithMicrosoftAccount()),
                     new StringElement("Login with Facebook", () => Login(MobileServiceAuthenticationProvider.Facebook)),
                     new StringElement("Login with Twitter", () => Login(MobileServiceAuthenticationProvider.Twitter)),
-                    new StringElement("Login with Google", () => Login(MobileServiceAuthenticationProvider.Google)),
-                    new StringElement("Login with AAD", () => Login(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory))
+                    new StringElement("Login and Refresh with Google", () => LoginAndRefreshWithGoogle()),
+                    new StringElement("Login and Refresh with AAD", () => LoginAndRefreshWithAAD())
                 }
             };
         }
@@ -91,20 +92,61 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
             var user = await client.LoginAsync(this, provider);
-            var alert = new UIAlertView("Welcome", "Your userId is: " + user.UserId, null, "OK");
+            var alert = new UIAlertView("Welcome", provider.ToString() + " Login succeeded. Your userId is: " + user.UserId, null, "OK");
             alert.Show();
         }
 
-        private async void LoginAndRefresh(MobileServiceAuthenticationProvider provider)
+        private async void LoginAndRefreshWithMicrosoftAccount()
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
-            MobileServiceUser user = await client.LoginAsync(this, provider);
+            MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount);
+            string authToken = user.MobileServiceAuthenticationToken;
+
             MobileServiceUser refreshedUser = await client.RefreshUserAsync();
 
             Assert.AreEqual(user.UserId, refreshedUser.UserId);
-            Assert.AreNotEqual(user.MobileServiceAuthenticationToken, refreshedUser.MobileServiceAuthenticationToken);
+            Assert.AreNotEqual(authToken, refreshedUser.MobileServiceAuthenticationToken);
 
-            var alert = new UIAlertView("Welcome", "Login and Refresh User succeeded. Your userId is: " + user.UserId, null, "OK");
+            var alert = new UIAlertView("Welcome", "Microsoft Account Login and Refresh User succeeded. Your userId is: " + user.UserId, null, "OK");
+            alert.Show();
+        }
+
+        private async void LoginAndRefreshWithAAD()
+        {
+            var client = new MobileServiceClient(this.uriEntry.Value);
+            MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory,
+                new Dictionary<string, string>()
+                {
+                    { "response_type", "code id_token" }
+                });
+            string authToken = user.MobileServiceAuthenticationToken;
+
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(authToken, refreshedUser.MobileServiceAuthenticationToken);
+
+            var alert = new UIAlertView("Welcome", "AAD Login and Refresh User succeeded. Your userId is: " + user.UserId, null, "OK");
+            alert.Show();
+        }
+
+        private async void LoginAndRefreshWithGoogle()
+        {
+            var client = new MobileServiceClient(this.uriEntry.Value);
+            MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google,
+                new Dictionary<string, string>()
+                {
+                    { "access_type", "offline" },
+                    { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                });
+            string authToken = user.MobileServiceAuthenticationToken;
+
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(authToken, refreshedUser.MobileServiceAuthenticationToken);
+
+            var alert = new UIAlertView("Welcome", "Google Login and Refresh User succeeded. Your userId is: " + user.UserId, null, "OK");
             alert.Show();
         }
     }
