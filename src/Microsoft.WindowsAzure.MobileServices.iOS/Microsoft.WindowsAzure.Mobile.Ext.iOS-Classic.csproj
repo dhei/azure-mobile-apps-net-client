@@ -170,6 +170,7 @@
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
       <Project>{75557793-E36E-4190-8714-5BD2665859FB}</Project>
       <Name>Microsoft.WindowsAzure.Mobile</Name>
+      <Properties>SkipValidatePackageReferences=true</Properties>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
