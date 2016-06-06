@@ -3,7 +3,7 @@
   <string name="MobileServiceUri">Mobile Service URI</string>
 	<string name="Tags">Tags</string>
 	<string name="RunTests">E2E Tests</string>
-	<string name="ApplicationName">Microsoft.WindowsAzure.Mobile.Android.Test</string>
+	<string name="ApplicationName">Android.E2ETest</string>
   <string name="MSALogin">Login/Refresh MSA</string>
   <string name="AADLogin">Login/Refresh AAD</string>
   <string name="GoogleLogin">Login/Refresh Google</string>

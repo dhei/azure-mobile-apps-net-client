@@ -2,5 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="microsoft.windowsazure.mobile.android.test" android:versionCode="1" android:versionName="1.0" android:installLocation="auto">
 	<uses-sdk />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="Microsoft.WindowsAzure.Mobile.Android.Test" android:icon="@drawable/Icon"></application>
+	<application android:icon="@drawable/Icon" android:label="Android.E2ETest"></application>
 </manifest>
