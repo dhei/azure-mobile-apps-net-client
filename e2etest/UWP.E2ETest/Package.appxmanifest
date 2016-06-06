@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="090c4fbc-84b7-4f81-bc46-54d2ee20057d" Publisher="CN=zumo" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="090c4fbc-84b7-4f81-bc46-54d2ee20057d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="Microsoft.WindowsAzure.Mobile.UWP.Test" Publisher="CN=zumo" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="Microsoft.WindowsAzure.Mobile.UWP.Phone.Test" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>UWP.E2ETest</DisplayName>
     <PublisherDisplayName>zumo</PublisherDisplayName>
