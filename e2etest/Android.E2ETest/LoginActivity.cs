@@ -228,6 +228,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
                 string message = "Facebook LoginAsync succeeded. RefreshAsync is not supported by Facebook. UserId: " + user.UserId;
                 this.loginTestResult.Text = message;
                 System.Diagnostics.Debug.WriteLine(message);
+                return;
             }
 
             Assert.Fail("RefreshAsync() should throw 400 error on Facebook account.");
@@ -250,6 +251,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
                 string message = "Twitter LoginAsync succeeded. RefreshAsync is not supported by Twitter. UserId: " + user.UserId;
                 this.loginTestResult.Text = message;
                 System.Diagnostics.Debug.WriteLine(message);
+                return;
             }
 
             Assert.Fail("RefreshAsync() should throw 400 error on Twitter account.");
