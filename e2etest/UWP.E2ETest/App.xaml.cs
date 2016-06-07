@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
+
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
     /// <summary>
@@ -74,7 +75,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                 Harness.SetAutoConfig(args.Arguments);
 
-                if(Harness.Settings.ManualMode)
+                if (Harness.Settings.ManualMode)
                 {
                     rootFrame.Navigate(typeof(MainPage));
                 }
@@ -97,6 +98,39 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Window.Current.Activate();
         }
 
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            
+            if (args.Kind == ActivationKind.Protocol)
+            {
+                ProtocolActivatedEventArgs protocolArgs = args as ProtocolActivatedEventArgs;
+
+                Frame content = Window.Current.Content as Frame;
+                if (content == null)
+                {
+                    content = new Frame();
+                    Harness.SetAutoConfigQueryString(protocolArgs.Uri.Query);
+
+                    if (Harness.Settings.ManualMode)
+                    {
+                        content.Navigate(typeof(MainPage));
+                    }
+                    else
+                    {
+                        content.Navigate(typeof(TestPage));
+                    }
+
+                    Window.Current.Content = content;
+                }
+
+                if (content.Content == null)
+                {
+                    content.Navigate(typeof(MainPage), args);
+                }
+            }
+            Window.Current.Activate();
+            base.OnActivated(args);
+        }
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
