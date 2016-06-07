@@ -74,7 +74,7 @@
                                 <StackPanel Orientation="Vertical" />
                             </ItemsPanelTemplate>
                         </GroupStyle.Panel>
-                        <GroupStyle.ContainerStyle>
+                        <GroupStyle.HeaderContainerStyle>
                             <Style TargetType="GroupItem">
                                 <Setter Property="IsTabStop" Value="False" />
                                 <Setter Property="Template">
@@ -111,7 +111,7 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
-                        </GroupStyle.ContainerStyle>
+                        </GroupStyle.HeaderContainerStyle>
                     </GroupStyle>
                 </ListView.GroupStyle>
                 <ListView.Template>

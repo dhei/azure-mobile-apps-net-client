@@ -32,7 +32,7 @@
                 <TextBox x:Name="txtTags" FontSize="20"  BorderThickness="0" Padding="0" />
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                     <Button x:Name="btnE2ETests" Content="E2E Tests" MinWidth="100" Click="ExecuteE2ETests" />
-                    <Button x:Name="btnLoginTests" Content="Login/Refresh Tests" MinWidth="100" Click="ExecuteLoginTests" />
+                    <Button x:Name="btnLoginTests" Content="Login &amp; Refresh Tests" MinWidth="100" Click="ExecuteLoginTests" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>

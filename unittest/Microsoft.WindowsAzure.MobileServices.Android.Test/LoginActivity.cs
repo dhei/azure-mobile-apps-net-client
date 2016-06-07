@@ -15,7 +15,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         private const string MobileServiceUriKey = "MobileServiceUri";
         private const string TagsKey = "Tags";
 
-        private EditText uriText, keyText, tagsText;
+        private EditText uriText, tagsText;
 
         protected override void OnCreate (Bundle bundle)
         {

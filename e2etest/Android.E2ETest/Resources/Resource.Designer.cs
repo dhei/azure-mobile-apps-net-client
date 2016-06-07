@@ -62,16 +62,28 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 		{
 			
 			// aapt resource value: 0x7f050007
-			public const int Description = 2131034119;
+			public const int AADLogin = 2131034119;
+			
+			// aapt resource value: 0x7f05000c
+			public const int Description = 2131034124;
+			
+			// aapt resource value: 0x7f050009
+			public const int FacebookLogin = 2131034121;
+			
+			// aapt resource value: 0x7f050008
+			public const int GoogleLogin = 2131034120;
 			
 			// aapt resource value: 0x7f050001
 			public const int List = 2131034113;
 			
-			// aapt resource value: 0x7f050008
-			public const int Log = 2131034120;
+			// aapt resource value: 0x7f05000d
+			public const int Log = 2131034125;
+			
+			// aapt resource value: 0x7f05000b
+			public const int LoginTestResult = 2131034123;
 			
 			// aapt resource value: 0x7f050006
-			public const int Login = 2131034118;
+			public const int MSALogin = 2131034118;
 			
 			// aapt resource value: 0x7f050000
 			public const int RunStatus = 2131034112;
@@ -87,6 +99,9 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 			
 			// aapt resource value: 0x7f050002
 			public const int TestName = 2131034114;
+			
+			// aapt resource value: 0x7f05000a
+			public const int TwitterLogin = 2131034122;
 			
 			static Id()
 			{
@@ -129,11 +144,23 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f040006
+			public const int AADLogin = 2130968582;
+			
 			// aapt resource value: 0x7f040004
 			public const int ApplicationName = 2130968580;
 			
+			// aapt resource value: 0x7f040008
+			public const int FacebookLogin = 2130968584;
+			
+			// aapt resource value: 0x7f040007
+			public const int GoogleLogin = 2130968583;
+			
+			// aapt resource value: 0x7f04000a
+			public const int LoginTestResult = 2130968586;
+			
 			// aapt resource value: 0x7f040005
-			public const int Login = 2130968581;
+			public const int MSALogin = 2130968581;
 			
 			// aapt resource value: 0x7f040001
 			public const int MobileServiceUri = 2130968577;
@@ -143,6 +170,9 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 			
 			// aapt resource value: 0x7f040002
 			public const int Tags = 2130968578;
+			
+			// aapt resource value: 0x7f040009
+			public const int TwitterLogin = 2130968585;
 			
 			// aapt resource value: 0x7f040000
 			public const int library_name = 2130968576;

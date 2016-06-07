@@ -18,14 +18,15 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     /// </summary>
     public class LoginTests
     {
-        private const string RefreshUser400ErrorMessage = "Failed to refresh access token because of a 400 Bad Request error. Refresh token must be supported by your identity provider and user is logged in with sufficient permission.";
+        private const string RefreshUser400ErrorMessage = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
 
         private const string GoogleTokenRevocationURI = @"https://accounts.google.com/o/oauth2/revoke?token={0}";
 
         private static MobileServiceClient client;
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of MicrosoftAccount
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> 
+        /// functionality of MicrosoftAccount, with <see cref="MobileServiceTable"/> CRUD operations
         /// </summary>
         /// <param name="useSingleSignOn">
         /// use single sign-on to login the user.
@@ -35,11 +36,18 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         /// </returns>
         private static async Task<string> TestMicrosoftAccountRefreshUserAsync(bool useSingleSignOn)
         {
+            await TestCRUDAsync("Public", tableRequiresAuthentication: false, userIsAuthenticated: false);
+            await TestCRUDAsync("Authorized", tableRequiresAuthentication: true, userIsAuthenticated: false);
+
             MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.MicrosoftAccount, useSingleSignOn);
+
             // save user.MobileServiceAuthenticationToken value for later use
             // because RefreshUserAsync() will override user.MobileServiceAuthenticationToken
             // in single sign-on scenario
             string authToken = user.MobileServiceAuthenticationToken;
+
+            await TestCRUDAsync("Public", tableRequiresAuthentication: false, userIsAuthenticated: true);
+            await TestCRUDAsync("Authorized", tableRequiresAuthentication: true, userIsAuthenticated: true);
 
             MobileServiceUser refreshedUser = await client.RefreshUserAsync();
             string refreshedAuthToken = refreshedUser.MobileServiceAuthenticationToken;
@@ -47,11 +55,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Assert.AreEqual(user.UserId, refreshedUser.UserId);
             Assert.AreNotEqual(authToken, refreshedAuthToken);
 
+            await TestLogoutAsync();
+            await TestCRUDAsync("Authorized", tableRequiresAuthentication: true, userIsAuthenticated: false);
+
             return string.Format("User Login and Refresh succeeded. UserId: {0} Token: {1}", refreshedUser.UserId, refreshedUser.MobileServiceAuthenticationToken);
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of WindowsAzureActiveDirectory
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of WindowsAzureActiveDirectory
         /// </summary>
         /// <param name="useSingleSignOn">
         /// use single sign-on to login the user.
@@ -82,7 +93,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Facebook
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Facebook
         /// </summary>
         /// <param name="useSingleSignOn">
         /// use single sign-on to login the user.
@@ -103,7 +114,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 Assert.IsNotNull(ex.InnerException);
                 Assert.AreEqual(HttpStatusCode.BadRequest, ex.Response.StatusCode);
                 Assert.AreEqual(RefreshUser400ErrorMessage, ex.Message);
-                return "User Login succeeded. User Refresh is not supported by Facebook as expected.";
+                return string.Format("User Login succeeded. User Refresh is not supported by Facebook. UserId: {0} Token: {1}", user.UserId, user.MobileServiceAuthenticationToken);
             }
 
             Assert.Fail("RefreshAsync() should throw 400 error on Facebook account.");
@@ -111,7 +122,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Twitter
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Twitter
         /// </summary>
         /// <param name="useSingleSignOn">
         /// use single sign-on to login the user.
@@ -132,7 +143,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 Assert.IsNotNull(ex.InnerException);
                 Assert.AreEqual(HttpStatusCode.BadRequest, ex.Response.StatusCode);
                 Assert.AreEqual(RefreshUser400ErrorMessage, ex.Message);
-                return "User Login succeeded. User Refresh is not supported by Twitter as expected.";
+                return string.Format("User Login succeeded. User Refresh is not supported by Twitter. UserId: {0} Token: {1}", user.UserId, user.MobileServiceAuthenticationToken);
             }
 
             Assert.Fail("RefreshAsync() should throw 400 error on Twitter account.");
@@ -140,7 +151,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         }
 
         /// <summary>
-        /// Tests the <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Google
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Google
         /// </summary>
         /// <param name="useSingleSignOn">
         /// use single sign-on to login the user.
@@ -297,45 +308,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             return result;
         }
 
-        /// <summary>
-        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> functionality on the platform.
-        /// </summary>
-        /// <param name="provider">The provider with which to login.
-        /// </param>
-        /// <param name="useSingleSignOn">Indicates if single sign-on should be used when logging in.
-        /// </param>
-        /// <param name="useProviderStringOverload">Indicates if the call to <see cref="MobileServiceClient.LoginAsync"/>
-        /// should be made with the overload where the provider is passed as a string.
-        /// </param>
-        /// <returns>The UserId and MobileServiceAuthentication token obtained from logging in.</returns>
-        public static async Task<string> TestLoginAsync(MobileServiceAuthenticationProvider provider, bool useSingleSignOn, bool useProviderStringOverload)
-        {
-            MobileServiceUser user;
-            await TestCRUDAsync("Public", false, false);
-            await TestCRUDAsync("Authorized", true, false);
-            if (useProviderStringOverload)
-            {
-                user = await client.LoginAsync(provider.ToString(), useSingleSignOn);
-            }
-            else
-            {
-                user = await client.LoginAsync(provider, useSingleSignOn);
-            }
-            await TestCRUDAsync("Public", false, true);
-            await TestCRUDAsync("Authorized", true, true);
-            await TestLogoutAsync();
-            await TestCRUDAsync("Authorized", true, false);
-            
-            return string.Format("UserId: {0} Token: {1}", user.UserId, user.MobileServiceAuthenticationToken);
-        }
-
-        public static async Task<string> TestLogoutAsync()
+        private static async Task<string> TestLogoutAsync()
         {
             await client.LogoutAsync();
             return string.Format("Logged out. Current logged-in client: {0}", client.CurrentUser == null ? "<<NULL>>" : client.CurrentUser.UserId);
         }
 
-        public static async Task<string> TestCRUDAsync(string tableName, bool tableRequiresAuthentication, bool userIsAuthenticated)
+        private static async Task<string> TestCRUDAsync(string tableName, bool tableRequiresAuthentication, bool userIsAuthenticated)
         {
             bool crudShouldWork = (tableRequiresAuthentication && userIsAuthenticated) || !tableRequiresAuthentication;
             var user = client.CurrentUser;
@@ -377,10 +356,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
 
             // Attempt to read data
+            JObject updatedItem = null;
             try
             {
-                var item2 = await table.LookupAsync(id, queryParameters);
-                Debug.WriteLine(string.Format("Retrieved item via lookup: {0}", item2));
+                updatedItem = (JObject)await table.LookupAsync(id, queryParameters);
+                Debug.WriteLine(string.Format("Retrieved item via lookup: {0}", updatedItem));
             }
             catch (MobileServiceInvalidOperationException e)
             {
@@ -407,8 +387,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             // Attempt to delete the data
             try
             {
-                JToken deletedItem = await table.DeleteAsync(item, queryParameters);
-                Debug.WriteLine(string.Format("Deleted item: {0}", item));
+                var itemToDelete = updatedItem ?? item; 
+                JToken deletedItem = await table.DeleteAsync(itemToDelete, queryParameters);
+                Debug.WriteLine(string.Format("Deleted item: {0}", itemToDelete));
             }
             catch (MobileServiceInvalidOperationException e)
             {
