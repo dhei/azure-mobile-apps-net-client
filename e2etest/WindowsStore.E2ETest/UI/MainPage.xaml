@@ -85,7 +85,7 @@
                           Click="ExecuteE2ETests" />
                         <Button
                           x:Name="btnLoginTests"
-                          Content="Login/Refresh Tests"
+                          Content="Login &amp; Refresh Tests"
                           MinWidth="100"
                           Click="ExecuteLoginTests" />
                     </StackPanel>
