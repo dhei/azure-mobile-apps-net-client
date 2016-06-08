@@ -5,7 +5,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -67,6 +69,17 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         public async void EndRun(TestHarness harness)
         {
+            string completionFileName = "uwp_e2etest_completion.txt";
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            string filePath = Path.Combine(storageFolder.Path, completionFileName);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            StorageFile completionFile = await storageFolder.CreateFileAsync(completionFileName);
+            File.WriteAllText(completionFile.Path, "Test Run Completed");
+
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 pnlFooter.Visibility = Visibility.Collapsed;
