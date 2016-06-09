@@ -109,7 +109,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             if (!useSingleSignOn)
             {
-                return client.LoginAsync(provider);
+                return client.LoginAsync(provider, parameters);
             }
 
             MobileServiceSingleSignOnAuthentication auth = new MobileServiceSingleSignOnAuthentication(client, provider, parameters);
