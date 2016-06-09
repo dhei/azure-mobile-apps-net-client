@@ -5,8 +5,11 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Live;
+using Microsoft.OneDrive.Sdk;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
+using Newtonsoft.Json.Linq;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
@@ -15,26 +18,35 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     {
         [AsyncTestMethod]
         /// <summary>
-        /// Tests logging into MobileService with Live SDK token. App needs to be assosciated with a WindowsStoreApp
+        /// Tests logging into MobileService with Microsoft Account token (via OneDrive SDK). 
+        /// App needs to be assosciated with a WindowsStoreApp
         /// </summary>
-        private async Task TestLiveSDKLogin()
+        private async Task TestClientDirectedMicrosoftAccountLogin()
         {
             try
             {
-                LiveAuthClient liveAuthClient = new LiveAuthClient(GetClient().MobileAppUri.ToString());
-                LiveLoginResult result = await liveAuthClient.InitializeAsync(new string[] { "wl.basic", "wl.offline_access", "wl.signin" });
-                if (result.Status != LiveConnectSessionStatus.Connected)
-                {
-                    result = await liveAuthClient.LoginAsync(new string[] { "wl.basic", "wl.offline_access", "wl.signin" });
-                }
-                if (result.Status == LiveConnectSessionStatus.Connected)
-                {
-                    LiveConnectSession session = result.Session;
-                    LiveConnectClient client = new LiveConnectClient(result.Session);
-                    LiveOperationResult meResult = await client.GetAsync("me");
-                    MobileServiceUser loginResult = await GetClient().LoginWithMicrosoftAccountAsync(result.Session.AuthenticationToken);
+                Task<AccountSession> sessionTask = null;
 
-                    Log(string.Format("{0} is now logged into MobileService with userId - {1}", meResult.Result["first_name"], loginResult.UserId));
+                // Force AuthenticateAsync() to run on the UI thread.
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    IOneDriveClient oneDriveClient = OneDriveClientExtensions.GetUniversalClient(new string[] { "wl.signin" });
+                    sessionTask = oneDriveClient.AuthenticateAsync();
+                });
+                AccountSession session = await sessionTask;
+
+                if (session != null && session.AccessToken != null)
+                {
+                    JObject accessToken = new JObject();
+                    accessToken["access_token"] = session.AccessToken;
+
+                    MobileServiceUser user = await this.GetClient().LoginAsync(MobileServiceAuthenticationProvider.MicrosoftAccount, accessToken);
+
+                    Log(string.Format("Log in with Microsoft Account succeeded - userId {0}", user.UserId));
+                }
+                else
+                {
+                    Assert.Fail("Log in with Live SDK failed");
                 }
             }
             catch (Exception exception)
