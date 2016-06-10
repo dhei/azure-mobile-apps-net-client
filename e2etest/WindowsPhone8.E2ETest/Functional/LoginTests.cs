@@ -168,8 +168,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             // Firstly, login user with Google account with offline permission
             MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, new Dictionary<string, string>()
             {
-                { "access_type", "offline" },
-                { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                { "access_type", "offline" }
             });
 
             // Secondly, refresh user using refresh token
@@ -206,8 +205,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             // Last, login user with Google offline scope again
             MobileServiceUser user2 = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, new Dictionary<string, string>()
             {
-                { "access_type", "offline" },
-                { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                { "access_type", "offline" }
             });
 
             // Refresh user should work this time

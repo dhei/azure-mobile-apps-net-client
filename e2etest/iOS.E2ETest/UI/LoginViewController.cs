@@ -136,8 +136,7 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
             MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google,
                 new Dictionary<string, string>()
                 {
-                    { "access_type", "offline" },
-                    { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                    { "access_type", "offline" }
                 });
             string authToken = user.MobileServiceAuthenticationToken;
 
