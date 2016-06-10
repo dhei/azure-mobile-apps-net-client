@@ -42,11 +42,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
                     MobileServiceUser user = await this.GetClient().LoginAsync(MobileServiceAuthenticationProvider.MicrosoftAccount, accessToken);
 
-                    Log(string.Format("Log in with Microsoft Account succeeded - userId {0}", user.UserId));
+                    Log(string.Format("Log in with Microsoft Account OneDrive SDK succeeded - userId {0}", user.UserId));
                 }
                 else
                 {
-                    Assert.Fail("Log in with Live SDK failed");
+                    Assert.Fail("Log in with Microsoft Account OneDrive SDK failed");
                 }
             }
             catch (Exception exception)
@@ -55,7 +55,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                                                 exception.GetType().ToString(),
                                                 exception.Message,
                                                 exception.StackTrace));
-                Assert.Fail("Log in with Live SDK failed");
+                Assert.Fail("Log in with Microsoft Account OneDrive SDK failed");
             }
         }
 
