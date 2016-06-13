@@ -165,8 +165,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, useSingleSignOn, 
                 new Dictionary<string, string>()
                 {
-                    { "access_type", "offline" },
-                    { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                    { "access_type", "offline" }
                 });
 
             // save user.MobileServiceAuthenticationToken value for later use
@@ -211,8 +210,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             MobileServiceUser sameUser = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, useSingleSignOn, 
                 new Dictionary<string, string>()
                 {
-                    { "access_type", "offline" },
-                    { "prompt", "consent" } // Force prompt window of Google offline scope in login
+                    { "access_type", "offline" }
                 });
             string authToken2 = sameUser.MobileServiceAuthenticationToken;
 
