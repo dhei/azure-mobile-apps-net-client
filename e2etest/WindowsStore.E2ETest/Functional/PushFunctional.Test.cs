@@ -138,8 +138,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
         }
 
-
-        [AsyncTestMethod]
+        //Temporarily exclude this one from test automation
+        //[AsyncTestMethod]
         public async Task WnsToastPushTest()
         {
             PushWatcher watcher = new PushWatcher();
