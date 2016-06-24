@@ -287,9 +287,10 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                         if (!Settings.ManualMode)
                         {
                             // upload test suite result to sunlight blob container
+                            string detailFilePath = string.Format("{0}-{1}-detail.json", this.Settings.Custom["RuntimeVersion"], this.Platform);
                             string blobStorageSasUrl = GetBlobStorageSasUrl(this.Settings.Custom["TestFrameworkStorageContainerUrl"],
                                 this.Settings.Custom["TestFrameworkStorageContainerSasToken"],
-                                this.Platform + "-detail.json");
+                                detailFilePath);
                             string fileContent = JsonConvert.SerializeObject(testRun.TestResults.ToList(), Formatting.Indented);
                             await UploadToBlobContainerAsync(blobStorageSasUrl, fileContent);
 
@@ -308,9 +309,10 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                             };
 
                             // upload test suite result to sunlight blob container
+                            string masterFilePath = string.Format("{0}-{1}-master.json", this.Settings.Custom["RuntimeVersion"], this.Platform);
                             blobStorageSasUrl = GetBlobStorageSasUrl(this.Settings.Custom["TestFrameworkStorageContainerUrl"],
                                 this.Settings.Custom["TestFrameworkStorageContainerSasToken"],
-                                this.Platform + "-master.json");
+                                masterFilePath);
                             fileContent = JsonConvert.SerializeObject(masterResult, Formatting.Indented);
                             await UploadToBlobContainerAsync(blobStorageSasUrl, fileContent);
                         }
