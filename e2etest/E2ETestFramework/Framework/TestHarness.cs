@@ -297,7 +297,8 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                             // upload test result summary to blob container
                             var masterResult = new MasterTestResult()
                             {
-                                FullName = this.Platform + "-" + Settings.Custom["RuntimeVersion"],
+                                FullName = Settings.Custom["RuntimeVersion"] + "-" + this.Platform,
+                                Backend = Settings.Custom["RuntimeVersion"],
                                 Outcome = Failures > 0 ? "Failed" : "Passed",
                                 TotalCount = testRun.TestCount,
                                 Passed = filteredTestCount - Failures,
@@ -305,7 +306,7 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                                 Skipped = testRun.TestCount - filteredTestCount,
                                 StartTime = RunStartTime,
                                 EndTime = DateTime.UtcNow,
-                                ReferenceUrl = this.Platform + "-detail.json"
+                                ReferenceUrl = Settings.Custom["RuntimeVersion"] + "-" + this.Platform + "-detail.json"
                             };
 
                             // upload test suite result to sunlight blob container
