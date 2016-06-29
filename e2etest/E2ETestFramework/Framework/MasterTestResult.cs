@@ -12,6 +12,9 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
         [JsonProperty("full_name")]
         public string FullName { get; set; }
 
+        [JsonProperty("backend")]
+        public string Backend { get; set; }
+
         [JsonProperty("outcome")]
         public string Outcome { get; set; }
 
