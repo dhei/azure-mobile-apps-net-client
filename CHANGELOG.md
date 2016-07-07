@@ -1,5 +1,10 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 2.1.0
+- Support [#110](https://github.com/Azure/azure-mobile-apps-net-client/issues/110) Auth Token Refresh [eddaee7](https://github.com/Azure/azure-mobile-apps-net-client/commit/eddaee72823b9f2e145b7b070f7e12bb45aa01c5)
+- Fix Single Sign-on LoginAsync malformatted query url issue in Windows Store 8 and Windows Phone 8.1 [b6c24c7](https://github.com/Azure/azure-mobile-apps-net-client/commit/b6c24c7389af5c20394091b8cdd077c2a79d025e)
+- Fix [#25](https://github.com/Azure/azure-mobile-apps-net-client/issues/25) Convert JObject to string for xamarin ios and andriod template parameter's body [6a1c60d](https://github.com/Azure/azure-mobile-apps-net-client/commit/6a1c60dc73bdcd9db2942fdedd381ca126071c7b)
+
 ### Version 2.0.1
 - Updated Error.UpdateAsync to use the tracked store [3673d02](https://github.com/Azure/azure-mobile-apps-net-client/commit/3673d02)
 - Fixing issues when using Xamarin linker [dc5a101](https://github.com/Azure/azure-mobile-apps-net-client/commit/dc5a101)
