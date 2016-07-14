@@ -1,12 +1,10 @@
-# Microsoft Azure Mobile Apps: .NET Client SDK
+# Azure Mobile Apps: .NET Client SDK
 
-With Microsoft Azure Mobile Apps you can add a scalable backend to your connected client applications in minutes. To learn more, visit our [Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
+With Azure Mobile Apps you can add a scalable backend to your connected client applications in minutes. To learn more, visit our [Developer Center](http://azure.microsoft.com/en-us/develop/mobile) and the [App Service Mobile learning path](https://azure.microsoft.com/en-us/documentation/learning-paths/appservice-mobileapps/).
 
 ## Getting Started
 
-If you are new to Mobile Services, you can get started by following our tutorials for connecting your Mobile
-Services cloud backend to [Windows Store apps](http://azure.microsoft.com/en-us/documentation/articles/mobile-services-windows-store-get-started/),
-and Windows Phone 8 apps.
+If you are new to Azure Mobile Apps, you can get started by following our tutorials for connecting to your hosted cloud backend with a [Xamarin.Forms client](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-xamarin-forms-get-started/) or [Windows client](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-windows-store-dotnet-get-started/).
 
 ## Download Source Code
 
@@ -22,21 +20,22 @@ To get the source code of our SDKs and samples via **git** just type:
 
 ## Managed Windows Client SDK
 
-Our managed portable library for Windows 8, Windows Phone 8, Windows Phone 8.1, and Windows Runtime Universal C# Client SDK makes it incredibly easy to use Mobile Services from your Windows applications. The [Microsoft Azure Mobile Services SDK](http://nuget.org/packages/WindowsAzure.MobileServices/) is available
-as a Nuget package or you can download the source using the instructions above. The managed portable library also supports the full .NET 4.5 platform.
+Our managed portable library for Window and Xamarin makes it easy to use Azure Mobile Apps from your managed client applications. The [Azure Mobile Client SDK](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client/) is available
+as a NuGet package or you can download the source using the instructions above. The managed portable library also supports the full .NET 4.5 platform.
+
+To learn more about the client library, see [How to use the managed client for Azure Mobile Apps](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-dotnet-how-to-use-client-library/).
 
 ### Prerequisites
 
-The SDK requires Visual Studio 2013.
+The SDK requires Visual Studio 2015.
 
 ### Building and Referencing the SDK
 
-The managed portable library solution includes a core portable assembly and platform-specific assemblies for each of the supported platforms: Windows 8,
-Windows Phone 8 and .NET 4.5. The core portable platform project is ```Microsoft.WindowsAzure.Mobile```. The platform-specific assembly projects are
+The managed portable library solution includes a core portable assembly and platform-specific assemblies for each of the supported platforms: Xamarin.iOS, Xamarin.Android, Windows 8.1, Windows Phone 8.1 and .NET 4.5. The core portable platform project is ```Microsoft.WindowsAzure.Mobile```. The platform-specific assembly projects are
 named using a ```Microsoft.WindowsAzure.Mobile.Ext.<Platform>``` convention. The Windows Phone 8 platform also
 include a ```Microsoft.WindowsAzure.Mobile.UI.<Platform>``` project that contain UI components. To build the Managed Portable Libray:
 
-1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` solution file in Visual Studio 2013.
+1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` solution file in Visual Studio 2015.
 2. Press F6 to build the solution.
 
 ### Running the Tests
@@ -61,9 +60,9 @@ Windows Phone 8 and .NET 4.5.
 
 * [Quickstarts](https://github.com/Azure/azure-mobile-apps-quickstarts)
 * [E2E Test Suite](e2etest)
-* [Samples](https://github.com/Azure/mobile-services-samples)
-* Tutorials and product overview are available at [Microsoft Azure Mobile Services Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
-* Our product team actively monitors the [Mobile Services Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) to assist you with any troubles.
+* [Samples](https://azure.microsoft.com/en-us/documentation/samples/?service=app-service&term=mobile)
+* Tutorials and product overview are available at [Azure Mobile Apps Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
+* Our product team actively monitors the [Mobile Apps Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) to assist you with any troubles and the StackOverflow tag [azure-mobile-services](http://stackoverflow.com/questions/tagged/azure-mobile-services).
 * Our product team publishes symbols to SymbolSource for an improved debugging experience. Instructions on enabling VisualStudio to load symbols from SymbolSource [here](http://www.symbolsource.org/Public/Wiki/Using) 
 
 ## Contribute Code or Provide Feedback
