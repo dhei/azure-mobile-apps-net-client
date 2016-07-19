@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Threading;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
@@ -50,6 +51,11 @@ namespace Microsoft.WindowsAzure.MobileServices
         private readonly Dictionary<MemberInfo, JsonProperty> jsonPropertyCache = new Dictionary<MemberInfo, JsonProperty>();
 
         /// <summary>
+        /// A lock used to synchronize concurrent access to the jsonPropertyCache.
+        /// </summary>
+        private readonly ReaderWriterLockSlim jsonPropertyCacheLock = new ReaderWriterLockSlim();
+
+        /// <summary>
         /// A cache of the system properties supported for a given type.
         /// </summary>
         private readonly Dictionary<Type, MobileServiceSystemProperties> systemPropertyCache = new Dictionary<Type, MobileServiceSystemProperties>();
@@ -80,45 +86,48 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             // Lookup the Mobile Services name of the Type and use that
             string name = null;
-            if (!this.tableNameCache.TryGetValue(type, out name))
+            lock (tableNameCache)
             {
-                // By default, use the type name itself
-                name = type.Name;
-
-                DataContractAttribute dataContractAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true)
-                                                                  .FirstOrDefault() as DataContractAttribute;
-                if (dataContractAttribute != null)
+                if (!this.tableNameCache.TryGetValue(type, out name))
                 {
-                    if (!string.IsNullOrWhiteSpace(dataContractAttribute.Name))
+                    // By default, use the type name itself
+                    name = type.Name;
+
+                    DataContractAttribute dataContractAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true)
+                                                                      .FirstOrDefault() as DataContractAttribute;
+                    if (dataContractAttribute != null)
                     {
-                        name = dataContractAttribute.Name;
+                        if (!string.IsNullOrWhiteSpace(dataContractAttribute.Name))
+                        {
+                            name = dataContractAttribute.Name;
+                        }
                     }
-                }
 
-                JsonContainerAttribute jsonContainerAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(JsonContainerAttribute), true)
-                                                                    .FirstOrDefault() as JsonContainerAttribute;
-                if (jsonContainerAttribute != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(jsonContainerAttribute.Title))
+                    JsonContainerAttribute jsonContainerAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(JsonContainerAttribute), true)
+                                                                        .FirstOrDefault() as JsonContainerAttribute;
+                    if (jsonContainerAttribute != null)
                     {
-                        name = jsonContainerAttribute.Title;
+                        if (!string.IsNullOrWhiteSpace(jsonContainerAttribute.Title))
+                        {
+                            name = jsonContainerAttribute.Title;
+                        }
                     }
-                }
 
-                DataTableAttribute dataTableAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(DataTableAttribute), true)
-                                                            .FirstOrDefault() as DataTableAttribute;
-                if (dataTableAttribute != null)
-                {
-                    if (!string.IsNullOrEmpty(dataTableAttribute.Name))
+                    DataTableAttribute dataTableAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(DataTableAttribute), true)
+                                                                .FirstOrDefault() as DataTableAttribute;
+                    if (dataTableAttribute != null)
                     {
-                        name = dataTableAttribute.Name;
+                        if (!string.IsNullOrEmpty(dataTableAttribute.Name))
+                        {
+                            name = dataTableAttribute.Name;
+                        }
                     }
+
+                    this.tableNameCache[type] = name;
+
+                    // Build the JsonContract now to catch any contract errors early
+                    this.CreateContract(type);
                 }
-
-                this.tableNameCache[type] = name;
-
-                // Build the JsonContract now to catch any contract errors early
-                this.CreateContract(type);
             }
 
             return name;
@@ -190,10 +199,20 @@ namespace Microsoft.WindowsAzure.MobileServices
         public virtual JsonProperty ResolveProperty(MemberInfo member)
         {
             JsonProperty property = null;
-            if (!this.jsonPropertyCache.TryGetValue(member, out property))
+
+            try
             {
-                ResolveContract(member.DeclaringType);
-                this.jsonPropertyCache.TryGetValue(member, out property);
+                jsonPropertyCacheLock.EnterReadLock();
+                
+                if (!this.jsonPropertyCache.TryGetValue(member, out property))
+                {
+                    ResolveContract(member.DeclaringType);
+                    this.jsonPropertyCache.TryGetValue(member, out property);
+                }                
+            }
+            finally
+            {
+                jsonPropertyCacheLock.ExitReadLock();
             }
 
             return property;
@@ -321,7 +340,16 @@ namespace Microsoft.WindowsAzure.MobileServices
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);
-            this.jsonPropertyCache[member] = property;
+
+            try
+            {
+                jsonPropertyCacheLock.EnterWriteLock();
+                this.jsonPropertyCache[member] = property;
+            }            
+            finally
+            {
+                jsonPropertyCacheLock.ExitWriteLock();
+            }            
 
             return property;
         }
@@ -363,21 +391,14 @@ namespace Microsoft.WindowsAzure.MobileServices
                 // Find the id property
                 JsonProperty idProperty = DetermineIdProperty(type, properties);
 
-                // Create a reverse cache of property to memberInfo to be used locally for validating the type
-                Dictionary<JsonProperty, MemberInfo> memberInfoCache = new Dictionary<JsonProperty, MemberInfo>();
-                foreach (KeyValuePair<MemberInfo, JsonProperty> pair in jsonPropertyCache)
-                {
-                    if (pair.Key.DeclaringType.GetTypeInfo().IsAssignableFrom(typeInfo))
-                    {
-                        memberInfoCache.Add(pair.Value, pair.Key);
-                    }
-                }
-
                 // Set any needed converters and look for system property attributes
+                IList<KeyValuePair<MemberInfo, JsonProperty>> relevantProperties = FilterJsonPropertyCacheByType(typeInfo);
                 foreach (JsonProperty property in properties)
                 {
+                    MemberInfo memberInfo = relevantProperties.Single(x => x.Value == property).Key;
+
                     SetMemberConverters(property);
-                    ApplySystemPropertyAttributes(property, memberInfoCache[property]);
+                    ApplySystemPropertyAttributes(property, memberInfo);
                 }
 
                 // Determine the system properties from the property names
@@ -397,6 +418,23 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             // always use the ReflectionValueProvider to make sure our behavior is consistent accross platforms.
             return new ReflectionValueProvider(member);
+        }
+
+        /// <summary>
+        /// Acquire a list of all MemberInfos currently tracked by the contract resolver in a threadsafe manner.
+        /// </summary>
+        /// <returns>A collection of <see cref="MemberInfo"/> instances.</returns>
+        private IList<KeyValuePair<MemberInfo, JsonProperty>> FilterJsonPropertyCacheByType(TypeInfo typeInfo)
+        {
+            try
+            {
+                jsonPropertyCacheLock.EnterReadLock();                
+                return jsonPropertyCache.Where(pair => pair.Key.DeclaringType.GetTypeInfo().IsAssignableFrom(typeInfo)).ToList();
+            }
+            finally
+            {
+                jsonPropertyCacheLock.ExitReadLock();
+            }
         }
 
         /// <summary>
