@@ -9,7 +9,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
     /// <summary>
     /// UI model for a test group.
     /// </summary>
-    public class GroupDescription : ObservableCollection<TestDescription>
+    class GroupDescription : ObservableCollection<TestDescription>
     {
         private string _name;
 

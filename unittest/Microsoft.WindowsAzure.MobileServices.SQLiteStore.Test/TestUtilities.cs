@@ -5,6 +5,7 @@
 using System;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using SQLitePCL;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 
 namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test
 {
@@ -12,9 +13,9 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test
     {
         public static void ResetDatabase(string dbName)
         {            
-            TestUtilities.DropTestTable(dbName, MobileServiceLocalSystemTables.OperationQueue);
-            TestUtilities.DropTestTable(dbName, MobileServiceLocalSystemTables.SyncErrors);
-            TestUtilities.DropTestTable(dbName, MobileServiceLocalSystemTables.Config);
+            DropTestTable(dbName, MobileServiceLocalSystemTables.OperationQueue);
+            DropTestTable(dbName, MobileServiceLocalSystemTables.SyncErrors);
+            DropTestTable(dbName, MobileServiceLocalSystemTables.Config);
         }
 
         public static void DropTestTable(string dbName, string tableName)
@@ -24,14 +25,18 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test
 
         public static long CountRows(string dbName, string tableName)
         {
-            long count;
-            using (var connection = new SQLiteConnection(dbName))
+            long count=0;
+            string sql = "SELECT COUNT(1) from " + tableName;
+            sqlite3 connection = SQLitePCLRawHelpers.GetSqliteConnection(dbName);
+            
+            sqlite3_stmt statement = SQLitePCLRawHelpers.GetSqliteStatement(sql, connection);
+            using (connection)
             {
-                using (var statement = connection.Prepare("SELECT COUNT(1) from " + tableName))
+                using (statement)
                 {
-                    statement.Step();
-
-                    count = (long)statement[0];
+                   int rc = raw.sqlite3_step(statement);
+                   SQLitePCLRawHelpers.VerifySQLiteResponse(rc, raw.SQLITE_ROW, connection);
+                   count = (long)raw.sqlite3_column_int64(statement, 0);
                 }
             }
             return count;
@@ -44,14 +49,14 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test
 
         public static void ExecuteNonQuery(string dbName, string sql)
         {
-            using (var connection = new SQLiteConnection(dbName))
+            sqlite3 connection = SQLitePCLRawHelpers.GetSqliteConnection(dbName);
+            sqlite3_stmt statement = SQLitePCLRawHelpers.GetSqliteStatement(sql, connection);
+            using (connection)
             {
-                using (var statement = connection.Prepare(sql))
+                using (statement)
                 {
-                    if (statement.Step() != SQLiteResult.DONE)
-                    {
-                        throw new InvalidOperationException();
-                    }
+                    int rc = raw.sqlite3_step(statement);
+                    SQLitePCLRawHelpers.VerifySQLiteResponse(rc, raw.SQLITE_DONE, connection);
                 }
             }
         }

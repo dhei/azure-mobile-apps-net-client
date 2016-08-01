@@ -75,11 +75,11 @@
                             </ItemsPanelTemplate>
                         </GroupStyle.Panel>
                         <GroupStyle.HeaderContainerStyle>
-                            <Style TargetType="GroupItem">
+                            <Style TargetType="ListViewHeaderItem">
                                 <Setter Property="IsTabStop" Value="False" />
                                 <Setter Property="Template">
                                     <Setter.Value>
-                                        <ControlTemplate TargetType="GroupItem">
+                                        <ControlTemplate TargetType="ListViewHeaderItem">
                                             <Border
                                               Background="{TemplateBinding Background}"
                                               BorderBrush="{TemplateBinding BorderBrush}"

@@ -7,13 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <Style x:Key="SubheaderStyle" TargetType="TextBlock" BasedOn="{StaticResource SubheaderTextStyle}">
+        <Style x:Key="SubheaderStyle" TargetType="TextBlock" BasedOn="{StaticResource SubheaderTextBlockStyle}">
             <Setter Property="Margin" Value="0 0 0 10" />
             <Setter Property="FontSize" Value="18" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="LineHeight" Value="20" />
         </Style>
-        <Style x:Key="HeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
+        <Style x:Key="HeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}">
             <Setter Property="Foreground" Value="#0094ff" />
         </Style>
         <Style x:Key="DialogStyle" TargetType="Border">
@@ -36,7 +36,7 @@
             <Setter Property="Height" Value="50" />
             <Setter Property="Width" Value="295" />
         </Style>
-        <Style x:Key="LabelStyle" TargetType="TextBlock" BasedOn="{StaticResource BasicTextStyle}">
+        <Style x:Key="LabelStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
