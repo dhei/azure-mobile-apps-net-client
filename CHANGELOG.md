@@ -1,5 +1,9 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 2.1.1
+- Fixing [#186](https://github.com/Azure/azure-mobile-apps-net-client/issues/186) threading issues with MobileServiceContractResolver. [2feba7c](https://github.com/Azure/azure-mobile-apps-net-client/commit/2feba7c3cf6430f1f55878c7945251a17c1376dd)
+- Fixing [#178](https://github.com/Azure/azure-mobile-apps-net-client/issues/178) missing IntelliSense of [Microsoft.WindowsAzure.Mobile.SQLiteStore nuget](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client.sqlitestore). [88a1ef4](https://github.com/Azure/azure-mobile-apps-net-client/commit/88a1ef4e0783ca0878486e0ff81050153e11baed)
+
 ### Version 2.1.0
 - Support [#110](https://github.com/Azure/azure-mobile-apps-net-client/issues/110) Auth Token Refresh [eddaee7](https://github.com/Azure/azure-mobile-apps-net-client/commit/eddaee72823b9f2e145b7b070f7e12bb45aa01c5)
 - Fix Single Sign-on LoginAsync malformatted query url issue in Windows Store 8 and Windows Phone 8.1 [b6c24c7](https://github.com/Azure/azure-mobile-apps-net-client/commit/b6c24c7389af5c20394091b8cdd077c2a79d025e)
