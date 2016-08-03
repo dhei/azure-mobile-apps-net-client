@@ -202,7 +202,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             try
             {
-                jsonPropertyCacheLock.EnterReadLock();
+                jsonPropertyCacheLock.EnterUpgradeableReadLock();
                 
                 if (!this.jsonPropertyCache.TryGetValue(member, out property))
                 {
@@ -212,7 +212,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
             finally
             {
-                jsonPropertyCacheLock.ExitReadLock();
+                jsonPropertyCacheLock.ExitUpgradeableReadLock();
             }
 
             return property;
