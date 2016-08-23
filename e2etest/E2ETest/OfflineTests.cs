@@ -12,19 +12,19 @@ using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 using Newtonsoft.Json.Linq;
-using Windows.Storage;
+using SQLitePCL;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
     [Tag("offline")]
     public class OfflineTests : FunctionalTestBase
     {
-        private const string StoreFileName = "store.bin";
+        public static string StoreFileName = "store.bin";
 
         [AsyncTestMethod]
         private async Task BasicOfflineTest()
         {
-            await ClearStore();
+            ClearStore();
             DateTime now = DateTime.UtcNow;
             int seed = now.Year * 10000 + now.Month * 100 + now.Day;
             Log("Using random seed: {0}", seed);
@@ -171,7 +171,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             finally
             {
                 localStore.Dispose();
-                ClearStore().Wait();
+                ClearStore();
             }
         }
 
@@ -304,7 +304,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             finally
             {
                 localStore.Dispose();
-                ClearStore().Wait();
+                ClearStore();
             }
             await offlineReadyClient.LogoutAsync();
         }
@@ -379,7 +379,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             finally
             {
                 localStore.Dispose();
-                ClearStore().Wait();
+                ClearStore();
             }
             await offlineReadyClient.LogoutAsync();
         }
@@ -438,7 +438,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private async Task AbortPushDuringSync(SyncAbortLocation whereToAbort)
         {
-            await ClearStore();
+            ClearStore();
             SyncAbortLocation abortLocation = whereToAbort;
             DateTime now = DateTime.UtcNow;
             int seed = now.Year * 10000 + now.Month * 100 + now.Day;
@@ -548,7 +548,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             finally
             {
                 localStore.Dispose();
-                ClearStore().Wait();
+                ClearStore();
             }
         }
 
@@ -625,7 +625,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private async Task CreateSyncConflict(bool autoResolve)
         {
-            await ClearStore();
+            ClearStore();
             bool resolveConflictsOnClient = autoResolve;
             DateTime now = DateTime.UtcNow;
             int seed = now.Year * 10000 + now.Month * 100 + now.Day;
@@ -727,23 +727,84 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await offlineReadyClient.SyncContext.PushAsync();
             Log("Done");
             localStore.Dispose();
-            await ClearStore();
+            ClearStore();
             if (!String.IsNullOrEmpty(errorMessage))
             {
                 Assert.Fail(errorMessage);
             }
         }
 
-        private async Task ClearStore()
+        private static void ClearStore()
         {
-            var files = await ApplicationData.Current.LocalFolder.GetFilesAsync();
-            foreach (var file in files)
+            List<string> tableNames = GetAllTableNames(StoreFileName);
+            foreach (var tableName in tableNames)
             {
-                if (file.Name == StoreFileName)
+                DropTestTable(StoreFileName, tableName);
+            }
+        }
+
+        private static List<string> GetAllTableNames(string dbName)
+        {
+            List<string> tableNames = new List<string>();
+            Batteries.Init();
+            sqlite3 connection;
+            int rc = raw.sqlite3_open(dbName, out connection);
+            VerifySQLiteResponse(rc, raw.SQLITE_OK, connection);
+            using (connection)
+            {
+                sqlite3_stmt statement;
+                rc = raw.sqlite3_prepare_v2(connection, "SELECT name FROM sqlite_master WHERE type = 'table'", out statement);
+                VerifySQLiteResponse(rc, raw.SQLITE_OK, connection);
+                using (statement)
                 {
-                    Log("Deleting store file");
-                    await file.DeleteAsync();
-                    break;
+                    int index = 0;
+                    while ((rc = raw.sqlite3_step(statement)) == raw.SQLITE_ROW)
+                    {
+                        string tableName = raw.sqlite3_column_text(statement, index);
+                        index++;
+                        if (tableName != null)
+                        {
+                            tableNames.Add(tableName);
+                        }
+                    }
+                }
+            }
+            return tableNames;
+        }
+
+        internal static void VerifySQLiteResponse(int result, int expectedResult, sqlite3 db)
+        {
+            if (result != expectedResult)
+            {
+                string sqliteErrorMessage = raw.sqlite3_errmsg(db);
+                throw new SQLiteException(string.Format("Error executing SQLite command: '{0}'.", sqliteErrorMessage));
+            }
+        }
+
+        private static void DropTestTable(string dbName, string tableName)
+        {
+            ExecuteNonQuery(dbName, "DROP TABLE IF EXISTS " + tableName);
+        }
+
+        private static void ExecuteNonQuery(string dbName, string sql)
+        {
+            Batteries.Init();
+            sqlite3 connection;
+            int rc = raw.sqlite3_open(dbName, out connection);
+            if (rc != raw.SQLITE_OK)
+            {
+                string errorMsg = raw.sqlite3_errmsg(connection);
+            }
+            using (connection)
+            {
+                sqlite3_stmt statement;
+                rc = raw.sqlite3_prepare_v2(connection, sql, out statement);
+                using (statement)
+                {
+                    if (raw.sqlite3_step(statement) != raw.SQLITE_DONE)
+                    {
+                        throw new InvalidOperationException();
+                    }
                 }
             }
         }

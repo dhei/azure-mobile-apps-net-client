@@ -29,7 +29,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         private const int MaxParametersPerQuery = 800;
 
         private Dictionary<string, TableDefinition> tableMap = new Dictionary<string, TableDefinition>(StringComparer.OrdinalIgnoreCase);
-        private SQLiteConnection connection;
+        private sqlite3 connection;
         private readonly SemaphoreSlim operationSemaphore = new SemaphoreSlim(1, 1);
 
         protected MobileServiceSQLiteStore() { }
@@ -44,8 +44,10 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             {
                 throw new ArgumentNullException("fileName");
             }
-
-            this.connection = new SQLiteConnection(fileName);
+            if (this.connection == null)
+            {
+                this.connection = SQLitePCLRawHelpers.GetSqliteConnection(fileName);
+            }
         }
 
         /// <summary>
@@ -126,10 +128,10 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 
 
                             long count = countRows[0].Value<long>("count");
-                            result = new JObject() 
-                            { 
-                                { "results", result }, 
-                                { "count", count } 
+                            result = new JObject()
+                            {
+                                { "results", result },
+                                { "count", count }
                             };
                         }
 
@@ -350,10 +352,10 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 
         internal virtual async Task SaveSetting(string name, string value)
         {
-            var setting = new JObject() 
-            { 
-                { "id", name }, 
-                { "value", value } 
+            var setting = new JObject()
+            {
+                { "id", name },
+                { "value", value }
             };
             await this.UpsertAsyncInternal(MobileServiceLocalSystemTables.Config, new[] { setting }, ignoreMissingColumns: false);
         }
@@ -539,16 +541,19 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         {
             parameters = parameters ?? new Dictionary<string, object>();
 
-
-            using (ISQLiteStatement statement = this.connection.Prepare(sql))
+            sqlite3_stmt stmt;
+            int rc = raw.sqlite3_prepare_v2(connection, sql, out stmt);
+            SQLitePCLRawHelpers.VerifySQLiteResponse(rc, raw.SQLITE_OK, connection);
+            using (stmt)
             {
                 foreach (KeyValuePair<string, object> parameter in parameters)
                 {
-                    statement.Bind(parameter.Key, parameter.Value);
+                    var index = raw.sqlite3_bind_parameter_index(stmt, parameter.Key);
+                    SQLitePCLRawHelpers.Bind(connection, stmt, index, parameter.Value);
                 }
 
-                SQLiteResult result = statement.Step();
-                ValidateResult(result);
+                int result = raw.sqlite3_step(stmt);
+                SQLitePCLRawHelpers.VerifySQLiteResponse(result, raw.SQLITE_DONE, connection);
             }
         }
 
@@ -569,43 +574,36 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         {
             table = table ?? new TableDefinition();
             parameters = parameters ?? new Dictionary<string, object>();
-
             var rows = new List<JObject>();
-            using (ISQLiteStatement statement = this.connection.Prepare(sql))
+
+            sqlite3_stmt statement = SQLitePCLRawHelpers.GetSqliteStatement(sql, connection);
+            using (statement)
             {
                 foreach (KeyValuePair<string, object> parameter in parameters)
                 {
-                    statement.Bind(parameter.Key, parameter.Value);
+                    var index = raw.sqlite3_bind_parameter_index(statement, parameter.Key);
+                    SQLitePCLRawHelpers.Bind(connection, statement, index, parameter.Value);
                 }
-
-                SQLiteResult result;
-                while ((result = statement.Step()) == SQLiteResult.ROW)
+                int rc;
+                while ((rc = raw.sqlite3_step(statement)) == raw.SQLITE_ROW)
                 {
                     var row = ReadRow(table, statement);
                     rows.Add(row);
                 }
 
-                ValidateResult(result);
+                SQLitePCLRawHelpers.VerifySQLiteResponse(rc, raw.SQLITE_DONE, connection);
             }
 
             return rows;
         }
 
-        private static void ValidateResult(SQLiteResult result)
-        {
-            if (result != SQLiteResult.DONE)
-            {
-                throw new SQLiteException(string.Format("Query execution failed with result: '{0}'.", result));
-            }
-        }
-
-        private JObject ReadRow(TableDefinition table, ISQLiteStatement statement)
+        private JObject ReadRow(TableDefinition table, sqlite3_stmt statement)
         {
             var row = new JObject();
-            for (int i = 0; i < statement.ColumnCount; i++)
+            for (int i = 0; i < raw.sqlite3_column_count(statement); i++)
             {
-                string name = statement.ColumnName(i);
-                object value = statement[i];
+                string name = raw.sqlite3_column_name(statement, i);
+                object value = SQLitePCLRawHelpers.GetValue(statement, i);
 
                 ColumnDefinition column;
                 if (table.TryGetValue(name, out column))

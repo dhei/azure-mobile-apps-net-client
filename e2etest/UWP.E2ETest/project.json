@@ -3,7 +3,7 @@
     "Microsoft.Net.Http": "2.2.29",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Newtonsoft.Json": "6.0.4",
-    "SQLitePCL": "3.8.7.2"
+    "SQLitePCL.bundle_green": "0.9.3"
   },
   "frameworks": {
     "uap10.0": {}

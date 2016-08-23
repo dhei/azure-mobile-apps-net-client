@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{46AE537A-1143-48A4-B9A4-4B2C7BD9AB1D}</ProjectGuid>
@@ -27,9 +27,10 @@
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <NuGetPackageImportStamp>0e393b55</NuGetPackageImportStamp>
     <TargetFrameworkProfile />
     <DefaultLanguage>en-US</DefaultLanguage>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -210,15 +211,19 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'SdkRel' ">
     <Reference Include="Microsoft.WindowsAzure.Mobile, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.1.0\lib\wp8\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.1.1\lib\wp8\Microsoft.WindowsAzure.Mobile.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.1.0\lib\wp8\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.1.1\lib\wp8\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.UI, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.1.0\lib\wp8\Microsoft.WindowsAzure.Mobile.UI.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.2.1.1\lib\wp8\Microsoft.WindowsAzure.Mobile.UI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.SQLiteStore, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.SQLiteStore.2.1.1\lib\portable-win+net45+wp8+wpa81+monotouch+monoandroid\Microsoft.WindowsAzure.Mobile.SQLiteStore.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -235,6 +240,10 @@
       <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
       <Name>Microsoft.WindowsAzure.Mobile</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.SQLiteStore\Microsoft.WindowsAzure.Mobile.SQLiteStore.csproj">
+      <Project>{4c20d49a-fe5e-4d9c-98b9-8125450074f5}</Project>
+      <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\E2ETestFramework\E2ETestFramework.csproj">
@@ -246,11 +255,14 @@
       <Name>Microsoft.WindowsAzure.Mobile.Test</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCL.batteries, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCL.bundle_green.0.9.3\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCL.batteries.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -276,4 +288,13 @@
   -->
   <ProjectExtensions />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\packages\SQLitePCL.native.sqlite3.v110_wp80.0.9.3\build\SQLitePCL.native.sqlite3.v110_wp80.targets" Condition="Exists('..\..\packages\SQLitePCL.native.sqlite3.v110_wp80.0.9.3\build\SQLitePCL.native.sqlite3.v110_wp80.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\SQLitePCL.native.sqlite3.v110_wp80.0.9.3\build\SQLitePCL.native.sqlite3.v110_wp80.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCL.native.sqlite3.v110_wp80.0.9.3\build\SQLitePCL.native.sqlite3.v110_wp80.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SQLitePCL.raw.0.9.3\build\wp8\SQLitePCL.raw.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCL.raw.0.9.3\build\wp8\SQLitePCL.raw.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\SQLitePCL.raw.0.9.3\build\wp8\SQLitePCL.raw.targets" Condition="Exists('..\..\packages\SQLitePCL.raw.0.9.3\build\wp8\SQLitePCL.raw.targets')" />
 </Project>

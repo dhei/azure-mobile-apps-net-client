@@ -2,6 +2,8 @@ using System.Reflection;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Test;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
+using System.IO;
+using System;
 
 namespace Microsoft.WindowsAzure.Mobile.Android.Test
 {
@@ -12,7 +14,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         static App()
         {
             CurrentPlatform.Init();
-
+            OfflineTests.StoreFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "test.db");
             Harness = new TestHarness();
             Harness.Platform = TestPlatform.XamarinAndroid;
 

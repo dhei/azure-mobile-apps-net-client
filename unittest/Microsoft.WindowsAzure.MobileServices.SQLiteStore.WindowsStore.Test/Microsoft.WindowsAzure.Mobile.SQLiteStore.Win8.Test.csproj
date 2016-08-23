@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\SQLitePCL.3.8.7.2\build\netcore45\SQLitePCL.props" Condition="Exists('..\..\packages\SQLitePCL.3.8.7.2\build\netcore45\SQLitePCL.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -179,8 +178,16 @@
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\netcore45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SQLitePCL">
-      <HintPath>..\..\packages\SQLitePCL.3.8.7.2\lib\netcore45\SQLitePCL.dll</HintPath>
+    <Reference Include="SQLitePCL.batteries, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCL.bundle_green.0.9.3\lib\win81\SQLitePCL.batteries.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCL.raw, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCL.raw.0.9.3\lib\win81\SQLitePCL.raw.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLPlugin_esqlite3, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCL.plugin.sqlite3.win81.0.9.3\lib\win81\SQLitePCLPlugin_esqlite3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -193,22 +200,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs, version=12.0">
-      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
-    </SDKReference>
-    <SDKReference Include="SQLite.WinRT81, Version=3.13.0">
-      <Name>SQLite for Windows Runtime %28Windows 8.1%29</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="UnitTests\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="..\..\packages\SQLitePCL.3.8.7.2\build\netcore45\SQLitePCL.targets" Condition="Exists('..\..\packages\SQLitePCL.3.8.7.2\build\netcore45\SQLitePCL.targets')" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\packages\SQLitePCL.native.sqlite3.v120.0.9.3\build\SQLitePCL.native.sqlite3.v120.targets" Condition="Exists('..\..\packages\SQLitePCL.native.sqlite3.v120.0.9.3\build\SQLitePCL.native.sqlite3.v120.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\SQLitePCL.native.sqlite3.v120.0.9.3\build\SQLitePCL.native.sqlite3.v120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCL.native.sqlite3.v120.0.9.3\build\SQLitePCL.native.sqlite3.v120.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
