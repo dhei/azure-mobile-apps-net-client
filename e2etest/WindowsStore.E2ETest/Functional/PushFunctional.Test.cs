@@ -67,7 +67,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await this.GetClient().InvokeApiAsync("verifyUnregisterInstallationResult", HttpMethod.Get, null);
         }
 
-        [AsyncTestMethod]
+        // Disable this test
+        // [AsyncTestMethod]
         public async Task RegisterAsyncWithTemplatesAndSecondaryTiles()
         {
             string channelUri = await this.GetChannelUri();
