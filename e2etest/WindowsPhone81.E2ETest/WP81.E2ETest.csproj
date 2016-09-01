@@ -15,6 +15,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -163,7 +165,9 @@
     <Content Include="TestInput\e2e_test_storage_url.txt" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="TestInput\e2e_test_storage_sas_token.txt" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -199,16 +203,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SQLitePCL.batteries, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQLitePCL.bundle_green.0.9.3\lib\wpa81\SQLitePCL.batteries.dll</HintPath>
+    <Reference Include="SQLitePCLRaw.batteries_green, Version=0.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.0.0-pre20160901085507\lib\wpa81\SQLitePCLRaw.batteries_green.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SQLitePCL.raw, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQLitePCL.raw.0.9.3\lib\wpa81\SQLitePCL.raw.dll</HintPath>
+    <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.core.1.0.0-pre20160901085507\lib\wpa81\SQLitePCLRaw.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SQLitePCLPlugin_esqlite3, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQLitePCL.plugin.sqlite3.wpa81.0.9.3\lib\wpa81\SQLitePCLPlugin_esqlite3.dll</HintPath>
+    <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.provider.e_sqlite3.wpa81.1.0.0-pre20160901085507\lib\wpa81\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -271,9 +275,9 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\SQLitePCL.native.sqlite3.v120_wp81.0.9.3\build\SQLitePCL.native.sqlite3.v120_wp81.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCL.native.sqlite3.v120_wp81.0.9.3\build\SQLitePCL.native.sqlite3.v120_wp81.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.1.0.0-pre20160901085507\build\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.1.0.0-pre20160901085507\build\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.targets'))" />
   </Target>
-  <Import Project="..\..\packages\SQLitePCL.native.sqlite3.v120_wp81.0.9.3\build\SQLitePCL.native.sqlite3.v120_wp81.targets" Condition="Exists('..\..\packages\SQLitePCL.native.sqlite3.v120_wp81.0.9.3\build\SQLitePCL.native.sqlite3.v120_wp81.targets')" />
+  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.1.0.0-pre20160901085507\build\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.1.0.0-pre20160901085507\build\SQLitePCLRaw.lib.e_sqlite3.v120_wp81.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
