@@ -1,9 +1,9 @@
 ﻿{
   "dependencies": {
     "Microsoft.Net.Http": "2.2.29",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Newtonsoft.Json": "6.0.4",
-    "SQLitePCL.bundle_green": "0.9.3"
+    "SQLitePCLRaw.bundle_green": "1.0.0-pre20160901085507"
   },
   "frameworks": {
     "uap10.0": {}
