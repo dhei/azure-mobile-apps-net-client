@@ -1858,8 +1858,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             List<Tuple<UriType, string>> testCases = new List<Tuple<UriType, string>>() {
                 new Tuple<UriType, string>(new UriType() { Uri = null }, "{\"Uri\":null}"),
-                new Tuple<UriType, string>(new UriType() { Uri = new Uri("http://someHost") }, "{\"Uri\":\"http://somehost/\"}"),
-                new Tuple<UriType, string>(new UriType() { Uri = new Uri("ftp://127.0.0.1") }, "{\"Uri\":\"ftp://127.0.0.1/\"}"),
+                new Tuple<UriType, string>(new UriType() { Uri = new Uri("http://someHost/") }, "{\"Uri\":\"http://someHost/\"}"),
+                new Tuple<UriType, string>(new UriType() { Uri = new Uri("ftp://127.0.0.1/") }, "{\"Uri\":\"ftp://127.0.0.1/\"}"),
             };
 
             // Need to ensure that the type is registered as a table to force the id property check
