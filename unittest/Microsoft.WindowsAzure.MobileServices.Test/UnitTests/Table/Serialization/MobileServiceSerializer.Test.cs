@@ -323,7 +323,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     actualError = e;
                 }
 
-                Assert.AreEqual(actualError.Message, "Error converting value \"I can't be parsed\" to type 'System.Boolean'. Path 'Bool', line 2, position 30.");
+                Assert.AreEqual(actualError.Message, "Error converting value \"I can't be parsed\" to type 'System.Boolean'. Path 'Bool', line 2, position 29.");
             }
         }
 
@@ -401,9 +401,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         public void ByteDeserializationNegative()
         {
             List<Tuple<string, string>> testCases = new List<Tuple<string, string>>() {
-                new Tuple<string, string>("{\"Byte\":256}", "Error converting value 256 to type 'System.Byte'. Path 'Byte', line 2, position 14."),
-                new Tuple<string, string>("{\"Byte\":\"256\"}","Error converting value \"256\" to type 'System.Byte'. Path 'Byte', line 2, position 16."),
-                new Tuple<string, string>("{\"Byte\":-1}","Error converting value -1 to type 'System.Byte'. Path 'Byte', line 2, position 13."),
+                new Tuple<string, string>("{\"Byte\":256}", "Error converting value 256 to type 'System.Byte'. Path 'Byte', line 2, position 13."),
+                new Tuple<string, string>("{\"Byte\":\"256\"}","Error converting value \"256\" to type 'System.Byte'. Path 'Byte', line 2, position 15."),
+                new Tuple<string, string>("{\"Byte\":-1}","Error converting value -1 to type 'System.Byte'. Path 'Byte', line 2, position 12."),
             };
 
             foreach (var testCase in testCases)
