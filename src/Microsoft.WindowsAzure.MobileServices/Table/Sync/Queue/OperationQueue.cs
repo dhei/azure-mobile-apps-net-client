@@ -90,7 +90,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             return this.itemLocks.Acquire(id, cancellationToken);
         }
 
-        public async Task<MobileServiceTableOperation> GetOperationByItemIdAsync(string tableName, string itemId)
+        public virtual async Task<MobileServiceTableOperation> GetOperationByItemIdAsync(string tableName, string itemId)
         {
             MobileServiceTableQueryDescription query = CreateQuery();
             query.Filter = new BinaryOperatorNode(BinaryOperatorKind.And,
@@ -153,7 +153,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
         {
             try
             {
-                MobileServiceTableOperation op = await GetOperationAsync(id);                
+                MobileServiceTableOperation op = await GetOperationAsync(id);
                 if (op == null || op.Version != version)
                 {
                     return false;
@@ -163,7 +163,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
 
                 // Change the operation state back to pending since this is a newly updated operation without any conflicts
                 op.State = MobileServiceTableOperationState.Pending;
-                
+
                 // if the operation type is delete then set the item property in the Operation table
                 if (op.Kind == MobileServiceTableOperationKind.Delete)
                 {
