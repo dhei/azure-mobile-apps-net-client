@@ -53,6 +53,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Unit.Table.Sync.Queue.Actio
             });
             this.opQueue.Setup(q => q.LockTableAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult<IDisposable>(null));
             this.opQueue.Setup(q => q.CountPending(It.IsAny<string>())).Returns(Task.FromResult(0L));
+            this.opQueue.Setup(q => q.GetOperationByItemIdAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<MobileServiceTableOperation>(null));
             this.table.SetupSequence(t => t.ReadAsync(It.IsAny<string>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<MobileServiceFeatures>()))
                       .Returns(Task.FromResult(QueryResult.Parse(result, null, false)))
                       .Returns(Task.FromResult(QueryResult.Parse(new JArray(), null, false)));
@@ -162,6 +163,67 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Unit.Table.Sync.Queue.Actio
             };
         }
 
+        [TestMethod]
+        public async Task DoesNotUpsertAnObject_IfRecordIsPresentInOperationQueue()
+        {
+            var query = new MobileServiceTableQueryDescription("test");
+            var action = new PullAction(this.table.Object, MobileServiceTableKind.Table, this.context.Object, null, query, null, null, this.opQueue.Object, this.settings.Object, this.store.Object, MobileServiceRemoteTableOptions.All, pullOptions: null, reader: null, cancellationToken: CancellationToken.None);
+
+            //// item with insert operation from server
+            var insertItemWithPendingOperation = new JObject() { { "id", "abc" }, { "text", "has pending operation" } };
+
+            //// item with update operation from server
+            var updateItemWithPendingOperation = new JObject() { { "id", "abc2" }, { "text", "has pending operation" } };
+
+            //// item with delete operation from server
+            var deleteItemWithPendingOperation = new JObject() { { "id", "abc3" }, { "text", "has pending operation" } };
+
+            //// item with no pending operation from server
+            var itemWithNoPendingOperation = new JObject() { { "id", "abc4" }, { "text", "has no pending operation" } };
+
+            var result = new JArray(new[]{
+                insertItemWithPendingOperation,
+                updateItemWithPendingOperation,
+                deleteItemWithPendingOperation,
+                itemWithNoPendingOperation
+            });
+
+            this.opQueue.Setup(q => q.LockTableAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult<IDisposable>(null));
+            this.opQueue.Setup(q => q.CountPending(It.IsAny<string>())).Returns(Task.FromResult(0L));
+            this.opQueue.Setup(q => q.GetOperationByItemIdAsync(It.IsAny<string>(), It.IsAny<string>())).Returns((string tableName, string id) =>
+            {
+                if (id.Equals("abc"))
+                    return Task.FromResult<MobileServiceTableOperation>(new InsertOperation(tableName, MobileServiceTableKind.Table, id));
+                else if (id.Equals("abc2"))
+                    return Task.FromResult<MobileServiceTableOperation>(new UpdateOperation(tableName, MobileServiceTableKind.Table, id));
+                else if (id.Equals("abc3"))
+                    return Task.FromResult<MobileServiceTableOperation>(new DeleteOperation(tableName, MobileServiceTableKind.Table, id));
+                else
+                    return Task.FromResult<MobileServiceTableOperation>(null);
+            });
+
+            //// below two reads correspond to first and second page from the server
+            this.table.SetupSequence(t => t.ReadAsync(It.IsAny<string>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<MobileServiceFeatures>()))
+                      .Returns(Task.FromResult(QueryResult.Parse(result, null, false)))
+                      .Returns(Task.FromResult(QueryResult.Parse(new JArray(), null, false)));
+
+            this.store.Setup(s => s.UpsertAsync("test", It.IsAny<IEnumerable<JObject>>(), true))
+                      .Returns(Task.FromResult(0))
+                      .Callback<string, IEnumerable<JObject>, bool>((tableName, items, fromServer) =>
+                      {
+                          Assert.AreEqual(1, items.Count());
+                          Assert.AreEqual(itemWithNoPendingOperation, items.First());
+                      });
+
+            await action.ExecuteAsync();
+
+            store.VerifyAll();
+            opQueue.VerifyAll();
+            table.VerifyAll();
+
+            store.Verify(s => s.DeleteAsync("test", It.IsAny<IEnumerable<string>>()), Times.Never(), "There shouldn't be any call to delete");
+        }
+
         private async Task TestIncrementalSync(MobileServiceTableQueryDescription query, JArray result, DateTime maxUpdatedAt, bool savesMax, string firstQuery, string secondQuery)
         {
             var action = new PullAction(this.table.Object, MobileServiceTableKind.Table, this.context.Object,
@@ -175,6 +237,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Unit.Table.Sync.Queue.Actio
 
             if (result.Any())
             {
+                this.opQueue.Setup(q => q.GetOperationByItemIdAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<MobileServiceTableOperation>(null));
                 this.table.Setup(t => t.ReadAsync(secondQuery, It.IsAny<IDictionary<string, string>>(), It.IsAny<MobileServiceFeatures>()))
                           .Returns(Task.FromResult(QueryResult.Parse(new JArray(), null, false)));
             }
