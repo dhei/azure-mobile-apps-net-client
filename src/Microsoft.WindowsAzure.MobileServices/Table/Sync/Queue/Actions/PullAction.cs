@@ -107,6 +107,12 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                     continue;
                 }
 
+                var pendingOperation = await this.OperationQueue.GetOperationByItemIdAsync(this.Table.TableName, id);
+                if (pendingOperation != null)
+                {
+                    continue;
+                }
+
                 DateTimeOffset updatedAt = this.Reader.GetUpdatedAt(item).GetValueOrDefault(Epoch).ToUniversalTime();
                 strategy.SetUpdateAt(updatedAt);
 
