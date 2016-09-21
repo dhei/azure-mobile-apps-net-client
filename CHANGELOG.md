@@ -1,5 +1,10 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 3.0.0
+- Update [Microsoft.Azure.Mobile.Client.SQLiteStore](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client.SQLiteStore) to depend on [SQLitePCLRaw.core](https://www.nuget.org/packages/SQLitePCLRaw.core/) and [SQLitePCLRaw.bundle_green](https://www.nuget.org/packages/SQLitePCLRaw.bundle_green) instead of [SQLitePCL](https://www.nuget.org/packages/SQLitePCL)
+- Fix [#210](https://github.com/Azure/azure-mobile-apps-net-client/issues/210)
+- Fix [#221](https://github.com/Azure/azure-mobile-apps-net-client/issues/221)
+
 ### Version 2.1.1
 - Fixing [#186](https://github.com/Azure/azure-mobile-apps-net-client/issues/186) threading issues with MobileServiceContractResolver. [2feba7c](https://github.com/Azure/azure-mobile-apps-net-client/commit/2feba7c3cf6430f1f55878c7945251a17c1376dd)
 - Fixing [#178](https://github.com/Azure/azure-mobile-apps-net-client/issues/178) missing IntelliSense of [Microsoft.WindowsAzure.Mobile.SQLiteStore nuget](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client.sqlitestore). [88a1ef4](https://github.com/Azure/azure-mobile-apps-net-client/commit/88a1ef4e0783ca0878486e0ff81050153e11baed)
