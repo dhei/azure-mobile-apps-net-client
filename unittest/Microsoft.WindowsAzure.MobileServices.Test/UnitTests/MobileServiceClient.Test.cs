@@ -161,7 +161,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
             string userAgent = string.Join(" ", hijack.Request.Headers.GetValues("user-agent"));
             Assert.IsTrue(userAgent.Contains("ZUMO/2."));
-            Assert.IsTrue(userAgent.Contains("version=2."));
+            Assert.IsTrue(userAgent.Contains("version=3."));
         }
 
         [AsyncTestMethod]
