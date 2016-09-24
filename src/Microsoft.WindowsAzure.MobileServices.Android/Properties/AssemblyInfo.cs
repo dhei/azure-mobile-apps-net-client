@@ -18,8 +18,8 @@ using Microsoft.WindowsAzure.MobileServices;
 [assembly: AssemblyProduct("Microsoft Azure Mobile Client SDK")]
 [assembly: AssemblyCopyright("© Microsoft Corporation. All rights reserved.")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: Preserve]
 
