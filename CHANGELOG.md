@@ -1,9 +1,12 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 3.0.1
+- Fix [#228](https://github.com/Azure/azure-mobile-apps-net-client/issues/228) Assembly version of Microsoft.WindowsAzure.Mobile.SQLiteStore.dll in [Microsoft.Azure.Mobile.Client.SQLiteStore 3.0.0 package](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client.SQLiteStore/3.0.0) is wrong
+
 ### Version 3.0.0
 - Update [Microsoft.Azure.Mobile.Client.SQLiteStore](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client.SQLiteStore) to depend on [SQLitePCLRaw.core](https://www.nuget.org/packages/SQLitePCLRaw.core/) and [SQLitePCLRaw.bundle_green](https://www.nuget.org/packages/SQLitePCLRaw.bundle_green) instead of [SQLitePCL](https://www.nuget.org/packages/SQLitePCL)
-- Fix [#210](https://github.com/Azure/azure-mobile-apps-net-client/issues/210)
-- Fix [#221](https://github.com/Azure/azure-mobile-apps-net-client/issues/221)
+- Fix [#210](https://github.com/Azure/azure-mobile-apps-net-client/issues/210) NuGet package should declare System.Net.Http as a framework assembly
+- Fix [#221](https://github.com/Azure/azure-mobile-apps-net-client/issues/221) Specify monotouch and monoandroid framework version in Microsoft.Azure.Mobile.Client.SQLiteStore package
 
 ### Version 2.1.1
 - Fixing [#186](https://github.com/Azure/azure-mobile-apps-net-client/issues/186) threading issues with MobileServiceContractResolver. [2feba7c](https://github.com/Azure/azure-mobile-apps-net-client/commit/2feba7c3cf6430f1f55878c7945251a17c1376dd)
