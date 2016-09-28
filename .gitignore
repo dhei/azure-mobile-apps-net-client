@@ -20,5 +20,3 @@ unittest/**/AppPackages/*
 .vs/
 e2etest/*/project.lock.json
 e2etest/*/*.nuget.targets
-/src/Microsoft.WindowsAzure.MobileServices.Net45/Microsoft.Azure.Mobile.Client.Ex.snk
-/src/Microsoft.WindowsAzure.MobileServices/Microsoft.Azure.Mobile.Client.Ex.snk
