@@ -13,7 +13,18 @@ To get the source code of our SDKs and samples via **git** just type:
     git clone https://github.com/Azure/azure-mobile-apps-net-client.git
     cd ./azure-mobile-apps-net-client/
 
-## Reference Documentation
+## Supported platforms
+
+* Xamarin Android releases for API 19 through 24 (KitKat through Nougat)
+* Xamarin iOS releases for iOS versions 8.0 through 10.0
+* Universal Windows Platform
+* Windows Phone 8.1
+* Windows Phone 8.0 except for Silverlight applications.
+
+Other versions may work.  We do not test them and thus cannot support them.
+
+**ADVANCED WARNING**: We intend to move to .NETStandard 1.1 in the next major release (v4.0.0).  At that
+time we will no longer support Windows Phone 8.0 in any form.
 
 ## Change log
 - [Managed SDK](CHANGELOG.md)
@@ -50,10 +61,10 @@ Windows Phone 8 and .NET 4.5.
 5. The test suite will run and display the results.
 
 ### Running the Xamarin.iOS E2E test using Xamarin Studio
-1. Open the client folder in Console or Terminal and execute the following:  
-   
-   ```git submodule init```  
-   ```git submodule update```  
+1. Open the client folder in Console or Terminal and execute the following:
+
+   ```git submodule init```
+   ```git submodule update```
 2. Open the ```e2etest/iOS.E2ETest/iOS.E2ETest.csproj``` file in Xamarin Studio, build and run.
 
 ## Useful Resources
@@ -63,7 +74,7 @@ Windows Phone 8 and .NET 4.5.
 * [Samples](https://azure.microsoft.com/en-us/documentation/samples/?service=app-service&term=mobile)
 * Tutorials and product overview are available at [Azure Mobile Apps Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
 * Our product team actively monitors the [Mobile Apps Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) to assist you with any troubles and the StackOverflow tag [azure-mobile-services](http://stackoverflow.com/questions/tagged/azure-mobile-services).
-* Our product team publishes symbols to SymbolSource for an improved debugging experience. Instructions on enabling VisualStudio to load symbols from SymbolSource [here](http://www.symbolsource.org/Public/Wiki/Using) 
+* Our product team publishes symbols to SymbolSource for an improved debugging experience. Instructions on enabling VisualStudio to load symbols from SymbolSource [here](http://www.symbolsource.org/Public/Wiki/Using)
 
 ## Contribute Code or Provide Feedback
 
