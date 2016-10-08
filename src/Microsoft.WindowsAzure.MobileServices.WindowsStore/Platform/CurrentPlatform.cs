@@ -20,7 +20,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         /// <summary>
         /// Returns a platform-specific implementation of a utility class
-        /// that provides functionality for manipulating 
+        /// that provides functionality for manipulating
         /// <see cref="System.Linq.Expressions.Expression"/> instances.
         /// </summary>
         public IExpressionUtility ExpressionUtility { get { return Microsoft.WindowsAzure.MobileServices.ExpressionUtility.Instance; } }
@@ -30,6 +30,14 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// that provides functionality for platform-specifc push capabilities.
         /// </summary>
         public IPushUtility PushUtility { get { return Microsoft.WindowsAzure.MobileServices.PushUtility.Instance; } }
+
+        public string DefaultDatabasePath
+        {
+            get
+            {
+                return Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+            }
+        }
 
         public IApplicationStorage GetNamedApplicationStorage(string name)
         {

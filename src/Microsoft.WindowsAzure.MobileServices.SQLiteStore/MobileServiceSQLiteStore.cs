@@ -3,8 +3,8 @@
 // ----------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,6 +13,7 @@ using Microsoft.WindowsAzure.MobileServices.Query;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Newtonsoft.Json.Linq;
 using SQLitePCL;
+using PCLStorage;
 
 namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 {
@@ -44,8 +45,27 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             {
                 throw new ArgumentNullException("fileName");
             }
+
             if (this.connection == null)
             {
+                // Fully qualify the path
+                var dbPath = fileName.StartsWith("/") ? fileName : Path.Combine(MobileServiceClient.DefaultDatabasePath, fileName);
+
+                // Split into the directory and file.
+                var directoryName = Path.GetDirectoryName(dbPath);
+                var nFileName = Path.GetFileName(dbPath);
+
+                // Ensure the file exists (synchronous deliberately since we are in constructor)
+                var folderRef = FileSystem.Current.GetFolderFromPathAsync(directoryName).Result;
+                try
+                {
+                    folderRef.CreateFileAsync(nFileName, CreationCollisionOption.FailIfExists).Wait();
+                }
+                catch (FileNotFoundException)
+                {
+                    // Ignore this error - it means the file exists
+                }
+
                 this.connection = SQLitePCLRawHelpers.GetSqliteConnection(fileName);
             }
         }

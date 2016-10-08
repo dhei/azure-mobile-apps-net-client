@@ -36,6 +36,14 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         IPushUtility IPlatform.PushUtility { get { return Microsoft.WindowsAzure.MobileServices.PushUtility.Instance; } }
 
+        string IPlatform.DefaultDatabasePath
+        {
+            get
+            {
+                return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            }
+        }
+
         IApplicationStorage IPlatform.GetNamedApplicationStorage(string name)
         {
             return new ApplicationStorage(name);
