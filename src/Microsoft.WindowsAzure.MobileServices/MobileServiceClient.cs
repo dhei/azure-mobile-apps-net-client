@@ -132,6 +132,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
+        /// Ensures that a file exists, creating it if necessary
+        /// </summary>
+        /// <param name="path">The fully-qualified pathname to check</param>
+        public static void EnsureFileExists(string path)
+        {
+            Platform.Instance.EnsureFileExists(path);
+        }
+
+        /// <summary>
         /// Gets or sets the settings used for serialization.
         /// </summary>
         public MobileServiceJsonSerializerSettings SerializerSettings

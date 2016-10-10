@@ -42,6 +42,12 @@ namespace Microsoft.WindowsAzure.MobileServices
         string DefaultDatabasePath { get; }
 
         /// <summary>
+        /// Ensures that a file exists, creating it if necessary
+        /// </summary>
+        /// <param name="path">The fully-qualified pathname to check</param>
+        void EnsureFileExists(string path);
+
+        /// <summary>
         /// Retrieves an ApplicationStorage where all items stored are segmented from other stored items
         /// </summary>
         /// <param name="name">The name of the segemented area in application storage</param>

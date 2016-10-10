@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------
 
 using System;
+using System.IO;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
@@ -31,6 +32,10 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </summary>
         public IPushUtility PushUtility { get { return null; } }
 
+        /// <summary>
+        /// Returns a platform-specific path for storing offline databases
+        /// that are not fully-qualified.
+        /// </summary>
         public string DefaultDatabasePath
         {
             get
@@ -39,9 +44,26 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
         }
 
+        /// <summary>
+        /// Retrieves an ApplicationStorage where all items stored are segmented from other stored items
+        /// </summary>
+        /// <param name="name">The name of the segemented area in application storage</param>
+        /// <returns>The specific instance of that segment</returns>
         public IApplicationStorage GetNamedApplicationStorage(string name)
         {
             return new ApplicationStorage(name);
+        }
+
+        /// <summary>
+        /// Ensures that a file exists, creating it if necessary
+        /// </summary>
+        /// <param name="path">The fully-qualified pathname to check</param>
+        public void EnsureFileExists(string path)
+        {
+            if (!File.Exists(path))
+            {
+                File.Create(path);
+            }
         }
     }
 }

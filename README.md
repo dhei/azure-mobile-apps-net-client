@@ -19,7 +19,7 @@ To get the source code of our SDKs and samples via **git** just type:
 * Xamarin iOS releases for iOS versions 8.0 through 10.0
 * Universal Windows Platform
 * Windows Phone 8.1
-* Windows Phone 8.0 except for Silverlight applications.
+* Windows Phone 8.0
 
 Other versions may work.  We do not test them and thus cannot support them.
 
