@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------
 
 using System;
+using System.IO;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
