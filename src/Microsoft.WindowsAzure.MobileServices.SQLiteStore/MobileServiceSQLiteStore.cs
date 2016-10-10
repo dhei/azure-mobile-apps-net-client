@@ -3,8 +3,8 @@
 // ----------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -44,8 +44,13 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             {
                 throw new ArgumentNullException("fileName");
             }
+
             if (this.connection == null)
             {
+                // Fully qualify the path
+                var dbPath = fileName.StartsWith("/") ? fileName : Path.Combine(MobileServiceClient.DefaultDatabasePath, fileName);
+                MobileServiceClient.EnsureFileExists(dbPath);
+
                 this.connection = SQLitePCLRawHelpers.GetSqliteConnection(fileName);
             }
         }

@@ -9,6 +9,8 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 {
     internal class SQLitePCLRawHelpers
     {
+        internal static bool sqliteIsInitialized = false;
+
         internal enum SQLiteType
         {
             INTEGER = 1, // 64-bit signed integer
@@ -20,7 +22,12 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 
         internal static sqlite3 GetSqliteConnection(string filename)
         {
-            Batteries.Init();
+            if (!sqliteIsInitialized)
+            {
+                Batteries.Init();
+                sqliteIsInitialized = true;
+            }
+
             sqlite3 connection;
             int rc = raw.sqlite3_open(filename, out connection);
             VerifySQLiteResponse(rc, raw.SQLITE_OK, connection);
@@ -34,7 +41,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             VerifySQLiteResponse(rc, raw.SQLITE_OK, db);
             return statement;
         }
-      
+
         internal static void VerifySQLiteResponse(int result, int expectedResult, sqlite3 db)
         {
             if (result != expectedResult)

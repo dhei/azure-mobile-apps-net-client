@@ -109,16 +109,36 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
-        /// The id used to identify this installation of the application to 
+        /// The id used to identify this installation of the application to
         /// provide telemetry data.
         /// </summary>
         public string InstallationId { get; private set; }
 
         /// <summary>
-        /// The event manager that exposes and manages the event stream used by the mobile services types to 
+        /// The event manager that exposes and manages the event stream used by the mobile services types to
         /// publish and consume events.
         /// </summary>
         public IMobileServiceEventManager EventManager { get; private set; }
+
+        /// <summary>
+        /// The location of any files we need to create for offline-sync
+        /// </summary>
+        public static string DefaultDatabasePath
+        {
+            get
+            {
+                return Platform.Instance.DefaultDatabasePath;
+            }
+        }
+
+        /// <summary>
+        /// Ensures that a file exists, creating it if necessary
+        /// </summary>
+        /// <param name="path">The fully-qualified pathname to check</param>
+        public static void EnsureFileExists(string path)
+        {
+            Platform.Instance.EnsureFileExists(path);
+        }
 
         /// <summary>
         /// Gets or sets the settings used for serialization.
@@ -173,8 +193,8 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// Absolute URI of the Microsoft Azure Mobile App.
         /// </param>
         /// <param name="handlers">
-        /// Chain of <see cref="HttpMessageHandler" /> instances. 
-        /// All but the last should be <see cref="DelegatingHandler"/>s. 
+        /// Chain of <see cref="HttpMessageHandler" /> instances.
+        /// All but the last should be <see cref="DelegatingHandler"/>s.
         /// </param>
         public MobileServiceClient(string mobileAppUri,
             params HttpMessageHandler[] handlers)
@@ -189,8 +209,8 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// Absolute URI of the Microsoft Azure Mobile App.
         /// </param>
         /// <param name="handlers">
-        /// Chain of <see cref="HttpMessageHandler" /> instances. 
-        /// All but the last should be <see cref="DelegatingHandler"/>s. 
+        /// Chain of <see cref="HttpMessageHandler" /> instances.
+        /// All but the last should be <see cref="DelegatingHandler"/>s.
         /// </param>
         public MobileServiceClient(Uri mobileAppUri,
             params HttpMessageHandler[] handlers)
@@ -229,7 +249,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
-        /// Returns a <see cref="IMobileServiceTable"/> instance, which provides 
+        /// Returns a <see cref="IMobileServiceTable"/> instance, which provides
         /// untyped data operations for that table.
         /// </summary>
         /// <param name="tableName">
@@ -265,7 +285,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
-        /// Returns a <see cref="IMobileServiceTable{T}"/> instance, which provides 
+        /// Returns a <see cref="IMobileServiceTable{T}"/> instance, which provides
         /// strongly typed data operations for that table.
         /// </summary>
         /// <typeparam name="T">
@@ -282,7 +302,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
 
         /// <summary>
-        /// Returns a <see cref="IMobileServiceSyncTable{T}"/> instance, which provides 
+        /// Returns a <see cref="IMobileServiceSyncTable{T}"/> instance, which provides
         /// strongly typed data operations for local table.
         /// </summary>
         /// <typeparam name="T">
@@ -448,7 +468,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Invokes a user-defined custom API of a Microsoft Azure Mobile Service using an HTTP POST.
         /// </summary>
-        /// <typeparam name="T">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>    
+        /// <typeparam name="T">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>
         /// <param name="apiName">The name of the custom API.</param>
         /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/> token to observe</param>
         /// <returns>The response content from the custom api invocation.</returns>
@@ -462,7 +482,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// support for sending HTTP content.
         /// </summary>
         /// <typeparam name="T">The type of instance sent to the Microsoft Azure Mobile Service.</typeparam>
-        /// <typeparam name="U">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>    
+        /// <typeparam name="U">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>
         /// <param name="apiName">The name of the custom API.</param>
         /// <param name="body">The value to be sent as the HTTP body.</param>
         /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/> token to observe</param>
@@ -494,7 +514,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// Additional data can be sent though the HTTP content or the query string.
         /// </summary>
         /// <typeparam name="T">The type of instance sent to the Microsoft Azure Mobile Service.</typeparam>
-        /// <typeparam name="U">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>    
+        /// <typeparam name="U">The type of instance returned from the Microsoft Azure Mobile Service.</typeparam>
         /// <param name="apiName">The name of the custom API.</param>
         /// <param name="body">The value to be sent as the HTTP body.</param>
         /// <param name="method">The HTTP method.</param>
@@ -557,7 +577,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="method">The HTTP method.</param>
         /// <param name="parameters">
         /// A dictionary of user-defined parameters and values to include in the request URI query string.
-        /// </param>        
+        /// </param>
         /// <param name="cancellationToken">The <see cref="System.Threading.CancellationToken"/> token to observe</param>
         /// <returns>The response content from the custom api invocation.</returns>
         public Task<JToken> InvokeApiAsync(string apiName, HttpMethod method, IDictionary<string, string> parameters, CancellationToken cancellationToken = default(CancellationToken))
@@ -607,7 +627,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         /// <summary>
         /// Invokes a user-defined custom API of a Windows Azure Mobile Service using the specified HttpMethod.
-        /// Additional data can be sent though the HTTP content or the query string. 
+        /// Additional data can be sent though the HTTP content or the query string.
         /// </summary>
         /// <param name="apiName">The name of the custom AP.</param>
         /// <param name="content">The HTTP content.</param>
@@ -669,7 +689,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         /// <summary>
         /// Invokes a user-defined custom API of a Windows Azure Mobile Service using the specified HttpMethod.
-        /// Additional data can be sent though the HTTP content or the query string. 
+        /// Additional data can be sent though the HTTP content or the query string.
         /// </summary>
         /// <param name="apiName">The name of the custom AP.</param>
         /// <param name="content">The HTTP content.</param>
