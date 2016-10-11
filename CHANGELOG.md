@@ -1,5 +1,11 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 3.0.2
+- Fix [#233](https://github.com/Azure/azure-mobile-apps-net-client/issues/233) Remove requirement to specify android path/create file
+- Fix [#236](https://github.com/Azure/azure-mobile-apps-net-client/issues/236) Call SQLitePCL.Batteries.Init() only once
+- Fix [#240](https://github.com/Azure/azure-mobile-apps-net-client/issues/240) Relative paths don't work on Android and iOS for SQLiteStore
+- Update documentation and README
+
 ### Version 3.0.1
 - Fix [#228](https://github.com/Azure/azure-mobile-apps-net-client/issues/228) Assembly version of Microsoft.WindowsAzure.Mobile.SQLiteStore.dll in [Microsoft.Azure.Mobile.Client.SQLiteStore 3.0.0 package](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client.SQLiteStore/3.0.0) is wrong
 
