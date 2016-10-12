@@ -51,7 +51,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 var dbPath = fileName.StartsWith("/") ? fileName : Path.Combine(MobileServiceClient.DefaultDatabasePath, fileName);
                 MobileServiceClient.EnsureFileExists(dbPath);
 
-                this.connection = SQLitePCLRawHelpers.GetSqliteConnection(fileName);
+                this.connection = SQLitePCLRawHelpers.GetSqliteConnection(dbPath);
             }
         }
 
