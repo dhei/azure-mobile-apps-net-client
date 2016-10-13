@@ -1,5 +1,8 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 3.0.3
+- Fix [#244](https://github.com/Azure/azure-mobile-apps-net-client/issues/244) Exception if not specifying full MobileServiceSQLiteStore path
+
 ### Version 3.0.2
 - Fix [#233](https://github.com/Azure/azure-mobile-apps-net-client/issues/233) Remove requirement to specify android path/create file
 - Fix [#236](https://github.com/Azure/azure-mobile-apps-net-client/issues/236) Call SQLitePCL.Batteries.Init() only once
