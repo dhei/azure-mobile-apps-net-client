@@ -46,7 +46,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         {
             if (result != expectedResult)
             {
-                string sqliteErrorMessage = raw.sqlite3_errmsg(db);
+                string sqliteErrorMessage = (db == null) ? raw.sqlite3_errstr(result) : raw.sqlite3_errmsg(db);
                 throw new SQLiteException(string.Format("Error executing SQLite command: '{0}'.", sqliteErrorMessage));
             }
         }
