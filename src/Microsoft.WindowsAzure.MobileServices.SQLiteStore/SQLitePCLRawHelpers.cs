@@ -24,7 +24,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         {
             if (!sqliteIsInitialized)
             {
-                Batteries.Init();
+                Batteries_V2.Init();
                 sqliteIsInitialized = true;
             }
 

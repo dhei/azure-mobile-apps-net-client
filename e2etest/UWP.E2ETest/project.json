@@ -5,7 +5,7 @@
     "Microsoft.Net.Http": "2.2.29",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Newtonsoft.Json": "6.0.4",
-    "SQLitePCLRaw.bundle_green": "1.0.0"
+    "SQLitePCLRaw.bundle_green": "1.1.2"
   },
   "frameworks": {
     "uap10.0": {}
