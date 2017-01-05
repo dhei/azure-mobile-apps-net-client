@@ -14,12 +14,6 @@ using Microsoft.WindowsAzure.MobileServices;
 [assembly: AssemblyTitle("Microsoft.WindowsAzure.Mobile.Ext")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft Corporation")]
-[assembly: AssemblyProduct("Microsoft Azure Mobile Client SDK")]
-[assembly: AssemblyCopyright("© Microsoft Corporation. All rights reserved.")]
-[assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: Preserve]
 
