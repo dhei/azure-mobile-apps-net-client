@@ -12,6 +12,8 @@ To get the source code of our SDKs and samples via **git** just type:
 
     git clone https://github.com/Azure/azure-mobile-apps-net-client.git
     cd ./azure-mobile-apps-net-client/
+    git submodule init
+    git submodule update
 
 ## Supported platforms
 
@@ -42,30 +44,34 @@ The SDK requires Visual Studio 2015.
 
 ### Building and Referencing the SDK
 
-The managed portable library solution includes a core portable assembly and platform-specific assemblies for each of the supported platforms: Xamarin.iOS, Xamarin.Android, Windows 8.1, Windows Phone 8.1 and .NET 4.5. The core portable platform project is ```Microsoft.WindowsAzure.Mobile```. The platform-specific assembly projects are
+The managed portable library solution includes a core portable assembly and platform-specific assemblies for each of the
+supported platforms: Xamarin.iOS, Xamarin.Android, Windows 8.1, Windows Phone 8.1 and .NET 4.5. The core portable platform
+project is ```Microsoft.WindowsAzure.Mobile```. The platform-specific assembly projects are
 named using a ```Microsoft.WindowsAzure.Mobile.Ext.<Platform>``` convention. The Windows Phone 8 platform also
 include a ```Microsoft.WindowsAzure.Mobile.UI.<Platform>``` project that contain UI components. To build the Managed Portable Libray:
 
-1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` solution file in Visual Studio 2015.
-2. Press F6 to build the solution.
+1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Full_IncludeXamarin_VS15.sln``` solution file in Visual Studio 2015.
+2. Use Solution -> Restore NuGet Packages...
+3. Press F6 to build the solution.
 
-### Running the Tests
+### Running the Unit Tests
 
-The managed portable library ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` has a test application for each of the supported platforms: Windows 8,
-Windows Phone 8 and .NET 4.5.
+The following test suites under the 'unittest' directory contain the unit tests:
 
-1. Open the ```Microsoft.WindowsAzure.Mobile.Managed_Windows.sln``` solution file in Visual Studio 2013.
-2. Right-click on the test project for a given platform in the Solution Explorer and select ```Set as StartUp Project```.
-3. Press F5 to run the application in debug mode.
-4. An application will appear with a prompt for a runtime Uri and Tags. You can safely ignore this prompt and just click the Start button.
-5. The test suite will run and display the results.
+* Microsoft.WindowsAzure.Mobile._platform_.Test
+* Microsoft.WindowsAzure.Mobile.SQLiteStore._platform_.Test
 
-### Running the Xamarin.iOS E2E test using Xamarin Studio
-1. Open the client folder in Console or Terminal and execute the following:
+Mark the appropriate project as the Startup project and run it.  The UI will open and then you can run the tests.  If in doubt,
+run the Win8 platform locally as a minimal unit test.
 
-   ```git submodule init```
-   ```git submodule update```
-2. Open the ```e2etest/iOS.E2ETest/iOS.E2ETest.csproj``` file in Xamarin Studio, build and run.
+### Running the E2E Tests
+
+You must have a working test endpoint to run the tests.  The test endpoint is not included and may take some time to set up.  If
+you need a working test endpoint, please reach out to us on Twitter or via the GitHub Issues.  The Azure Mobile Apps team will run
+the E2E tests prior to publication.
+
+If you are an Azure Mobile Apps team member, you can set the appropriate e2etest project as active, build, and use a configured
+endpoint.
 
 ## Useful Resources
 
