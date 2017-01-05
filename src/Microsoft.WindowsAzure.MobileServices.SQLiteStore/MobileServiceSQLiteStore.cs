@@ -121,7 +121,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 {
                     try
                     {
-                        IList<JObject> rows = this.ExecuteQuery(query.TableName, sql, formatter.Parameters);
+                        IList<JObject> rows = this.ExecuteQueryInternal(query.TableName, sql, formatter.Parameters);
                         JToken result = new JArray(rows.ToArray());
 
                         if (query.IncludeTotalCount)
@@ -129,7 +129,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                             sql = formatter.FormatSelectCount();
                             IList<JObject> countRows = null;
 
-                            countRows = this.ExecuteQuery(query.TableName, sql, formatter.Parameters);
+                            countRows = this.ExecuteQueryInternal(query.TableName, sql, formatter.Parameters);
 
 
                             long count = countRows[0].Value<long>("count");
@@ -172,6 +172,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             return UpsertAsyncInternal(tableName, items, ignoreMissingColumns);
         }
 
+
         private Task UpsertAsyncInternal(string tableName, IEnumerable<JObject> items, bool ignoreMissingColumns)
         {
             TableDefinition table = GetTable(tableName);
@@ -212,12 +213,12 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 {
                     try
                     {
-                        this.ExecuteNonQuery("BEGIN TRANSACTION", null);
+                        this.ExecuteNonQueryInternal("BEGIN TRANSACTION", null);
 
                         BatchInsert(tableName, items, columns.Where(c => c.Name.Equals(MobileServiceSystemColumns.Id)).Take(1).ToList());
                         BatchUpdate(tableName, items, columns);
 
-                        this.ExecuteNonQuery("COMMIT TRANSACTION", null);
+                        this.ExecuteNonQueryInternal("COMMIT TRANSACTION", null);
                     }
                     finally
                     {
@@ -231,6 +232,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         /// </summary>
         /// <param name="query">A query to find records to delete.</param>
         /// <returns>A task that completes when delete query has executed.</returns>
+        /// <exception cref="ArgumentNullException">You must supply a query value</exception>
         public override Task DeleteAsync(MobileServiceTableQueryDescription query)
         {
             if (query == null)
@@ -248,7 +250,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 {
                     try
                     {
-                        this.ExecuteNonQuery(sql, formatter.Parameters);
+                        this.ExecuteNonQueryInternal(sql, formatter.Parameters);
                     }
                     finally
                     {
@@ -296,7 +298,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                {
                    try
                    {
-                       this.ExecuteNonQuery(sql, parameters);
+                       this.ExecuteNonQueryInternal(sql, parameters);
                    }
                    finally
                    {
@@ -335,7 +337,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 {
                     try
                     {
-                        IList<JObject> results = this.ExecuteQuery(tableName, sql, parameters);
+                        IList<JObject> results = this.ExecuteQueryInternal(tableName, sql, parameters);
                         return results.FirstOrDefault();
                     }
                     finally
@@ -425,7 +427,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
 
                 sql.AppendFormat(" WHERE {0} = {1}", SqlHelpers.FormatMember(MobileServiceSystemColumns.Id), AddParameter(item, parameters, idColumn));
 
-                this.ExecuteNonQuery(sql.ToString(), parameters);
+                this.ExecuteNonQueryInternal(sql.ToString(), parameters);
             }
         }
 
@@ -460,7 +462,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                 if (parameters.Any())
                 {
                     sql.Remove(sql.Length - 1, 1); // remove the trailing comma
-                    this.ExecuteNonQuery(sql.ToString(), parameters);
+                    this.ExecuteNonQueryInternal(sql.ToString(), parameters);
                 }
             }
         }
@@ -501,10 +503,10 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             }
 
             String tblSql = string.Format("CREATE TABLE IF NOT EXISTS {0} ({1})", SqlHelpers.FormatTableName(tableName), String.Join(", ", colDefinitions));
-            this.ExecuteNonQuery(tblSql, parameters: null);
+            this.ExecuteNonQueryInternal(tblSql, parameters: null);
 
             string infoSql = string.Format("PRAGMA table_info({0});", SqlHelpers.FormatTableName(tableName));
-            IDictionary<string, JObject> existingColumns = this.ExecuteQuery((TableDefinition)null, infoSql, parameters: null)
+            IDictionary<string, JObject> existingColumns = this.ExecuteQueryInternal((TableDefinition)null, infoSql, parameters: null)
                                                                .ToDictionary(c => c.Value<string>("name"), StringComparer.OrdinalIgnoreCase);
 
             // new columns that do not exist in existing columns
@@ -516,7 +518,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
                                                  SqlHelpers.FormatTableName(tableName),
                                                  SqlHelpers.FormatMember(column.Name),
                                                  column.StoreType);
-                this.ExecuteNonQuery(createSql, parameters: null);
+                this.ExecuteNonQueryInternal(createSql, parameters: null);
             }
 
             // NOTE: In SQLite you cannot drop columns, only add them.
@@ -542,7 +544,7 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         /// </summary>
         /// <param name="tableName">The name of the table.</param>
         /// <param name="parameters">The query parameters.</param>
-        protected virtual void ExecuteNonQuery(string sql, IDictionary<string, object> parameters)
+        protected virtual void ExecuteNonQueryInternal(string sql, IDictionary<string, object> parameters)
         {
             parameters = parameters ?? new Dictionary<string, object>();
 
@@ -563,19 +565,61 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
         }
 
         /// <summary>
+        /// Executes a SQL query against the store.  This is useful for running arbitrary queries
+        /// that are supported by SQLite but not the SDK LINQ Provider
+        /// </summary>
+        /// <param name="tableName">The name of the table</param>
+        /// <param name="sql">The SQL command</param>
+        /// <param name="parameters">The list of parameters</param>
+        /// <returns>The result of the query (untyped objects)</returns>
+        /// <exception cref="ArgumentNullException">tableName and sql must be provided</exception>
+        public Task<IList<JObject>> ExecuteQueryAsync(string tableName, string sql, IDictionary<string, object> parameters)
+        {
+            if (tableName == null)
+            {
+                throw new ArgumentNullException("tableName");
+            }
+            if (sql == null)
+            {
+                throw new ArgumentNullException("sql");
+            }
+
+            this.EnsureInitialized();
+            return this.operationSemaphore.WaitAsync()
+                .ContinueWith(t =>
+                {
+                    try
+                    {
+                        return this.ExecuteQueryInternal(tableName, sql, parameters);
+                    }
+                    finally
+                    {
+                        this.operationSemaphore.Release();
+                    }
+                });
+        }
+
+        /// <summary>
         /// Executes a sql statement on a given table in local SQLite database.
         /// </summary>
         /// <param name="tableName">The name of the table.</param>
         /// <param name="sql">The SQL query to execute.</param>
         /// <param name="parameters">The query parameters.</param>
         /// <returns>The result of query.</returns>
-        protected virtual IList<JObject> ExecuteQuery(string tableName, string sql, IDictionary<string, object> parameters)
+        protected virtual IList<JObject> ExecuteQueryInternal(string tableName, string sql, IDictionary<string, object> parameters)
         {
             TableDefinition table = GetTable(tableName);
-            return this.ExecuteQuery(table, sql, parameters);
+            return this.ExecuteQueryInternal(table, sql, parameters);
         }
 
-        protected virtual IList<JObject> ExecuteQuery(TableDefinition table, string sql, IDictionary<string, object> parameters)
+        /// <summary>
+        /// Executes a sql statement on a given table in local SQLite database.
+        /// </summary>
+        /// <param name="table">The table definition.</param>
+        /// <param name="sql">The SQL query to execute.</param>
+        /// <param name="parameters">The query parameters.</param>
+        /// <returns>The result of query.</returns>
+        protected virtual IList<JObject> ExecuteQueryInternal(TableDefinition table, string sql, IDictionary<string, object> parameters)
         {
             table = table ?? new TableDefinition();
             parameters = parameters ?? new Dictionary<string, object>();
