@@ -67,7 +67,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             object id = MobileServiceSerializer.GetId(instance, ignoreCase: false, allowDefault: true);
             if (id == null)
             {
-                id = Guid.NewGuid().ToString();
+                id = Guid.NewGuid().ToString("N");
                 instance = (JObject)instance.DeepClone();
                 instance[MobileServiceSystemColumns.Id] = (string)id;
             }
