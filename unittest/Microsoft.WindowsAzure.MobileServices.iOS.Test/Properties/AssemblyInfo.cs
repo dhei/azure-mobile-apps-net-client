@@ -9,11 +9,6 @@ using Microsoft.WindowsAzure.MobileServices;
 [assembly: AssemblyTitle("Microsoft.WindowsAzure.MobileServices.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Microsoft.WindowsAzure.MobileServices.Test")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 [assembly: Preserve]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -23,16 +18,3 @@ using Microsoft.WindowsAzure.MobileServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("024c2798-106e-4f1f-9f06-e7ba1baa4da5")]
-
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]

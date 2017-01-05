@@ -8,24 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Microsoft.WindowsAzure.Mobile.Ext")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft Corporation")]
-[assembly: AssemblyProduct("Microsoft Azure Mobile Services SDK")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
 [assembly: ComVisible(false)]
 [assembly: GuidAttribute("02EEF75A-D824-4203-B243-C1B97B0D35A9")]
 #if Sign
