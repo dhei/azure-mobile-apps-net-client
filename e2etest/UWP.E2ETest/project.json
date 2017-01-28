@@ -4,7 +4,7 @@
     "Microsoft.Bcl.Build": "1.0.21",
     "Microsoft.Net.Http": "2.2.29",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-    "Newtonsoft.Json": "6.0.4",
+    "Newtonsoft.Json": "9.0.1",
     "SQLitePCLRaw.bundle_green": "1.1.2"
   },
   "frameworks": {
