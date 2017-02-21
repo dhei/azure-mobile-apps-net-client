@@ -15,7 +15,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
 {
     internal class MobileServiceSyncTable : IMobileServiceSyncTable
     {
-        private static readonly Regex queryIdRegex = new Regex("^[^|]{0,50}$");
+        private static readonly int queryIdKeySize = 255;
+
+        private static readonly Regex queryIdRegex = new Regex($"^[^|]{{0,{queryIdKeySize}}}$");
         private MobileServiceSyncContext syncContext;
 
         public MobileServiceClient MobileServiceClient { get; private set; }
@@ -138,7 +140,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                 throw new ArgumentException(
                         string.Format(
                             CultureInfo.InvariantCulture,
-                            "The query id must not contain pipe character and should be less than 50 characters in length."),
+                            $"The query id must not contain pipe character and should be less than {queryIdKeySize} characters in length."),
                             "queryId");
             }
         }
