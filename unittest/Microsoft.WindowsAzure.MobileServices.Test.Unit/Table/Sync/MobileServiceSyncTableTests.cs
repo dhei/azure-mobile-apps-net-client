@@ -10,7 +10,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Unit.Table.Sync
         [TestMethod]
         public void ValidateQueryId_Throws_OnInvalidId()
         {
-            var testCases = new[] { "|myitems", "s|myitems", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz" };
+            var testCases = new[] { "|myitems", "s|myitems", "a012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" };
             foreach (var queryId in testCases)
             {
                 var ex = AssertEx.Throws<ArgumentException>(() => MobileServiceSyncTable.ValidateQueryId(queryId));
