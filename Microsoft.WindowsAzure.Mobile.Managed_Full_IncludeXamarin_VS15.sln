@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Ext.Net45", "src\Microsoft.WindowsAzure.MobileServices.Net45\Microsoft.WindowsAzure.Mobile.Ext.Net45.csproj", "{8BE160B5-ADBF-4FE0-A0E2-A4A77A87E620}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Ext.Win8", "src\Microsoft.WindowsAzure.MobileServices.WindowsStore\Microsoft.WindowsAzure.Mobile.Ext.Win8.csproj", "{41E0BBEA-091B-4C06-AE08-B7F50E2BEB8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Ext.UWP", "src\Microsoft.WindowsAzure.MobileServices.WindowsStore\Microsoft.WindowsAzure.Mobile.Ext.UWP.csproj", "{41E0BBEA-091B-4C06-AE08-B7F50E2BEB8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2ETest", "e2etest\E2ETest\E2ETest.csproj", "{D8BBC92A-B213-463B-911D-3A106F91D5F9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unittest", "unittest", "{E7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Net45.Test", "unittest\Microsoft.WindowsAzure.Mobile.Net45.Test\Microsoft.WindowsAzure.Mobile.Net45.Test.csproj", "{BCF9BADC-8D46-4530-BF62-4C31C5DBB61F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Win8.Test", "unittest\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\Microsoft.WindowsAzure.Mobile.Win8.Test.csproj", "{882C5B40-F18B-4873-AB65-392154F441DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.UWP.Test", "unittest\Microsoft.WindowsAzure.MobileServices.WindowsStore.Test\Microsoft.WindowsAzure.Mobile.UWP.Test.csproj", "{882C5B40-F18B-4873-AB65-392154F441DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Test", "unittest\Microsoft.WindowsAzure.MobileServices.Test\Microsoft.WindowsAzure.Mobile.Test.csproj", "{05B6709B-C25A-4C1D-8D61-9E05BEE0DB86}"
 EndProject
