@@ -8,7 +8,7 @@
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.Test</RootNamespace>
-    <AssemblyName>Microsoft.WindowsAzure.Mobile.Win8.Test</AssemblyName>
+    <AssemblyName>Microsoft.WindowsAzure.Mobile.UWP.Test</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <DefineConstants>$(DefineConstants);TRACE;NETFX_CORE</DefineConstants>
     <FileAlignment>512</FileAlignment>
