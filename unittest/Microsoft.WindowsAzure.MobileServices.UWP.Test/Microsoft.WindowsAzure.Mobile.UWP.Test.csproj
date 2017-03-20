@@ -91,7 +91,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.WindowsStore\Microsoft.WindowsAzure.Mobile.Ext.UWP.csproj">
+    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.UWP\Microsoft.WindowsAzure.Mobile.Ext.UWP.csproj">
       <Project>{41e0bbea-091b-4c06-ae08-b7f50e2beb8a}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.Ext.UWP</Name>
     </ProjectReference>
