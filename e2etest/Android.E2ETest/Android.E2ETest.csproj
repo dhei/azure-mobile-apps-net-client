@@ -127,9 +127,6 @@
     <Compile Include="HarnessActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\..\src\Microsoft.WindowsAzure.MobileServices\Properties\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\GcmService.cs" />
     <Compile Include="TestDescription.cs" />
