@@ -122,11 +122,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <None Include="packages.config" />
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Functional\LoginTests.cs" />
     <Compile Include="Functional\PushFunctional.Test.cs" />
     <Compile Include="UI\GroupDescription.cs" />
@@ -170,30 +165,14 @@
       <Project>{d8bbc92a-b213-463b-911d-3a106f91d5f9}</Project>
       <Name>E2ETest</Name>
     </ProjectReference>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.2.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'SdkRel' ">
-    <Reference Include="Microsoft.WindowsAzure.Mobile, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.3.0.3\lib\netcore45\Microsoft.WindowsAzure.Mobile.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.3.0.3\lib\netcore45\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.SQLiteStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.SQLiteStore.3.0.3\lib\portable-win+net45+wp8+wpa81+monotouch10+monoandroid10+xamarinios10\Microsoft.WindowsAzure.Mobile.SQLiteStore.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.0-alpha-001" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'SdkRel'">
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.SQLiteStore\Microsoft.WindowsAzure.Mobile.SQLiteStore.csproj">
-      <Project>{4c20d49a-fe5e-4d9c-98b9-8125450074f5}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
-      <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client\Microsoft.Azure.Mobile.Client.csproj" Name="Microsoft.Azure.Mobile.Client" />
+    <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client.SQLiteStore\Microsoft.Azure.Mobile.Client.SQLiteStore.csproj" Name="Microsoft.Azure.Mobile.Client.SQLiteStore" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
