@@ -95,10 +95,6 @@
       <Project>{41e0bbea-091b-4c06-ae08-b7f50e2beb8a}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.Ext.UWP</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
-      <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.TestFramework\Microsoft.WindowsAzure.Mobile.TestFramework.csproj">
       <Project>{3cffb62f-3384-4d71-badc-7542d5c31a9e}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.TestFramework</Name>
@@ -134,7 +130,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

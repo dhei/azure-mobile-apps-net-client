@@ -36,13 +36,6 @@
     <DocumentationFile>$(OutputPath)\Microsoft.WindowsAzure.Mobile.SQLiteStore.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
-      <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="MobileServiceSQLiteStore.cs" />
     <Compile Include="MobileServiceSQLiteStoreExtensions.cs" />
