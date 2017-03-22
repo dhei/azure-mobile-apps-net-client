@@ -7,6 +7,7 @@
     <Version>4.0.0-alpha-001</Version>
     <PackageTitle>Azure Mobile Client SDK</PackageTitle>
     <Authors>Microsoft</Authors>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkId=286110</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Azure/azure-mobile-apps-net-client</PackageProjectUrl>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkID=288890</PackageIconUrl>
