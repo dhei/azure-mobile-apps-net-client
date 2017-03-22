@@ -6,21 +6,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "e2etest", "e2etest", "{45E5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28D05719-6DC4-4962-BC7E-75F9C72E695C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile", "src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj", "{75557793-E36E-4190-8714-5BD2665859FB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Ext.Net45", "src\Microsoft.WindowsAzure.MobileServices.Net45\Microsoft.WindowsAzure.Mobile.Ext.Net45.csproj", "{8BE160B5-ADBF-4FE0-A0E2-A4A77A87E620}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Ext.UWP", "src\Microsoft.WindowsAzure.MobileServices.UWP\Microsoft.WindowsAzure.Mobile.Ext.UWP.csproj", "{41E0BBEA-091B-4C06-AE08-B7F50E2BEB8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2ETest", "e2etest\E2ETest\E2ETest.csproj", "{D8BBC92A-B213-463B-911D-3A106F91D5F9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{75557793-E36E-4190-8714-5BD2665859FB} = {75557793-E36E-4190-8714-5BD2665859FB}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2ETestFramework", "e2etest\E2ETestFramework\E2ETestFramework.csproj", "{A2500BD2-A9A2-4085-9978-DEE3675B02DD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{75557793-E36E-4190-8714-5BD2665859FB} = {75557793-E36E-4190-8714-5BD2665859FB}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net45.E2ETest", "e2etest\Net45.E2ETest\Net45.E2ETest.csproj", "{7C1A9BC1-3E60-4673-AC08-AC8399032D49}"
 EndProject
@@ -105,51 +97,6 @@ Global
 		Signed|x86 = Signed|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|Any CPU.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|ARM.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|iPhone.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|Mixed Platforms.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|x64.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.AppStore|x86.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|ARM.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|x64.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Release|x86.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|Any CPU.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|Any CPU.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|ARM.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|iPhone.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|Mixed Platforms.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|x64.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.SdkRel|x86.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|Any CPU.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|Any CPU.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|ARM.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|iPhone.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|Mixed Platforms.Build.0 = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|x64.ActiveCfg = Release|Any CPU
-		{75557793-E36E-4190-8714-5BD2665859FB}.Signed|x86.ActiveCfg = Release|Any CPU
 		{8BE160B5-ADBF-4FE0-A0E2-A4A77A87E620}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
 		{8BE160B5-ADBF-4FE0-A0E2-A4A77A87E620}.AppStore|Any CPU.Build.0 = Release|Any CPU
 		{8BE160B5-ADBF-4FE0-A0E2-A4A77A87E620}.AppStore|ARM.ActiveCfg = Release|Any CPU
@@ -1552,7 +1499,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{75557793-E36E-4190-8714-5BD2665859FB} = {28D05719-6DC4-4962-BC7E-75F9C72E695C}
 		{8BE160B5-ADBF-4FE0-A0E2-A4A77A87E620} = {28D05719-6DC4-4962-BC7E-75F9C72E695C}
 		{41E0BBEA-091B-4C06-AE08-B7F50E2BEB8A} = {28D05719-6DC4-4962-BC7E-75F9C72E695C}
 		{D8BBC92A-B213-463B-911D-3A106F91D5F9} = {45E57CDC-7178-4915-8D0B-CF80F5E44AF6}
