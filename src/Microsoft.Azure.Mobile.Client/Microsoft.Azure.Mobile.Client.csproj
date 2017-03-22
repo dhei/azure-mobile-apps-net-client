@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.4;net45;MonoAndroid44;Xamarin.iOS10;uap10.0</TargetFrameworks>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <Version>4.0.0-alpha-001</Version>
+    <PackageTitle>Azure Mobile Client SDK</PackageTitle>
+    <Authors>Microsoft</Authors>
+    <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkId=286110</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Azure/azure-mobile-apps-net-client</PackageProjectUrl>
+    <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkID=288890</PackageIconUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Description>This library provides features for creating Windows and Xamarin mobile apps that connect to Azure Mobile Apps. Azure Mobile Apps allows you to develop an app with a scalable backed hosted in Azure App Service, with support for mobile authentication, offline sync, and push notifications. To learn more about Azure Mobile, go to http://azure.microsoft.com/mobile. </Description>
+    <Summary>Azure Mobile Apps SDK</Summary>
+    <PackageTags>microsoft;windows;azure;mobile;apps;services;windowsazureofficial</PackageTags>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <!-- Workaround until Xamarin supports PPDB -->
+    <DebugType>full</DebugType>
+    <RootNamespace>Microsoft.WindowsAzure.MobileServices</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Need this to see the parent refs to Auth -->
+    <ProjectCapability Include="ShowFilesOutsideOfProject" />
+    <!-- This None is here so the conditinonally included files show up in the Solution Explorer -->
+    <None Include="**\*.cs;**\*.xml;**\*.axml" Exclude="obj\**\*.*;bin\**\*.*" />
+    <Compile Remove="Platforms\**\*.*" />
+    <Compile Remove="Features\**\*.*" />
+    <EmbeddedResource Include="Properties\*.rd.xml" />
+  </ItemGroup>
+
+
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+</Project>
