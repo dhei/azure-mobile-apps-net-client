@@ -20,6 +20,23 @@
     <DebugType>full</DebugType>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- Need this to see the parent refs to Auth -->
+    <ProjectCapability Include="ShowFilesOutsideOfProject" />
+    <!-- This None is here so the conditinonally included files show up in the Solution Explorer -->
+    <None Include="**\*.cs;**\*.xml;**\*.axml" Exclude="obj\**\*.*;bin\**\*.*" />
+    <None Include="..\External\Xamarin.Auth\src\**\*.cs" Exclude="..\External\Xamarin.Auth\src\Xamarin.Auth\AssemblyInfo.cs" />
+    <Compile Remove="Platforms\**\*.*" />
+    <Compile Remove="Features\**\*.*" />
+    <EmbeddedResource Include="Properties\*.rd.xml" />
+    <Compile Update="Resources.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Resources.resx" />
+    <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+  </ItemGroup>
+
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'MonoAndroid44' ">
+    <DefineConstants>$(DefineConstants);PLATFORM_ANDROID;XAMARIN_AUTH_INTERNAL</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
@@ -35,18 +52,16 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Net.Http" />
   </ItemGroup>
-  <ItemGroup>
-    <!-- Need this to see the parent refs to Auth -->
-    <ProjectCapability Include="ShowFilesOutsideOfProject" />
-    <!-- This None is here so the conditinonally included files show up in the Solution Explorer -->
-    <None Include="**\*.cs;**\*.xml;**\*.axml" Exclude="obj\**\*.*;bin\**\*.*" />
-    <Compile Remove="Platforms\**\*.*" />
-    <Compile Remove="Features\**\*.*" />
-    <EmbeddedResource Include="Properties\*.rd.xml" />
-    <Compile Update="Resources.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Resources.resx" />
-    <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'MonoAndroid44' ">
+    <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth\**\*.cs" Exclude="..\External\Xamarin.Auth\src\Xamarin.Auth\AssemblyInfo.cs" />
+    <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth.Android\**\*.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
+    <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth\**\*.cs" Exclude="..\External\Xamarin.Auth\src\Xamarin.Auth\AssemblyInfo.cs" />
+    <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth.iOS\**\*.cs" />
+  </ItemGroup>
 
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>
