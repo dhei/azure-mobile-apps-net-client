@@ -37,7 +37,11 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'MonoAndroid44' ">
     <DefineConstants>$(DefineConstants);PLATFORM_ANDROID;XAMARIN_AUTH_INTERNAL</DefineConstants>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
+    <DefineConstants>$(DefineConstants);PLATFORM_IOS;XAMARIN_AUTH_INTERNAL</DefineConstants>
+  </PropertyGroup>
+  
+  
   <ItemGroup>
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
@@ -45,22 +49,26 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.2.3" />
     <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />
+    <Compile Include="Platforms\uwp\**\*.cs" Exclude="Platforms\uwp\Extensions\MobileServiceCollectionViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Net.Http" />
+    <Compile Include="Platforms\net45\**\*.cs" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'MonoAndroid44' ">
     <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth\**\*.cs" Exclude="..\External\Xamarin.Auth\src\Xamarin.Auth\AssemblyInfo.cs" />
     <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth.Android\**\*.cs" />
+    <Compile Include="Platforms\android\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
     <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth\**\*.cs" Exclude="..\External\Xamarin.Auth\src\Xamarin.Auth\AssemblyInfo.cs" />
     <Compile Include="..\External\Xamarin.Auth\src\Xamarin.Auth.iOS\**\*.cs" />
+    <Compile Include="Platforms\ios\**\*.cs" />
   </ItemGroup>
 
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />

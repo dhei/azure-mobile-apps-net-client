@@ -101,12 +101,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'SdkRel' ">
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.iOS\Microsoft.WindowsAzure.Mobile.Ext.iOS.csproj">
-      <Project>{a871b137-83a8-4e9b-913d-30ee0288e161}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile.Ext.iOS</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices\Microsoft.WindowsAzure.Mobile.csproj">
       <Project>{75557793-e36e-4190-8714-5bd2665859fb}</Project>
       <Name>Microsoft.WindowsAzure.Mobile</Name>

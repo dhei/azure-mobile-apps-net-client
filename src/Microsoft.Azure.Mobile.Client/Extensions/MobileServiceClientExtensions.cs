@@ -11,7 +11,7 @@ namespace Microsoft.WindowsAzure.MobileServices
     /// <summary>
     ///  Provides extension methods on <see cref="MobileServiceClient"/>.
     /// </summary>
-    public static class MobileServiceClientExtensions
+    public static partial class MobileServiceClientExtensions
     {
         /// <summary>
         /// Name of the  JSON member in the token object that stores the

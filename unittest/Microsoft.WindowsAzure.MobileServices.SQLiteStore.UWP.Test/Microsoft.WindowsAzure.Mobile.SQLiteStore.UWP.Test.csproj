@@ -93,10 +93,6 @@
       <Project>{4c20d49a-fe5e-4d9c-98b9-8125450074f5}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.UWP\Microsoft.WindowsAzure.Mobile.Ext.UWP.csproj">
-      <Project>{41e0bbea-091b-4c06-ae08-b7f50e2beb8a}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile.Ext.UWP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test\Microsoft.WindowsAzure.Mobile.SQLiteStore.Test.csproj">
       <Project>{cd5d8a3a-5631-41bf-8161-8a2a7f892b71}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore.Test</Name>

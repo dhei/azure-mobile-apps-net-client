@@ -12,7 +12,7 @@ namespace Microsoft.WindowsAzure.MobileServices
     /// <summary>
     /// Extension methods for UI-based login.
     /// </summary>
-    public static class MobileServiceClientExtensions
+    public static partial class MobileServiceClientExtensions
     {
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
