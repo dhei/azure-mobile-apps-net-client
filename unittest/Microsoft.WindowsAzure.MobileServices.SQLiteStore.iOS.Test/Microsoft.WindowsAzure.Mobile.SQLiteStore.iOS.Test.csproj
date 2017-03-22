@@ -116,13 +116,13 @@
     <BundleResource Include="Resources\Default-568h%402x.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client.SQLiteStore\Microsoft.Azure.Mobile.Client.SQLiteStore.csproj">
+      <Project>{99c2f464-172a-4b49-93b7-9b0e4fed1310}</Project>
+      <Name>Microsoft.Azure.Mobile.Client.SQLiteStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client\Microsoft.Azure.Mobile.Client.csproj">
       <Project>{04fc5444-1240-41d7-9aa8-648b9a465c9d}</Project>
       <Name>Microsoft.Azure.Mobile.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Microsoft.WindowsAzure.MobileServices.SQLiteStore\Microsoft.WindowsAzure.Mobile.SQLiteStore.csproj">
-      <Project>{4c20d49a-fe5e-4d9c-98b9-8125450074f5}</Project>
-      <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore</Name>
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test\Microsoft.WindowsAzure.Mobile.SQLiteStore.Test.csproj">
       <Project>{cd5d8a3a-5631-41bf-8161-8a2a7f892b71}</Project>

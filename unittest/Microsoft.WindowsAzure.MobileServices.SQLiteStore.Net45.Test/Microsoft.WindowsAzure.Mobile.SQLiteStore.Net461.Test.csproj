@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BCF9BADC-8D46-4530-BF62-4C31C5DBB61F}</ProjectGuid>
+    <ProjectGuid>{1A8BCF31-2199-453C-A761-5AF2F8FD5B81}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.WindowsAzure.MobileServices.Test</RootNamespace>
-    <AssemblyName>Microsoft.WindowsAzure.Mobile.Net45.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test</RootNamespace>
+    <AssemblyName>Microsoft.WindowsAzure.Mobile.SQLiteStore.Net45.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -73,17 +74,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.UWP.Test\UI\GroupDescription.cs">
+    <Compile Include="..\Microsoft.WindowsAzure.Mobile.Net45.Test\ConsoleHelper.cs">
+      <Link>ConsoleHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.SQLiteStore.UWP.Test\UI\GroupDescription.cs">
       <Link>UI\GroupDescription.cs</Link>
     </Compile>
-    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.UWP.Test\UI\TestDescription.cs">
+    <Compile Include="..\Microsoft.WindowsAzure.MobileServices.SQLiteStore.UWP.Test\UI\TestDescription.cs">
       <Link>UI\TestDescription.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConsoleHelper.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -103,9 +106,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\..\src\Microsoft.WindowsAzure.MobileServices\Properties\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -128,9 +128,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client.SQLiteStore\Microsoft.Azure.Mobile.Client.SQLiteStore.csproj">
+      <Project>{99c2f464-172a-4b49-93b7-9b0e4fed1310}</Project>
+      <Name>Microsoft.Azure.Mobile.Client.SQLiteStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client\Microsoft.Azure.Mobile.Client.csproj">
       <Project>{04fc5444-1240-41d7-9aa8-648b9a465c9d}</Project>
       <Name>Microsoft.Azure.Mobile.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.SQLiteStore.Test\Microsoft.WindowsAzure.Mobile.SQLiteStore.Test.csproj">
+      <Project>{cd5d8a3a-5631-41bf-8161-8a2a7f892b71}</Project>
+      <Name>Microsoft.WindowsAzure.Mobile.SQLiteStore.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.TestFramework\Microsoft.WindowsAzure.Mobile.TestFramework.csproj">
       <Project>{3cffb62f-3384-4d71-badc-7542d5c31a9e}</Project>
@@ -144,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PlatformTests\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

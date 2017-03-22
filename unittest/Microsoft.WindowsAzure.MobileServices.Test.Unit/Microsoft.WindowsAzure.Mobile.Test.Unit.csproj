@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.Test.Unit</RootNamespace>
     <AssemblyName>Microsoft.WindowsAzure.Mobile.Test.Unit</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -17,6 +17,7 @@
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +71,10 @@
     <Compile Include="Threading\AsyncLockDictionaryTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client\Microsoft.Azure.Mobile.Client.csproj">
+      <Project>{04fc5444-1240-41d7-9aa8-648b9a465c9d}</Project>
+      <Name>Microsoft.Azure.Mobile.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.WindowsAzure.MobileServices.Test\Microsoft.WindowsAzure.Mobile.Test.csproj">
       <Project>{05b6709b-c25a-4c1d-8d61-9e05bee0db86}</Project>
       <Name>Microsoft.WindowsAzure.Mobile.Test</Name>
@@ -79,8 +84,10 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Moq" Version="4.2.1408.0717" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Table\Sync\Eventing\" />
-    <PackageReference Include="Moq" Version="4.2.1408.0717"  />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
