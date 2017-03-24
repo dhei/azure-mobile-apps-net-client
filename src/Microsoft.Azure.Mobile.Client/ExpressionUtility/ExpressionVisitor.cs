@@ -198,6 +198,9 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         protected virtual ReadOnlyCollection<Expression> VisitExpressionList(ReadOnlyCollection<Expression> original)
         {
+#if NETSTANDARD1_1
+            return null;
+#else
             List<Expression> list = null;
             for (int i = 0, n = original.Count; i < n; i++)
             {
@@ -221,6 +224,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                 return list.AsReadOnly();
             }
             return original;
+#endif
         }
 
         protected virtual MemberAssignment VisitMemberAssignment(MemberAssignment assignment)
