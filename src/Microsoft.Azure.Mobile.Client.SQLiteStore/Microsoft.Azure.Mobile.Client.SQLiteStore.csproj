@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\build\Microsoft.Azure.Mobile.Client.Build.props" />
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net45</TargetFrameworks>
     <Version>4.0.0-alpha-001</Version>
