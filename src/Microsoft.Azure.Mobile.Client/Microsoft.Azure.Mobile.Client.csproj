@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\build\Microsoft.Azure.Mobile.Client.Build.props" />
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;netstandard1.1;net45;MonoAndroid44;Xamarin.iOS10;uap10.0</TargetFrameworks>
     <DefaultLanguage>en-US</DefaultLanguage>
