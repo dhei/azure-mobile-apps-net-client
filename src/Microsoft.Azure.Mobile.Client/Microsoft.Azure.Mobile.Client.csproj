@@ -58,6 +58,11 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' or '$(TargetFramework)' == 'netstandard1.1' ">
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
+    <Compile Include="Platforms\netstandard14\**\*.cs" />
+    <PackageReference Include="System.IO.IsolatedStorage" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+  </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Net.Http" />
     <Compile Include="Platforms\net45\**\*.cs" />

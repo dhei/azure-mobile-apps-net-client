@@ -66,7 +66,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             try
             {
-                using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.Assembly | IsolatedStorageScope.User, null, null))
+                using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     using (IsolatedStorageFileStream fileStream = isoStore.OpenFile(string.Concat(this.StoragePrefix, name), FileMode.OpenOrCreate, FileAccess.Read))
                     {
@@ -108,7 +108,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             try
             {
-                using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.Assembly | IsolatedStorageScope.User, null, null))
+                using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     using (IsolatedStorageFileStream fileStream = isoStore.OpenFile(string.Concat(this.StoragePrefix, name), FileMode.OpenOrCreate, FileAccess.Write))
                     {
