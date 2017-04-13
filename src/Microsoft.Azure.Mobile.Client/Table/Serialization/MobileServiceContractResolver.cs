@@ -29,7 +29,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// The system property names mapped to the enum values
         /// </summary>
         private static readonly Dictionary<string, MobileServiceSystemProperties> systemPropertyNameToEnum =
-            new Dictionary<string, MobileServiceSystemProperties>(StringComparer.OrdinalIgnoreCase) { 
+            new Dictionary<string, MobileServiceSystemProperties>(StringComparer.OrdinalIgnoreCase) {
                 { GetSystemPropertyString(MobileServiceSystemProperties.CreatedAt), MobileServiceSystemProperties.CreatedAt },
                 { GetSystemPropertyString(MobileServiceSystemProperties.UpdatedAt), MobileServiceSystemProperties.UpdatedAt } ,
                 { GetSystemPropertyString(MobileServiceSystemProperties.Version), MobileServiceSystemProperties.Version },
@@ -43,9 +43,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         private readonly Dictionary<Type, JsonProperty> idPropertyCache = new Dictionary<Type, JsonProperty>();
 
         /// <summary>
-        /// A cache of <see cref="JsonProperty"/> instances for a given 
+        /// A cache of <see cref="JsonProperty"/> instances for a given
         /// <see cref="MemberInfo"/> instance. Used to determine the property name
-        /// to serialize from the <see cref="MemberInfo"/> used within an 
+        /// to serialize from the <see cref="MemberInfo"/> used within an
         /// <see cref="System.Linq.Expressions.Expression"/> instance.
         /// </summary>
         private readonly Dictionary<MemberInfo, JsonProperty> jsonPropertyCache = new Dictionary<MemberInfo, JsonProperty>();
@@ -61,11 +61,11 @@ namespace Microsoft.WindowsAzure.MobileServices
         private readonly Dictionary<Type, MobileServiceSystemProperties> systemPropertyCache = new Dictionary<Type, MobileServiceSystemProperties>();
 
         /// <summary>
-        /// A cache of table names for a given Type that accounts for table renaming 
+        /// A cache of table names for a given Type that accounts for table renaming
         /// via the DataContractAttribute, DataTableAttribute and/or the JsonObjectAttribute.
         /// </summary>
         private readonly Dictionary<Type, string> tableNameCache = new Dictionary<Type, string>();
-        
+
         /// <summary>
         /// Indicates if the property names should be camel-cased when serialized
         /// out into JSON.
@@ -73,7 +73,12 @@ namespace Microsoft.WindowsAzure.MobileServices
         internal bool CamelCasePropertyNames { get; set; }
 
         /// <summary>
-        /// Returns a table name for a type and accounts for table renaming 
+        /// Locks for the CreateProperties methods
+        /// </summary>
+        private static readonly IDictionary<Type, object> createPropertiesForTypeLocks = new Dictionary<Type, object>();
+
+        /// <summary>
+        /// Returns a table name for a type and accounts for table renaming
         /// via the DataContractAttribute, DataTableAttribute and/or the JsonObjectAttribute.
         /// </summary>
         /// <param name="type">
@@ -170,12 +175,12 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
-        /// Returns the system properties as a comma seperated list for a 
+        /// Returns the system properties as a comma seperated list for a
         /// given type. Returns null if the type does not support system properties.
         /// </summary>
         /// <param name="type">The type for which to get the system properties.</param>
         /// <returns>
-        /// The system properties as a comma seperated list for the given type or null 
+        /// The system properties as a comma seperated list for the given type or null
         /// if the type does not support system properties.
         /// </returns>
         public virtual MobileServiceSystemProperties ResolveSystemProperties(Type type)
@@ -187,7 +192,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         /// <summary>
         /// Returns the <see cref="JsonProperty"/> for the given <see cref="MemberInfo"/> instance.
-        /// The <see cref="JsonProperty"/> can be used to get information about how the 
+        /// The <see cref="JsonProperty"/> can be used to get information about how the
         /// <see cref="MemberInfo"/> should be serialized.
         /// </summary>
         /// <param name="member">
@@ -203,12 +208,12 @@ namespace Microsoft.WindowsAzure.MobileServices
             try
             {
                 jsonPropertyCacheLock.EnterUpgradeableReadLock();
-                
+
                 if (!this.jsonPropertyCache.TryGetValue(member, out property))
                 {
                     ResolveContract(member.DeclaringType);
                     this.jsonPropertyCache.TryGetValue(member, out property);
-                }                
+                }
             }
             finally
             {
@@ -253,8 +258,8 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// the given type should be serialized to JSON.
         /// </summary>
         /// <remarks>
-        /// This method is overridden in order to catch types that have 
-        /// <see cref="DataMemberAttribute"/> on one or more members without having a 
+        /// This method is overridden in order to catch types that have
+        /// <see cref="DataMemberAttribute"/> on one or more members without having a
         /// <see cref="DataContractAttribute"/> on the type itself. This used to be supported
         /// but no longer is and therefore an exception must be thrown for such types. The exception
         /// informs the developer about how to correctly attribute the type with the
@@ -266,16 +271,16 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// The <see cref="JsonObjectContract"/> for the type.
         /// </returns>
-        protected override JsonObjectContract CreateObjectContract(Type type)
+        protected override JsonObjectContract CreateObjectContract(Type objectType)
         {
-            JsonObjectContract contract = base.CreateObjectContract(type);
+            JsonObjectContract contract = base.CreateObjectContract(objectType);
 
-            DataContractAttribute dataContractAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true)
+            DataContractAttribute dataContractAttribute = objectType.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true)
                                                               .FirstOrDefault() as DataContractAttribute;
             if (dataContractAttribute == null)
             {
                 // Make sure the type does not have a base class with a [DataContract]
-                Type baseTypeWithDataContract = type.GetTypeInfo().BaseType;
+                Type baseTypeWithDataContract = objectType.GetTypeInfo().BaseType;
                 while (baseTypeWithDataContract != null)
                 {
                     if (baseTypeWithDataContract.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true).Any())
@@ -293,16 +298,16 @@ namespace Microsoft.WindowsAzure.MobileServices
                     throw new NotSupportedException(
                             string.Format(CultureInfo.InvariantCulture,
                             "The type '{0}' does not have a DataContractAttribute, but the type derives from the type '{1}', which does have a DataContractAttribute. If a type has a DataContractAttribute, any type that derives from that type must also have a DataContractAttribute.",
-                            type.FullName,
+                            objectType.FullName,
                             baseTypeWithDataContract.FullName));
                 }
 
                 // [DataMember] attributes on members without a [DataContract]
                 // attribute on the type itself used to be honored.  Now with JSON.NET, [DataMember]
                 // attributes are ignored if there is no [DataContract] attribute on the type.
-                // To ensure types are not serialized differently, an exception must be thrown if this 
+                // To ensure types are not serialized differently, an exception must be thrown if this
                 // type is using [DataMember] attributes without a [DataContract] on the type itself.
-                if (type.GetRuntimeProperties()
+                if (objectType.GetRuntimeProperties()
                          .Where( m => m.GetCustomAttributes(typeof(DataMemberAttribute), true)
                                        .FirstOrDefault() != null)
                          .Any())
@@ -310,7 +315,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                     throw new NotSupportedException(
                         string.Format(CultureInfo.InvariantCulture,
                         "The type '{0}' has one or members with a DataMemberAttribute, but the type itself does not have a DataContractAttribute. Use the Newtonsoft.Json.JsonPropertyAttribute in place of the DataMemberAttribute and set the PropertyName to the desired name.",
-                        type.FullName));
+                        objectType.FullName));
                 }
             }
 
@@ -322,7 +327,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </summary>
         /// <remarks>
         /// This method is overridden in order set specialized <see cref="IValueProvider"/>
-        /// implementations for certain property types. The date types (<see cref="DateTime"/>, 
+        /// implementations for certain property types. The date types (<see cref="DateTime"/>,
         /// <see cref="DateTimeOffset"/>) require conversion to UTC dates on serialization and to
         /// local dates on deserialization. The numerical types (<see cref="long"/>, <see cref="ulong"/>,
         /// <see cref="decimal"/>) require checks to ensure that precision will not be lost on
@@ -345,17 +350,17 @@ namespace Microsoft.WindowsAzure.MobileServices
             {
                 jsonPropertyCacheLock.EnterWriteLock();
                 this.jsonPropertyCache[member] = property;
-            }            
+            }
             finally
             {
                 jsonPropertyCacheLock.ExitWriteLock();
-            }            
+            }
 
             return property;
         }
 
         /// <summary>
-        /// Creates a collection of <see cref="JsonProperty"/> instances for the members of a given 
+        /// Creates a collection of <see cref="JsonProperty"/> instances for the members of a given
         /// type.
         /// </summary>
         /// <remarks>
@@ -364,7 +369,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// ensure that there is one and only one id property for the type. Also, the id property
         /// should be ignored when it is the default or null value and it should always serialize to JSON
         /// with a lowercase 'id' name.
-        /// 
+        ///
         /// This method also checks for and applies and system property attributes.
         /// </remarks>
         /// <param name="type">
@@ -374,29 +379,44 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// Specifies the member serialization options for the type.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="JsonProperty"/> instances for the members of a given 
+        /// A collection of <see cref="JsonProperty"/> instances for the members of a given
         /// type.
         /// </returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
+            lock (createPropertiesForTypeLocks)
+            {
+                if (!createPropertiesForTypeLocks.ContainsKey(type))
+                {
+                    createPropertiesForTypeLocks.Add(type, new object());
+                }
+            }
+
+            lock (createPropertiesForTypeLocks[type])
+            {
+                return CreatePropertiesInner(type, memberSerialization);
+            }
+        }
+
+        private IList<JsonProperty> CreatePropertiesInner(Type type, MemberSerialization memberSerialization)
+        {
+            var properties = base.CreateProperties(type, memberSerialization);
 
             // If this type is for a known table, ensure that it has an id.
             TypeInfo typeInfo = type.GetTypeInfo();
-            if (this.tableNameCache.ContainsKey(type) || this.tableNameCache.Keys.Any(t => t.GetTypeInfo().IsAssignableFrom(typeInfo)))
+            if (tableNameCache.ContainsKey(type) || tableNameCache.Keys.Any(t => t.GetTypeInfo().IsAssignableFrom(typeInfo)))
             {
                 // Filter out properties that are not read/write
                 properties = properties.Where(p => p.Writable).ToList();
 
                 // Find the id property
-                JsonProperty idProperty = DetermineIdProperty(type, properties);
+                DetermineIdProperty(type, properties);
 
                 // Set any needed converters and look for system property attributes
-                IList<KeyValuePair<MemberInfo, JsonProperty>> relevantProperties = FilterJsonPropertyCacheByType(typeInfo);
-                foreach (JsonProperty property in properties)
+                var relevantProperties = FilterJsonPropertyCacheByType(typeInfo);
+                foreach (var property in properties)
                 {
-                    MemberInfo memberInfo = relevantProperties.Single(x => x.Value == property).Key;
-
+                    var memberInfo = relevantProperties.Single(x => x.Value == property).Key;
                     SetMemberConverters(property);
                     ApplySystemPropertyAttributes(property, memberInfo);
                 }
@@ -407,7 +427,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
 
             return properties;
-        }        
+        }
 
         /// <summary>
         /// Creates the <see cref="IValueProvider"/> used by the serializer to get and set values from a member.
@@ -428,7 +448,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             try
             {
-                jsonPropertyCacheLock.EnterReadLock();                
+                jsonPropertyCacheLock.EnterReadLock();
                 return jsonPropertyCache.Where(pair => pair.Key.DeclaringType.GetTypeInfo().IsAssignableFrom(typeInfo)).ToList();
             }
             finally
@@ -513,7 +533,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
-        /// Given a <see cref="MobileServiceSystemProperties"/> enum value, returns the string value with the 
+        /// Given a <see cref="MobileServiceSystemProperties"/> enum value, returns the string value with the
         /// correct casing.
         /// </summary>
         /// <param name="systemProperty">The system property.</param>
@@ -566,7 +586,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             if (property.PropertyType.GetTypeInfo().IsValueType)
             {
-                // The NullHandlingConverter will ensure that nulls get treated as the default value 
+                // The NullHandlingConverter will ensure that nulls get treated as the default value
                 // for value types.
                 if (property.MemberConverter == null)
                 {
@@ -624,7 +644,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             /// <summary>
             /// Reads the JSON representation of the object.
-            /// The reason why this works is 
+            /// The reason why this works is
             /// </summary>
             /// <param name="reader">
             /// The <see cref="JsonReader"/> to read from.
