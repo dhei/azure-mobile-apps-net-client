@@ -271,16 +271,16 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// The <see cref="JsonObjectContract"/> for the type.
         /// </returns>
-        protected override JsonObjectContract CreateObjectContract(Type type)
+        protected override JsonObjectContract CreateObjectContract(Type objectType)
         {
-            JsonObjectContract contract = base.CreateObjectContract(type);
+            JsonObjectContract contract = base.CreateObjectContract(objectType);
 
-            DataContractAttribute dataContractAttribute = type.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true)
+            DataContractAttribute dataContractAttribute = objectType.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true)
                                                               .FirstOrDefault() as DataContractAttribute;
             if (dataContractAttribute == null)
             {
                 // Make sure the type does not have a base class with a [DataContract]
-                Type baseTypeWithDataContract = type.GetTypeInfo().BaseType;
+                Type baseTypeWithDataContract = objectType.GetTypeInfo().BaseType;
                 while (baseTypeWithDataContract != null)
                 {
                     if (baseTypeWithDataContract.GetTypeInfo().GetCustomAttributes(typeof(DataContractAttribute), true).Any())
@@ -298,7 +298,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                     throw new NotSupportedException(
                             string.Format(CultureInfo.InvariantCulture,
                             "The type '{0}' does not have a DataContractAttribute, but the type derives from the type '{1}', which does have a DataContractAttribute. If a type has a DataContractAttribute, any type that derives from that type must also have a DataContractAttribute.",
-                            type.FullName,
+                            objectType.FullName,
                             baseTypeWithDataContract.FullName));
                 }
 
@@ -307,7 +307,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                 // attributes are ignored if there is no [DataContract] attribute on the type.
                 // To ensure types are not serialized differently, an exception must be thrown if this
                 // type is using [DataMember] attributes without a [DataContract] on the type itself.
-                if (type.GetRuntimeProperties()
+                if (objectType.GetRuntimeProperties()
                          .Where( m => m.GetCustomAttributes(typeof(DataMemberAttribute), true)
                                        .FirstOrDefault() != null)
                          .Any())
@@ -315,7 +315,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                     throw new NotSupportedException(
                         string.Format(CultureInfo.InvariantCulture,
                         "The type '{0}' has one or members with a DataMemberAttribute, but the type itself does not have a DataContractAttribute. Use the Newtonsoft.Json.JsonPropertyAttribute in place of the DataMemberAttribute and set the PropertyName to the desired name.",
-                        type.FullName));
+                        objectType.FullName));
                 }
             }
 
@@ -388,17 +388,13 @@ namespace Microsoft.WindowsAzure.MobileServices
             {
                 if (!createPropertiesForTypeLocks.ContainsKey(type))
                 {
-                    createPropertiesForTypeLocks.Add(type, new List<JsonProperty>());
+                    createPropertiesForTypeLocks.Add(type, new object());
                 }
             }
 
             lock (createPropertiesForTypeLocks[type])
             {
-                if (((List<JsonProperty>)createPropertiesForTypeLocks[type]).Count == 0)
-                {
-                    createPropertiesForTypeLocks[type] = CreatePropertiesInner(type, memberSerialization);
-                }
-                return (List<JsonProperty>)createPropertiesForTypeLocks[type];
+                return CreatePropertiesInner(type, memberSerialization);
             }
         }
 
