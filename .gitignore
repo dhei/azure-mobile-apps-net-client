@@ -21,4 +21,5 @@ unittest/**/AppPackages/*
 *.nuget.props
 *.bak
 *.lock.json
+*.pfx
 _ReSharper*
