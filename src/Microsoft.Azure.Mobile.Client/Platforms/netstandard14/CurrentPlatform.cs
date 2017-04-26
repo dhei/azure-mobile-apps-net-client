@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
@@ -40,7 +41,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             get
             {
-                return string.Empty;
+                return AppContext.BaseDirectory;
             }
         }
 

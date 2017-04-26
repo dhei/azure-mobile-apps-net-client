@@ -2,7 +2,7 @@
 
   <Import Project="..\..\build\Microsoft.Azure.Mobile.Client.Build.props" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;netstandard1.1;net45;MonoAndroid44;Xamarin.iOS10;uap10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;net45;MonoAndroid44;Xamarin.iOS10;uap10.0</TargetFrameworks>
     <DefaultLanguage>en-US</DefaultLanguage>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <Version>4.0.0-alpha-002</Version>
@@ -56,13 +56,11 @@
     <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />
     <Compile Include="Platforms\uwp\**\*.cs" Exclude="Platforms\uwp\Extensions\MobileServiceCollectionViewExtensions.cs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' or '$(TargetFramework)' == 'netstandard1.1' ">
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
-  </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
     <Compile Include="Platforms\netstandard14\**\*.cs" />
     <PackageReference Include="System.IO.IsolatedStorage" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Net.Http" />
