@@ -87,9 +87,11 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
         {
             // Create the list of filters (at some point we could make this
             // publicly accessible)
-            List<TestFilter> filters = new List<TestFilter>();
-            filters.Add(new FunctionalTestFilter(this.Settings));
-            filters.Add(new TagTestFilter(this.Settings));
+            List<TestFilter> filters = new List<TestFilter>
+            {
+                new FunctionalTestFilter(this.Settings),
+                new TagTestFilter(this.Settings)
+            };
 
             // Apply any test filters to the set of tests before we begin
             // executing (test filters will change the Excluded property of
@@ -240,8 +242,8 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
 
         private static void LoadTestAssembly(TestHarness harness, Assembly testAssembly)
         {
-            Dictionary<Type, TestGroup> groups = new Dictionary<Type, TestGroup>();
-            Dictionary<TestGroup, object> instances = new Dictionary<TestGroup, object>();
+            var groups = new Dictionary<Type, TestGroup>();
+            var instances = new Dictionary<TestGroup, object>();
             foreach (Type type in testAssembly.ExportedTypes)
             {
                 foreach (MethodInfo method in type.GetRuntimeMethods())
@@ -249,17 +251,15 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
                     if (method.GetCustomAttributes<TestMethodAttribute>().Any() ||
                             method.GetCustomAttributes<AsyncTestMethodAttribute>().Any())
                     {
-                        TestGroup group = null;
                         object instance = null;
-                        if (!groups.TryGetValue(type, out group))
+                        if (!groups.TryGetValue(type, out TestGroup group))
                         {
                             group = CreateGroup(type);
                             harness.Groups.Add(group);
                             groups[type] = group;
 
                             instance = Activator.CreateInstance(type);
-                            TestBase testBase = instance as TestBase;
-                            if (testBase != null)
+                            if (instance is TestBase testBase)
                             {
                                 testBase.SetTestHarness(harness);
                             }
@@ -280,8 +280,10 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
 
         private static TestGroup CreateGroup(Type type)
         {
-            TestGroup group = new TestGroup();
-            group.Name = type.Name;
+            TestGroup group = new TestGroup()
+            {
+                Name = type.Name
+            };
             group.Tags.Add(type.Name);
             group.Tags.Add(type.FullName);
 
@@ -299,9 +301,10 @@ namespace Microsoft.WindowsAzure.MobileServices.TestFramework
 
         private static TestMethod CreateMethod(Type type, object instance, MethodInfo method)
         {
-            TestMethod test = new TestMethod();
-            test.Name = method.Name;
-
+            TestMethod test = new TestMethod()
+            {
+                Name = method.Name
+            };
             if (method.GetCustomAttributes<AsyncTestMethodAttribute>().Any())
             {
                 test.Test = new AsyncTestMethodAsyncAction(instance, method);

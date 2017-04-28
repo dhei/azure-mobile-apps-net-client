@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.MobileServices;
 
 namespace Microsoft.WindowsAzure.Mobile.SQLiteStore.Android.Test
 {
-    [Activity(Label = "Microsoft.WindowsAzure.Mobile.SQLiteStore.Android.Test", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(MainLauncher = true, Icon = "@drawable/icon")]
     public class LoginActivity : Activity
     {
         private const string TagsKey = "Tags";

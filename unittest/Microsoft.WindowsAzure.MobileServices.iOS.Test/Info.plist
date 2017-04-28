@@ -23,7 +23,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleDisplayName</key>
-	<string>iOSTest</string>
+	<string>iOSUnitTest</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.mobileservices.iOSTest</string>
 	<key>CFBundleVersion</key>

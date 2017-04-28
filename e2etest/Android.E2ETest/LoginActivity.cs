@@ -14,7 +14,7 @@ using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
 namespace Microsoft.WindowsAzure.Mobile.Android.Test
 {
-    [Activity(Name="microsoft.windowsazure.mobile.android.test.LoginActivity", Label = "Microsoft.WindowsAzure.Mobile.Android.Test", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Name="microsoft.windowsazure.mobile.android.test.LoginActivity", MainLauncher = true, Icon = "@drawable/icon")]
     public class LoginActivity : Activity
     {
         static class Keys
