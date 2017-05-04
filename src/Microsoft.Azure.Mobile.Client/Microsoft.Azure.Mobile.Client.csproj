@@ -5,7 +5,7 @@
     <TargetFrameworks>netstandard1.4;net45;MonoAndroid44;Xamarin.iOS10;uap10.0</TargetFrameworks>
     <DefaultLanguage>en-US</DefaultLanguage>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-    <Version>4.0.0-alpha-002</Version>
+    <Version>4.0.0</Version>
     <PackageTitle>Azure Mobile Client SDK</PackageTitle>
     <Title>Azure Mobile Client SDK</Title>
     <Authors>Microsoft, mobile-center</Authors>
