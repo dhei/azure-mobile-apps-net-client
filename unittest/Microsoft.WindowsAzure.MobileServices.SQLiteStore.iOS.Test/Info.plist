@@ -21,7 +21,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleDisplayName</key>
-	<string>iOSTest</string>
+	<string>iOSSqliteTest</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.mobileservices.sqlitestore.iOSTest</string>
 	<key>CFBundleVersion</key>

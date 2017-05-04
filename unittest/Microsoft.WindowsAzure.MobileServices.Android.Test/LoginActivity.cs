@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.MobileServices;
 
 namespace Microsoft.WindowsAzure.Mobile.Android.Test
 {
-    [Activity(Label = "Microsoft.WindowsAzure.Mobile.Android.Test", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(MainLauncher = true, Icon = "@drawable/icon")]
     public class LoginActivity : Activity
     {
         private const string MobileServiceUriKey = "MobileServiceUri";

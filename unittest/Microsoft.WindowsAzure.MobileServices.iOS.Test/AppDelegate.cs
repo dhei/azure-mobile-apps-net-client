@@ -26,9 +26,11 @@ namespace MicrosoftWindowsAzureMobileiOSTest
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
-			window = new UIWindow ((CGRect)UIScreen.MainScreen.Bounds);
-		    window.RootViewController = new UINavigationController (new LoginViewController());
-			window.MakeKeyAndVisible();
+            window = new UIWindow((CGRect)UIScreen.MainScreen.Bounds)
+            {
+                RootViewController = new UINavigationController(new LoginViewController())
+            };
+            window.MakeKeyAndVisible();
 
 			return true;
 		}

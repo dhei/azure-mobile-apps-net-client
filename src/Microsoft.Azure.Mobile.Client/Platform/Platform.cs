@@ -31,11 +31,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                 // create if not yet created
                 if (current == null)
                 {
-#if !NETSTANDARD1_4 && !NETSTANDARD1_1
                     current = new CurrentPlatform();
-#else
-                    throw new PlatformNotSupportedException("TODO...");
-#endif
                 }
 
                 return current;
