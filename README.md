@@ -17,7 +17,6 @@ To get the source code of our SDKs and samples via **git** just type:
 
 ## Supported platforms
 
-* .NET Standard 1.1
 * .NET Standard 1.4
 * Xamarin Android releases for API 19 through 24 (KitKat through Nougat)
 * Xamarin iOS releases for iOS versions 8.0 through 10.0
@@ -53,7 +52,7 @@ The following test suites under the 'unittest' directory contain the unit tests:
 * Microsoft.WindowsAzure.Mobile.SQLiteStore._platform_.Test
 
 Mark the appropriate project as the Startup project and run it.  The UI will open and then you can run the tests.  If in doubt,
-run the Win8 platform locally as a minimal unit test.
+run the Net 4.6.1 platform locally as a minimal unit test.
 
 ### Running the E2E Tests
 
