@@ -30,9 +30,12 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var auth = new WebRedirectAuthenticator(StartUri, EndUri);
-            //auth.ShowUIErrors = false;
-            auth.ClearCookiesBeforeLogin = false;
+            var auth = new WebRedirectAuthenticator(StartUri, EndUri)
+            {
+                IsUsingNativeUI = true,
+                //ShowUIErrors = false,
+                ClearCookiesBeforeLogin = false
+            };
 
             UIViewController c = auth.GetUI();
 

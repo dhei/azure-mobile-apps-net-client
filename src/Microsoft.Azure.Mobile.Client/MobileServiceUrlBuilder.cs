@@ -130,6 +130,15 @@ namespace Microsoft.WindowsAzure.MobileServices
                                  path2.TrimStart(Slash));
         }
 
+        public static string CombileSchemeAndPath(string scheme, string path)
+        {
+            return string.Format(CultureInfo.InvariantCulture,
+                                 "{0}{1}{2}",
+                                 scheme,
+                                 SchemeDelimiter,
+                                 path);
+        }
+
         /// <summary>
         /// Appends a slash ('/') to <paramref name="uri"/> if it is missing a trailing slash.
         /// </summary>

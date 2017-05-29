@@ -1,33 +1,36 @@
 using System;
-using System.Globalization;
-using Android.Content;
-using System.Threading.Tasks;
-using Xamarin.Auth._MobileServices;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using Android.Content;
+using Xamarin.Auth._MobileServices;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
-    internal class MobileServiceUIAuthentication : MobileServiceAuthentication
+    internal class MobileServiceUIAuthentication : MobileServicePKCEAuthentication
     {
-        public MobileServiceUIAuthentication (Context context, IMobileServiceClient client, string providerName, IDictionary<string, string> parameters)
-            : base (client, providerName, parameters)
+        public MobileServiceUIAuthentication (Context context, MobileServiceClient client, string providerName, string uriScheme, IDictionary<string, string> parameters)
+            : base (client, providerName, uriScheme, parameters)
         {
             this.context = context;
         }
 
         private Context context;
 
-        protected override Task<string> LoginAsyncOverride()
+        protected override Task<string> LoginAsyncOverride(string codeChallenge, string codeChallengeMethod)
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var auth = new WebRedirectAuthenticator (StartUri, EndUri);
-            //auth.ShowUIErrors = false;
-            auth.ClearCookiesBeforeLogin = false;
+            var authenticator = new WebRedirectAuthenticator (StartUri, CallbackUri)
+            {
+                IsUsingNativeUI = true,
+                //ShowUIErrors = false,
+                ClearCookiesBeforeLogin = false
+            };
 
-            Intent intent = auth.GetUI (this.context);
+            Intent intent = authenticator.GetUI (this.context);
 
-            auth.Error += (sender, e) =>
+            authenticator.Error += (sender, e) =>
             {
                 string message = String.Format (CultureInfo.InvariantCulture, "Authentication failed with HTTP response code {0}.", e.Message);
                 InvalidOperationException ex = (e.Exception == null)
@@ -35,14 +38,16 @@ namespace Microsoft.WindowsAzure.MobileServices
                     : new InvalidOperationException (message, e.Exception);
 
                 tcs.TrySetException (ex);
+                authenticator = null;
             };
 
-            auth.Completed += (sender, e) =>
+            authenticator.Completed += (sender, e) =>
             {
                 if (!e.IsAuthenticated)
                     tcs.TrySetException (new InvalidOperationException ("Authentication was cancelled by the user."));
                 else
                     tcs.TrySetResult(e.Account.Properties["token"]);
+                authenticator = null;
             };
 
             context.StartActivity (intent);

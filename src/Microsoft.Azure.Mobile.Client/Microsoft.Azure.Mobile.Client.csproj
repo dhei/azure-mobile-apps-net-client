@@ -41,6 +41,9 @@
   </ItemGroup>
 
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
+    <PackageTargetFallback>portable-net45+win8+wp8+wpa81</PackageTargetFallback>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'MonoAndroid71' ">
     <TargetFrameworkIdentifier>MonoAndroid</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
@@ -65,9 +68,11 @@
     <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
   </PropertyGroup>
   
+  
   <ItemGroup>
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.2" PrivateAssets="All" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="PCLCrypto" Version="2.0.147" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.2.3" />
@@ -86,7 +91,6 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'MonoAndroid71' ">
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="25.3.1" />
-    <PackageReference Include="PCLCrypto" Version="2.0.147" />
     <AndroidResource Include="..\External\Xamarin.Auth\source\Xamarin.Auth.XamarinAndroid\Resources\**\*.xml" />
     <AndroidResource Include="..\External\Xamarin.Auth\source\Xamarin.Auth.XamarinAndroid\Resources\**\*.png" />
     <Compile Include="..\External\Xamarin.Auth\source\Xamarin.Auth.LinkSource\**\*.cs" Exclude="**\AssemblyInfo.cs;**\*.Portable.cs;**\*.netfx.cs;**\*.netfx45.cs;**\*.net45.cs;**\*.LinkSource.cs" />
@@ -95,7 +99,6 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
-    <PackageReference Include="PCLCrypto" Version="2.0.147" />
     <Compile Include="..\External\Xamarin.Auth\source\Xamarin.Auth.LinkSource\**\*.cs" Exclude="**\AssemblyInfo.cs;**\*.Portable.cs;**\*.netfx.cs;**\*.netfx45.cs;**\*.net45.cs;**\*.LinkSource.cs" />
     <Compile Include="..\External\Xamarin.Auth\source\Xamarin.Auth.XamarinIOS\**\*.cs" Exclude="**\AssemblyInfo.cs" />
     <Compile Include="Platforms\ios\**\*.cs" />
