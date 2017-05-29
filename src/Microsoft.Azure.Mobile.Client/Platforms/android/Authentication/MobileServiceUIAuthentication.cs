@@ -17,20 +17,23 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         private Context context;
 
+
+        internal static WebAuthenticator CurrentAuthenticator;
+
         protected override Task<string> GetAuthorizationCodeAsync()
         {
             var tcs = new TaskCompletionSource<string>();
-
-            var authenticator = new WebRedirectAuthenticator (LoginUri, EndUri)
+            
+            CurrentAuthenticator = new WebRedirectAuthenticator (LoginUri, CallbackUri)
             {
                 IsUsingNativeUI = true,
                 //ShowUIErrors = false,
                 ClearCookiesBeforeLogin = false
             };
 
-            Intent intent = authenticator.GetUI (this.context);
+            Intent intent = CurrentAuthenticator.GetUI (this.context);
 
-            authenticator.Error += (sender, e) =>
+            CurrentAuthenticator.Error += (sender, e) =>
             {
                 string message = String.Format (CultureInfo.InvariantCulture, "Authentication failed with HTTP response code {0}.", e.Message);
                 InvalidOperationException ex = (e.Exception == null)
@@ -38,16 +41,16 @@ namespace Microsoft.WindowsAzure.MobileServices
                     : new InvalidOperationException (message, e.Exception);
 
                 tcs.TrySetException (ex);
-                authenticator = null;
+                CurrentAuthenticator = null;
             };
 
-            authenticator.Completed += (sender, e) =>
+            CurrentAuthenticator.Completed += (sender, e) =>
             {
                 if (!e.IsAuthenticated)
                     tcs.TrySetException (new InvalidOperationException ("Authentication was cancelled by the user."));
                 else
-                    tcs.TrySetResult(e.Account.Properties["token"]);
-                authenticator = null;
+                    tcs.TrySetResult(e.Account.Properties["authorization_code"]);
+                CurrentAuthenticator = null;
             };
 
             context.StartActivity (intent);
