@@ -17,11 +17,11 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         private Context context;
 
-        protected override Task<string> LoginAsyncOverride(string codeChallenge, string codeChallengeMethod)
+        protected override Task<string> GetAuthorizationCodeAsync()
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var authenticator = new WebRedirectAuthenticator (StartUri, CallbackUri)
+            var authenticator = new WebRedirectAuthenticator (LoginUri, EndUri)
             {
                 IsUsingNativeUI = true,
                 //ShowUIErrors = false,
