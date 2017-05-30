@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 #if __UNIFIED__
+using Foundation;
 using UIKit;
 #else
+using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif
 
@@ -17,7 +20,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="viewController" type="MonoTouch.UIKit.UIViewController">
@@ -29,15 +32,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIViewController viewController, MobileServiceAuthenticationProvider provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIViewController viewController, MobileServiceAuthenticationProvider provider, string uriScheme)
         {
-            return LoginAsync(client, viewController, provider, parameters: null);
+            return LoginAsync(client, viewController, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="viewController" type="MonoTouch.UIKit.UIViewController">
@@ -52,15 +55,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIViewController viewController, MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIViewController viewController, MobileServiceAuthenticationProvider provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, default(RectangleF), viewController, provider.ToString(), parameters);
+            return LoginAsync(client, default(RectangleF), viewController, provider.ToString(), uriScheme, parameters);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="viewController" type="MonoTouch.UIKit.UIViewController">
@@ -72,15 +75,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIViewController viewController, string provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIViewController viewController, string provider, string uriScheme)
         {
-            return LoginAsync(client, viewController, provider, parameters: null);
+            return LoginAsync(client, viewController, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="viewController" type="MonoTouch.UIKit.UIViewController">
@@ -95,15 +98,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIViewController viewController, string provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIViewController viewController, string provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, default(RectangleF), viewController, provider, parameters);
+            return LoginAsync(client, default(RectangleF), viewController, provider, uriScheme, parameters);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="rectangle" type="System.Drawing.RectangleF">
@@ -118,15 +121,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, RectangleF rectangle, UIView view, MobileServiceAuthenticationProvider provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, RectangleF rectangle, UIView view, MobileServiceAuthenticationProvider provider, string uriScheme)
         {
-            return LoginAsync(client, rectangle, view, provider, parameters: null);
+            return LoginAsync(client, rectangle, view, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="rectangle" type="System.Drawing.RectangleF">
@@ -144,15 +147,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, RectangleF rectangle, UIView view, MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, RectangleF rectangle, UIView view, MobileServiceAuthenticationProvider provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, rectangle, (object)view, provider.ToString(), parameters);
+            return LoginAsync(client, rectangle, (object)view, provider.ToString(), uriScheme, parameters);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="rectangle" type="System.Drawing.RectangleF">
@@ -167,15 +170,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, RectangleF rectangle, UIView view, string provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, RectangleF rectangle, UIView view, string provider, string uriScheme)
         {
-            return LoginAsync(client, rectangle, view, provider, parameters: null);
+            return LoginAsync(client, rectangle, view, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="rectangle" type="System.Drawing.RectangleF">
@@ -193,15 +196,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, RectangleF rectangle, UIView view, string provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, RectangleF rectangle, UIView view, string provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, rectangle, (object)view, provider, parameters);
+            return LoginAsync(client, rectangle, (object)view, provider, uriScheme, parameters);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="barButtonItem" type="MonoTouch.UIKit.UIBarButtonItem">
@@ -213,15 +216,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIBarButtonItem barButtonItem, MobileServiceAuthenticationProvider provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIBarButtonItem barButtonItem, MobileServiceAuthenticationProvider provider, string uriScheme)
         {
-            return LoginAsync(client, barButtonItem, provider, parameters: null);
+            return LoginAsync(client, barButtonItem, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="barButtonItem" type="MonoTouch.UIKit.UIBarButtonItem">
@@ -236,15 +239,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIBarButtonItem barButtonItem, MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIBarButtonItem barButtonItem, MobileServiceAuthenticationProvider provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, default(RectangleF), barButtonItem, provider.ToString(), parameters);
+            return LoginAsync(client, default(RectangleF), barButtonItem, provider.ToString(), uriScheme, parameters);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="barButtonItem" type="MonoTouch.UIKit.UIBarButtonItem">
@@ -256,15 +259,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIBarButtonItem barButtonItem, string provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIBarButtonItem barButtonItem, string provider, string uriScheme)
         {
-            return LoginAsync(client, barButtonItem, provider, parameters: null);
+            return LoginAsync(client, barButtonItem, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="barButtonItem" type="MonoTouch.UIKit.UIBarButtonItem">
@@ -282,15 +285,25 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, UIBarButtonItem barButtonItem, string provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, UIBarButtonItem barButtonItem, string provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, default(RectangleF), barButtonItem, provider, parameters);
+            return LoginAsync(client, default(RectangleF), barButtonItem, provider, uriScheme, parameters);
         }
 
-        internal static Task<MobileServiceUser> LoginAsync(IMobileServiceClient client, RectangleF rect, object view, string provider, IDictionary<string, string> parameters)
+        internal static Task<MobileServiceUser> LoginAsync(MobileServiceClient client, RectangleF rect, object view, string provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            var auth = new MobileServiceUIAuthentication(rect, view, client, provider, parameters);
+            var auth = new MobileServiceUIAuthentication(rect, view, client, provider, uriScheme, parameters);
             return auth.LoginAsync();
+        }
+
+        public static bool ResumeWithURL(this MobileServiceClient client, NSUrl url)
+        {
+            // Convert iOS NSUrl to C#/netxf/BCL System.Uri - common API
+            Uri uri_netfx = new Uri(url.AbsoluteString);
+
+            MobileServiceUIAuthentication.CurrentAuthenticator?.OnPageLoading(uri_netfx);
+
+            return true;
         }
 
         /// <summary>

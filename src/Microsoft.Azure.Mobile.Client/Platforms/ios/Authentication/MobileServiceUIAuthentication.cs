@@ -14,35 +14,37 @@ using MonoTouch.UIKit;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
-    internal class MobileServiceUIAuthentication : MobileServiceAuthentication
+    internal class MobileServiceUIAuthentication : MobileServicePKCEAuthentication
     {
         private readonly RectangleF rect;
         private readonly object view;
 
-        public MobileServiceUIAuthentication(RectangleF rect, object view, IMobileServiceClient client, string providerName, IDictionary<string, string> parameters)
-            : base(client, providerName, parameters)
+        public MobileServiceUIAuthentication(RectangleF rect, object view, MobileServiceClient client, string providerName, string uriScheme, IDictionary<string, string> parameters)
+            : base(client, providerName, uriScheme, parameters)
         {
             this.rect = rect;
             this.view = view;
         }
 
-        protected override Task<string> LoginAsyncOverride()
+        internal static WebAuthenticator CurrentAuthenticator;
+
+        protected override Task<string> GetAuthorizationCodeAsync()
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var auth = new WebRedirectAuthenticator(StartUri, EndUri)
+            CurrentAuthenticator = new WebRedirectAuthenticator(LoginUri, CallbackUri)
             {
-                IsUsingNativeUI = true,
+                IsUsingNativeUI = ObjCRuntime.Class.GetHandle("SFSafariViewController") != IntPtr.Zero,
                 //ShowUIErrors = false,
                 ClearCookiesBeforeLogin = false
             };
 
-            UIViewController c = auth.GetUI();
+            UIViewController c = CurrentAuthenticator.GetUI();
 
             UIViewController controller = null;
             UIPopoverController popover = null;
 
-            auth.Error += (o, e) =>
+            CurrentAuthenticator.Error += (o, e) =>
             {
                 NSAction completed = () =>
                 {
@@ -57,16 +59,17 @@ namespace Microsoft.WindowsAzure.MobileServices
                     popover.Dismiss(true);
                     completed();
                 }
+                CurrentAuthenticator = null;
             };
 
-            auth.Completed += (o, e) =>
+            CurrentAuthenticator.Completed += (o, e) =>
             {
                 NSAction completed = () =>
                 {
                     if (!e.IsAuthenticated)
                         tcs.TrySetException(new InvalidOperationException("Authentication was cancelled by the user."));
                     else
-                        tcs.TrySetResult(e.Account.Properties["token"]);
+                        tcs.TrySetResult(e.Account.Properties["authorization_code"]);
                 };
 
                 if (controller != null)
@@ -76,6 +79,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                     popover.Dismiss(true);
                     completed();
                 }
+                CurrentAuthenticator = null;
             };
 
             controller = view as UIViewController;

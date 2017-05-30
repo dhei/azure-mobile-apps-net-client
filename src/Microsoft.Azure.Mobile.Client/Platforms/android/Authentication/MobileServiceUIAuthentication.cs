@@ -16,8 +16,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         private Context context;
-
-
+        
         internal static WebAuthenticator CurrentAuthenticator;
 
         protected override Task<string> GetAuthorizationCodeAsync()
