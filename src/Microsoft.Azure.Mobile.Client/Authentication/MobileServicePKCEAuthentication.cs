@@ -22,7 +22,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         
         protected string CodeVerifier { get; private set; }
 
-        public MobileServicePKCEAuthentication(MobileServiceClient client, string provider, string uriScheme, IDictionary<string, string> parameters)
+        protected MobileServicePKCEAuthentication(MobileServiceClient client, string provider, string uriScheme, IDictionary<string, string> parameters)
             : base(client, provider, parameters)
         {
             Debug.Assert(client != null, "client should not be null.");
@@ -42,7 +42,8 @@ namespace Microsoft.WindowsAzure.MobileServices
             loginParameters.Add("post_login_redirect_url", this.CallbackUri.AbsoluteUri);
             loginParameters.Add("code_challenge", GetHash(this.CodeVerifier));
             loginParameters.Add("code_challenge_method", "S256");
-            var loginQueryString = MobileServiceUrlBuilder.GetQueryString(loginParameters, useTableAPIRules: false);
+            loginParameters.Add("session_mode", "token");
+            var loginQueryString = MobileServiceUrlBuilder.GetQueryString(loginParameters, false);
             var loginPathAndQuery = MobileServiceUrlBuilder.CombinePathAndQuery(path, loginQueryString);
             
             this.LoginUri = new Uri(this.Client.MobileAppUri, loginPathAndQuery);
@@ -52,11 +53,10 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
         }
         
-        protected async sealed override Task<string> LoginAsyncOverride()
+        protected sealed override async Task<string> LoginAsyncOverride()
         {
-            string codeVerifier = GetCodeVerifier();
-            string authorizationCode = await this.GetAuthorizationCodeAsync();
-            string path = MobileServiceUrlBuilder.CombinePaths(LoginAsyncUriFragment, ProviderName);
+            var authorizationCode = await this.GetAuthorizationCodeAsync();
+            var path = MobileServiceUrlBuilder.CombinePaths(LoginAsyncUriFragment, ProviderName);
             if (!string.IsNullOrEmpty(client.LoginUriPrefix))
             {
                 path = MobileServiceUrlBuilder.CombinePaths(client.LoginUriPrefix, ProviderName);
@@ -64,11 +64,11 @@ namespace Microsoft.WindowsAzure.MobileServices
             path = MobileServiceUrlBuilder.CombinePaths(path, "token");
             var tokenParameters = Parameters != null ? new Dictionary<string, string>(Parameters) : new Dictionary<string, string>();
             tokenParameters.Add("authorization_code", authorizationCode);
-            tokenParameters.Add("code_verifier", codeVerifier);
-            string queryString = MobileServiceUrlBuilder.GetQueryString(tokenParameters);
-            string pathAndQuery = MobileServiceUrlBuilder.CombinePathAndQuery(path, queryString);
+            tokenParameters.Add("code_verifier", CodeVerifier);
+            var queryString = MobileServiceUrlBuilder.GetQueryString(tokenParameters);
+            var pathAndQuery = MobileServiceUrlBuilder.CombinePathAndQuery(path, queryString);
             var httpClient = client.AlternateLoginHost == null ? client.HttpClient : client.AlternateAuthHttpClient;
-            return await client.HttpClient.RequestWithoutHandlersAsync(HttpMethod.Get, pathAndQuery, null);
+            return await httpClient.RequestWithoutHandlersAsync(HttpMethod.Get, pathAndQuery, null);
         }
 
         protected abstract Task<string> GetAuthorizationCodeAsync();
