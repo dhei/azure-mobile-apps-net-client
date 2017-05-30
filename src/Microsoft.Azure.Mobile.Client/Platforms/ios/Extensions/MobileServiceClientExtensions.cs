@@ -28,7 +28,10 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
-        /// </param>        
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
+        /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
@@ -48,6 +51,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -72,6 +78,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
         /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
+        /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
@@ -91,6 +100,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -118,6 +130,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
         /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
+        /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
@@ -140,6 +155,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -167,6 +185,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
         /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
+        /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
@@ -189,6 +210,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -213,6 +237,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
         /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
+        /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
@@ -232,6 +259,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -256,6 +286,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
         /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
+        /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
@@ -276,8 +309,8 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
         /// </param>
-        /// <param name="parameters">
-        /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -296,6 +329,9 @@ namespace Microsoft.WindowsAzure.MobileServices
             return auth.LoginAsync();
         }
 
+        /// <summary>
+        /// Resume login process with the specified URL.
+        /// </summary>
         public static bool ResumeWithURL(this MobileServiceClient client, NSUrl url)
         {
             // Convert iOS NSUrl to C#/netxf/BCL System.Uri - common API

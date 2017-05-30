@@ -130,6 +130,18 @@ namespace Microsoft.WindowsAzure.MobileServices
                                  path2.TrimStart(Slash));
         }
 
+        /// <summary>
+        /// Concatenates the URI path string to the URI scheme.
+        /// </summary>
+        /// <param name="scheme">
+        /// The URI scheme.
+        /// </param>
+        /// <param name="path">
+        /// The URI path.
+        /// </param>
+        /// <returns>
+        /// The concatenated URI scheme and path string.
+        /// </returns>
         public static string CombileSchemeAndPath(string scheme, string path)
         {
             return string.Format(CultureInfo.InvariantCulture,

@@ -12,7 +12,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="context" type="Android.Content.Context">
@@ -20,6 +20,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
@@ -32,7 +35,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="context" type="Android.Content.Context">
@@ -40,6 +43,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="MobileServiceAuthenticationProvider">
         /// Authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
@@ -55,7 +61,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="context" type="Android.Content.Context">
@@ -63,6 +69,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <returns>
         /// Task that will complete when the user has finished authentication.
@@ -75,7 +84,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Log a user into a Mobile Services application given a provider name.
         /// </summary>
-        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.IMobileServiceClient">
+        /// <param name="client" type="Microsoft.WindowsAzure.MobileServices.MobileServiceClient">
         /// The MobileServiceClient instance to login with
         /// </param>
         /// <param name="context" type="Android.Content.Context">
@@ -83,6 +92,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </param>
         /// <param name="provider" type="string">
         /// The name of the authentication provider to use.
+        /// </param>
+        /// <param name="uriScheme">
+        /// The URL scheme of the application.
         /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
