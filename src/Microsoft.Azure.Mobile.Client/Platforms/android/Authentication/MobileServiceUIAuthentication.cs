@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Android.Content;
+using Android.Support.CustomTabs.Chromium.SharedUtilities;
 using Xamarin.Auth._MobileServices;
 
 namespace Microsoft.WindowsAzure.MobileServices
@@ -31,7 +32,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             
             CurrentAuthenticator = new WebRedirectAuthenticator (LoginUri, CallbackUri)
             {
-                IsUsingNativeUI = true,
+                IsUsingNativeUI = PackageManagerHelper.GetPackageNameToUse(context, LoginUri.ToString()) != null,
                 ClearCookiesBeforeLogin = false
             };
 
