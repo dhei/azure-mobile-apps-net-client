@@ -29,6 +29,8 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 
         private const string RefreshUser400ErrorMessage = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
 
+        private const string uriScheme = ""; // TODO
+
         private EditText uriText, tagsText;
         private TextView loginTestResult;
 
@@ -147,7 +149,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             this.loginTestResult.Text = string.Empty;
 
             var client = new MobileServiceClient(this.uriText.Text);
-            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount, uriScheme);
             string authToken = user.MobileServiceAuthenticationToken;
             this.loginTestResult.Text = "MicrosoftAccount LoginAsync succeeded. UserId: " + user.UserId;
 
@@ -166,7 +168,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             this.loginTestResult.Text = string.Empty;
 
             var client = new MobileServiceClient(this.uriText.Text);
-            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, 
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, uriScheme, 
                 new Dictionary<string, string>()
                 {
                     { "response_type", "code id_token" }
@@ -189,7 +191,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             this.loginTestResult.Text = string.Empty;
 
             var client = new MobileServiceClient(this.uriText.Text);
-            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google,
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google, uriScheme,
                 new Dictionary<string, string>()
                 {
                     { "access_type", "offline" }
@@ -212,7 +214,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             this.loginTestResult.Text = string.Empty;
 
             var client = new MobileServiceClient(this.uriText.Text);
-            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook, uriScheme);
             this.loginTestResult.Text = "Facebook LoginAsync succeeded. UserId: " + user.UserId;
 
             try
@@ -236,7 +238,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         private async void OnClickTwitterLoginAndRefresh(object sender, EventArgs eventArgs)
         {
             var client = new MobileServiceClient(this.uriText.Text);
-            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Twitter);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Twitter, uriScheme);
 
             try
             {

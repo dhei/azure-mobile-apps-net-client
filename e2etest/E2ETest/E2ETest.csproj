@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net45;MonoAndroid44;Xamarin.iOS10;uap10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;net45;MonoAndroid71;Xamarin.iOS10;uap10.0</TargetFrameworks>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <!-- Workaround until Xamarin supports PPDB -->
     <DebugType>full</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'MonoAndroid44' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'MonoAndroid71' ">
     <DefineConstants>$(DefineConstants);PLATFORM_ANDROID;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
