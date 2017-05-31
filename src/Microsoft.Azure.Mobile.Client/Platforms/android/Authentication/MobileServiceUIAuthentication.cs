@@ -22,6 +22,12 @@ namespace Microsoft.WindowsAzure.MobileServices
         protected override Task<string> GetAuthorizationCodeAsync()
         {
             var tcs = new TaskCompletionSource<string>();
+
+            if (CurrentAuthenticator != null)
+            {
+                tcs.TrySetException(new InvalidOperationException("Authentication is already in progress."));
+                return tcs.Task;
+            }
             
             CurrentAuthenticator = new WebRedirectAuthenticator (LoginUri, CallbackUri)
             {
@@ -44,13 +50,18 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             CurrentAuthenticator.Completed += (sender, e) =>
             {
+                string authorizationCode;
                 if (!e.IsAuthenticated)
                 {
-                    tcs.TrySetException (new InvalidOperationException ("Authentication was cancelled by the user."));
+                    tcs.TrySetException(new InvalidOperationException ("Authentication was cancelled by the user."));
+                }
+                else if (!e.Account.Properties.TryGetValue("authorization_code", out authorizationCode))
+                {
+                    tcs.TrySetException(new InvalidOperationException("Authentication failed: could not found \"authorization_code\"."));
                 }
                 else
                 {
-                    tcs.TrySetResult(e.Account.Properties["authorization_code"]);
+                    tcs.TrySetResult(authorizationCode);
                 }
                 CurrentAuthenticator = null;
             };

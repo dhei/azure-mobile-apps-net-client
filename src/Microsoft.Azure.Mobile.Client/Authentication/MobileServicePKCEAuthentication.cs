@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,11 +24,16 @@ namespace Microsoft.WindowsAzure.MobileServices
         protected MobileServicePKCEAuthentication(MobileServiceClient client, string provider, string uriScheme, IDictionary<string, string> parameters)
             : base(client, provider, parameters)
         {
-            Debug.Assert(client != null, "client should not be null.");
-            Debug.Assert(uriScheme != null, "uriScheme should not be null.");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+            if (string.IsNullOrWhiteSpace(uriScheme))
+            {
+                throw new ArgumentException("uriScheme");
+            }
 
             this.client = client;
-
             this.CodeVerifier = GetCodeVerifier();
             this.CallbackUri = new Uri(MobileServiceUrlBuilder.CombileSchemeAndPath(uriScheme, "easyauth.callback"));
 
