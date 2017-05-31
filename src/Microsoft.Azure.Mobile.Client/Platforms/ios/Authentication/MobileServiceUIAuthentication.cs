@@ -35,7 +35,6 @@ namespace Microsoft.WindowsAzure.MobileServices
             CurrentAuthenticator = new WebRedirectAuthenticator(LoginUri, CallbackUri)
             {
                 IsUsingNativeUI = ObjCRuntime.Class.GetHandle("SFSafariViewController") != IntPtr.Zero,
-                //ShowUIErrors = false,
                 ClearCookiesBeforeLogin = false
             };
 

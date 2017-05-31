@@ -144,6 +144,15 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// </returns>
         public static string CombileSchemeAndPath(string scheme, string path)
         {
+            if (string.IsNullOrEmpty(scheme))
+            {
+                throw new ArgumentException("scheme");
+            }
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException("path");
+            }
+
             return string.Format(CultureInfo.InvariantCulture,
                                  "{0}{1}{2}",
                                  scheme,

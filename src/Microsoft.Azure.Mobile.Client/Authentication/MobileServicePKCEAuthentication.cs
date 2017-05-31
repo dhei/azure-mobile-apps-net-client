@@ -40,7 +40,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
             var loginParameters = parameters != null ? new Dictionary<string, string>(parameters) : new Dictionary<string, string>();
             loginParameters.Add("post_login_redirect_url", this.CallbackUri.AbsoluteUri);
-            loginParameters.Add("code_challenge", GetHash(this.CodeVerifier));
+            loginParameters.Add("code_challenge", GetSha256Hash(this.CodeVerifier));
             loginParameters.Add("code_challenge_method", "S256");
             loginParameters.Add("session_mode", "token");
             var loginQueryString = MobileServiceUrlBuilder.GetQueryString(loginParameters, false);
@@ -52,10 +52,17 @@ namespace Microsoft.WindowsAzure.MobileServices
                 this.LoginUri = new Uri(this.Client.AlternateLoginHost, loginPathAndQuery);
             }
         }
-        
+
+        /// <summary>
+        /// Login via OAuth 2.0 PKCE protocol.
+        /// </summary>
+        /// <returns></returns>
         protected sealed override async Task<string> LoginAsyncOverride()
         {
+            // Show platform-specific login ui and care about handling authorization_code from callback via deep linking.
             var authorizationCode = await this.GetAuthorizationCodeAsync();
+
+            // Send authorization_code and code_verifier via HTTPS request to complete the PKCE flow.
             var path = MobileServiceUrlBuilder.CombinePaths(LoginAsyncUriFragment, ProviderName);
             if (!string.IsNullOrEmpty(client.LoginUriPrefix))
             {
@@ -79,7 +86,12 @@ namespace Microsoft.WindowsAzure.MobileServices
             return Convert.ToBase64String(randomBytes);
         }
 
-        private static string GetHash(string data)
+        /// <summary>
+        /// SHA-256 hashing followed by Base64 encoding of the string input.
+        /// </summary>
+        /// <param name="data">Input data</param>
+        /// <returns>Base64 encoded SHA-256 hash</returns>
+        private static string GetSha256Hash(string data)
         {
             var sha = WinRTCrypto.HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Sha256);
             return Convert.ToBase64String(sha.HashData(Encoding.UTF8.GetBytes(data)));

@@ -26,7 +26,6 @@ namespace Microsoft.WindowsAzure.MobileServices
             CurrentAuthenticator = new WebRedirectAuthenticator (LoginUri, CallbackUri)
             {
                 IsUsingNativeUI = true,
-                //ShowUIErrors = false,
                 ClearCookiesBeforeLogin = false
             };
 
