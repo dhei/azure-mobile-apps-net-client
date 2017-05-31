@@ -46,9 +46,13 @@ namespace Microsoft.WindowsAzure.MobileServices
             CurrentAuthenticator.Completed += (sender, e) =>
             {
                 if (!e.IsAuthenticated)
+                {
                     tcs.TrySetException (new InvalidOperationException ("Authentication was cancelled by the user."));
+                }
                 else
+                {
                     tcs.TrySetResult(e.Account.Properties["authorization_code"]);
+                }
                 CurrentAuthenticator = null;
             };
 

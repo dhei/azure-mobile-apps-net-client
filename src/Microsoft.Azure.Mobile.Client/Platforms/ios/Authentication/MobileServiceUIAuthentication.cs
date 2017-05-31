@@ -53,7 +53,10 @@ namespace Microsoft.WindowsAzure.MobileServices
                 };
 
                 if (controller != null)
+                {
                     controller.DismissViewController(true, completed);
+                }
+
                 if (popover != null)
                 {
                     popover.Dismiss(true);
@@ -67,13 +70,20 @@ namespace Microsoft.WindowsAzure.MobileServices
                 NSAction completed = () =>
                 {
                     if (!e.IsAuthenticated)
+                    {
                         tcs.TrySetException(new InvalidOperationException("Authentication was cancelled by the user."));
+                    }
                     else
+                    {
                         tcs.TrySetResult(e.Account.Properties["authorization_code"]);
+                    }
                 };
 
                 if (controller != null)
+                {
                     controller.DismissViewController(true, completed);
+                }
+
                 if (popover != null)
                 {
                     popover.Dismiss(true);
@@ -95,9 +105,13 @@ namespace Microsoft.WindowsAzure.MobileServices
                 popover = new UIPopoverController(c);
 
                 if (barButton != null)
+                {
                     popover.PresentFromBarButtonItem(barButton, UIPopoverArrowDirection.Any, true);
+                }
                 else
+                {
                     popover.PresentFromRect(rect, v, UIPopoverArrowDirection.Any, true);
+                }
             }
 
             return tcs.Task;
