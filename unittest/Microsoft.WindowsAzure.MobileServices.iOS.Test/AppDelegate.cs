@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Test;
@@ -15,7 +16,9 @@ namespace MicrosoftWindowsAzureMobileiOSTest
 
 	    public static TestHarness Harness { get; private set; }
 
-	    static AppDelegate()
+	    public static Func<NSUrl, bool> ResumeWithURL;
+
+        static AppDelegate()
 	    {
             CurrentPlatform.Init();
 
@@ -33,6 +36,11 @@ namespace MicrosoftWindowsAzureMobileiOSTest
             window.MakeKeyAndVisible();
 
 			return true;
-		}
-	}
+	    }
+
+	    public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+	    {
+	        return ResumeWithURL != null && ResumeWithURL(url);
+	    }
+    }
 }

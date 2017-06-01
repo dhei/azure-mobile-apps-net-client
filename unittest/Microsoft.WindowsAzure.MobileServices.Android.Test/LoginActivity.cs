@@ -15,7 +15,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         private const string MobileServiceUriKey = "MobileServiceUri";
         private const string TagsKey = "Tags";
 
-        private const string uriScheme = ""; // TODO
+        private const string uriScheme = "zumoe2etestapp";
 
         private EditText uriText, tagsText;
 

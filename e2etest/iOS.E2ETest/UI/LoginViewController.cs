@@ -55,7 +55,7 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
         private const string RunIdKey = "RunId";
         private const string RuntimeVersionKey = "RuntimeVersion";
 
-        private const string uriScheme = ""; // TODO
+        private const string uriScheme = "zumoe2etestapp";
 
         private readonly EntryElement uriEntry;
         private readonly EntryElement tagsEntry;
@@ -93,6 +93,7 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
         private async void Login(MobileServiceAuthenticationProvider provider)
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
+            AppDelegate.ResumeWithURL = url => url.Scheme == uriScheme && client.ResumeWithURL(url);
             var user = await client.LoginAsync(this, provider, uriScheme);
             var alert = new UIAlertView("Welcome", provider.ToString() + " Login succeeded. Your userId is: " + user.UserId, null, "OK");
             alert.Show();
@@ -101,6 +102,7 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
         private async void LoginAndRefreshWithMicrosoftAccount()
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
+            AppDelegate.ResumeWithURL = url => url.Scheme == uriScheme && client.ResumeWithURL(url);
             MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount, uriScheme);
             string authToken = user.MobileServiceAuthenticationToken;
 
@@ -116,6 +118,7 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
         private async void LoginAndRefreshWithAAD()
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
+            AppDelegate.ResumeWithURL = url => url.Scheme == uriScheme && client.ResumeWithURL(url);
             MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, uriScheme,
                 new Dictionary<string, string>()
                 {
@@ -135,6 +138,7 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
         private async void LoginAndRefreshWithGoogle()
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
+            AppDelegate.ResumeWithURL = url => url.Scheme == uriScheme && client.ResumeWithURL(url);
             MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google, uriScheme,
                 new Dictionary<string, string>()
                 {

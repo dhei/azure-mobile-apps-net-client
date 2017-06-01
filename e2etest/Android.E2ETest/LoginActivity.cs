@@ -29,7 +29,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
 
         private const string RefreshUser400ErrorMessage = "Refresh failed with a 400 Bad Request error. The identity provider does not support refresh, or the user is not logged in with sufficient permission.";
 
-        private const string uriScheme = ""; // TODO
+        private const string uriScheme = "zumoe2etestapp";
 
         private EditText uriText, tagsText;
         private TextView loginTestResult;

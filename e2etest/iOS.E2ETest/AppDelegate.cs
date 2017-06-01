@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Test;
@@ -15,6 +16,8 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
 
         public static TestHarness Harness { get; private set; }
 
+        public static Func<NSUrl, bool> ResumeWithURL;
+
         static AppDelegate()
         {
             CurrentPlatform.Init();
@@ -31,6 +34,11 @@ namespace Microsoft.WindowsAzure.Mobile.iOS.Test
             window.RootViewController = new UINavigationController(new LoginViewController());
             window.MakeKeyAndVisible();
             return true;
+        }
+
+        public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+        {
+            return ResumeWithURL != null && ResumeWithURL(url);
         }
     }
 }
