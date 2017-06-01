@@ -30,9 +30,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider, bool useSingleSignOn)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, MobileServiceAuthenticationProvider provider, string uriScheme, bool useSingleSignOn)
         {
-            return LoginAsync(client, provider, useSingleSignOn, parameters: null);
+            return LoginAsync(client, provider, uriScheme, useSingleSignOn, parameters: null);
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider, bool useSingleSignOn, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, MobileServiceAuthenticationProvider provider, string uriScheme, bool useSingleSignOn, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, provider.ToString(), useSingleSignOn, parameters);
+            return LoginAsync(client, provider.ToString(), uriScheme, useSingleSignOn, parameters);
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, string provider, bool useSingleSignOn)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, string provider, string uriScheme, bool useSingleSignOn)
         {
-            return LoginAsync(client, provider, useSingleSignOn, parameters: null);
+            return LoginAsync(client, provider, uriScheme, useSingleSignOn, parameters: null);
         }
 
         /// <summary>
@@ -105,11 +105,11 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, string provider, bool useSingleSignOn, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, string provider, string uriScheme, bool useSingleSignOn, IDictionary<string, string> parameters)
         {
             if (!useSingleSignOn)
             {
-                return client.LoginAsync(provider, parameters);
+                return client.LoginAsync(provider, uriScheme, parameters);
             }
 
             MobileServiceSingleSignOnAuthentication auth = new MobileServiceSingleSignOnAuthentication(client, provider, parameters);

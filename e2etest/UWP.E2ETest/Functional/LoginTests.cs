@@ -22,6 +22,8 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private const string GoogleTokenRevocationURI = @"https://accounts.google.com/o/oauth2/revoke?token={0}";
 
+        private const string uriScheme = "zumoe2etestapp";
+
         private static MobileServiceClient client;
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await TestCRUDAsync("Public", tableRequiresAuthentication: false, userIsAuthenticated: false);
             await TestCRUDAsync("Authorized", tableRequiresAuthentication: true, userIsAuthenticated: false);
 
-            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.MicrosoftAccount, useSingleSignOn);
+            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.MicrosoftAccount, uriScheme, useSingleSignOn);
 
             // save user.MobileServiceAuthenticationToken value for later use
             // because RefreshUserAsync() will override user.MobileServiceAuthenticationToken
@@ -72,7 +74,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         /// </returns>
         private static async Task<string> TestAADRefreshUserAsync(bool useSingleSignOn)
         {
-            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, useSingleSignOn, 
+            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, uriScheme, useSingleSignOn, 
                 new Dictionary<string, string>()
                 {
                     { "response_type", "code id_token" }
@@ -103,7 +105,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         /// </returns>
         private static async Task<string> TestFacebookRefreshUserAsync(bool useSingleSignOn)
         {
-            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Facebook, useSingleSignOn);
+            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Facebook, uriScheme, useSingleSignOn);
 
             try
             {
@@ -132,7 +134,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         /// </returns>
         private static async Task<string> TestTwitterRefreshUserAsync(bool useSingleSignOn)
         {
-            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Twitter, useSingleSignOn);
+            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Twitter, uriScheme, useSingleSignOn);
 
             try
             {
@@ -162,7 +164,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         private static async Task<string> TestGoogleRefreshUserAsync(bool useSingleSignOn)
         {
             // Firstly, login user with Google account with offline permission
-            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, useSingleSignOn, 
+            MobileServiceUser user = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, uriScheme, useSingleSignOn, 
                 new Dictionary<string, string>()
                 {
                     { "access_type", "offline" }
@@ -207,7 +209,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             }
 
             // Last, login user with Google offline scope again
-            MobileServiceUser sameUser = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, useSingleSignOn, 
+            MobileServiceUser sameUser = await client.LoginAsync(MobileServiceAuthenticationProvider.Google, uriScheme, useSingleSignOn, 
                 new Dictionary<string, string>()
                 {
                     { "access_type", "offline" }

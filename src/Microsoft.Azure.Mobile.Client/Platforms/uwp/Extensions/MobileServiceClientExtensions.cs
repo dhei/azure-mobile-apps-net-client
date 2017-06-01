@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ----------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,9 +25,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, MobileServiceAuthenticationProvider provider, string uriScheme)
         {
-            return LoginAsync(client, provider, parameters: null);
+            return LoginAsync(client, provider, uriScheme, parameters: null);
         }
 
         /// <summary>
@@ -44,9 +45,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, MobileServiceAuthenticationProvider provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, provider.ToString(), parameters);
+            return LoginAsync(client, provider.ToString(), uriScheme, parameters);
         }
 
         /// <summary>
@@ -61,9 +62,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, string provider)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, string provider, string uriScheme)
         {
-            return LoginAsync(client, provider, null);
+            return LoginAsync(client, provider, uriScheme, null);
         }
 
         /// <summary>
@@ -81,10 +82,19 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, string provider, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, string provider, string uriScheme, IDictionary<string, string> parameters)
         {
-            MobileServiceUIAuthentication auth = new MobileServiceUIAuthentication(client, provider, parameters);
+            MobileServiceUIAuthentication auth = new MobileServiceUIAuthentication(client, provider, uriScheme, parameters);
             return auth.LoginAsync();
+        }
+
+        /// <summary>
+        /// Resume login process with the specified URL.
+        /// </summary>
+        public static bool ResumeWithURL(this MobileServiceClient client, Uri uri)
+        {
+            MobileServiceUIAuthentication.CurrentAuthenticator?.OnResponseReceived(uri);
+            return true;
         }
 
         /// <summary>
