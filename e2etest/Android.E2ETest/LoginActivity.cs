@@ -78,11 +78,11 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             this.tagsText.Text = prefs.GetString(Keys.TagExpression, null);
 
             FindViewById<Button>(Resource.Id.RunTests).Click += OnClickRunTests;
-            FindViewById<Button>(Resource.Id.MSALogin).Click += OnClickMicrosoftAccountLoginAndRefresh;
-            FindViewById<Button>(Resource.Id.AADLogin).Click += OnClickAADLoginAndRefresh;
-            FindViewById<Button>(Resource.Id.GoogleLogin).Click += OnClickGoogleLoginAndRefresh;
-            FindViewById<Button>(Resource.Id.FacebookLogin).Click += OnClickFacebookLoginAndRefresh;
-            FindViewById<Button>(Resource.Id.TwitterLogin).Click += OnClickTwitterLoginAndRefresh;
+            FindViewById<Button>(Resource.Id.MSALogin).Click += CatchInvalidOperationExceptions(OnClickMicrosoftAccountLoginAndRefresh);
+            FindViewById<Button>(Resource.Id.AADLogin).Click += CatchInvalidOperationExceptions(OnClickAADLoginAndRefresh);
+            FindViewById<Button>(Resource.Id.GoogleLogin).Click += CatchInvalidOperationExceptions(OnClickGoogleLoginAndRefresh);
+            FindViewById<Button>(Resource.Id.FacebookLogin).Click += CatchInvalidOperationExceptions(OnClickFacebookLoginAndRefresh);
+            FindViewById<Button>(Resource.Id.TwitterLogin).Click += CatchInvalidOperationExceptions(OnClickTwitterLoginAndRefresh);
 
             string autoStart = ReadSettingFromIntentOrDefault(Keys.AutoStart, "false");
             if (autoStart != null && autoStart.ToLower() == "true")
@@ -98,6 +98,23 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
                 App.Harness.SetAutoConfig(config);
                 RunTests();
             }
+        }
+
+        private EventHandler CatchInvalidOperationExceptions(Func<Task> origin)
+        {
+            return async (sender, eventArgs) =>
+            {
+                try
+                {
+                    await origin();
+                }
+                catch (InvalidOperationException e)
+                {
+                    string message = "Failed with exception: " + e.Message;
+                    this.loginTestResult.Text = message;
+                    System.Diagnostics.Debug.WriteLine(message);
+                }
+            };
         }
 
         private string ReadSettingFromIntentOrDefault(string key, string defaultValue = null)
@@ -144,7 +161,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             StartActivity(intent);
         }
 
-        private async void OnClickMicrosoftAccountLoginAndRefresh(object sender, EventArgs eventArgs)
+        private async Task OnClickMicrosoftAccountLoginAndRefresh()
         {
             this.loginTestResult.Text = string.Empty;
 
@@ -163,7 +180,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             System.Diagnostics.Debug.WriteLine(message);
         }
 
-        private async void OnClickAADLoginAndRefresh(object sender, EventArgs eventArgs)
+        private async Task OnClickAADLoginAndRefresh()
         {
             this.loginTestResult.Text = string.Empty;
 
@@ -186,7 +203,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             System.Diagnostics.Debug.WriteLine(message);
         }
 
-        private async void OnClickGoogleLoginAndRefresh(object sender, EventArgs eventArgs)
+        private async Task OnClickGoogleLoginAndRefresh()
         {
             this.loginTestResult.Text = string.Empty;
 
@@ -209,7 +226,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             System.Diagnostics.Debug.WriteLine(message);
         }
 
-        private async void OnClickFacebookLoginAndRefresh(object sender, EventArgs eventArgs)
+        private async Task OnClickFacebookLoginAndRefresh()
         {
             this.loginTestResult.Text = string.Empty;
 
@@ -235,7 +252,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
             Assert.Fail("RefreshAsync() should throw 400 error on Facebook account.");
         }
 
-        private async void OnClickTwitterLoginAndRefresh(object sender, EventArgs eventArgs)
+        private async Task OnClickTwitterLoginAndRefresh()
         {
             var client = new MobileServiceClient(this.uriText.Text);
             var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Twitter, uriScheme);
