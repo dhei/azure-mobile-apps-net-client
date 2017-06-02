@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.WindowsAzure.MobileServices.Platforms.uwp.Authentication
+namespace Microsoft.WindowsAzure.MobileServices
 {
-    class AuthenticationHelper
+    internal class AuthenticationHelper
     {
         /// <summary>
         /// Occurs when authentication has been successfully or unsuccessfully completed.

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.WindowsAzure.MobileServices.Platforms.uwp.Authentication
+namespace Microsoft.WindowsAzure.MobileServices
 {
-    class AuthenticatorCompletedEventArgs : EventArgs
+    internal class AuthenticatorCompletedEventArgs : EventArgs
     {
         // <summary>
         /// Whether the authentication succeeded and there is a valid authorization code.

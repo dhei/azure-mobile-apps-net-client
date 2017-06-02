@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.MobileServices.Platforms.uwp.Authentication;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
@@ -69,7 +68,7 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             var browserLaunched = Windows.System.Launcher.LaunchUriAsync(LoginUri);
             //if (!browserLaunched) {
-            //    tcs.TrySetException(new Exception("Could not start browser."));
+            //    tcs.TrySetException(new Exception("Could not start the browser."));
             //}
             return tcs.Task;
         }

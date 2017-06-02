@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.WindowsAzure.MobileServices.Platforms.uwp.Authentication
+namespace Microsoft.WindowsAzure.MobileServices
 {
     internal class AuthenticatorErrorEventArgs : EventArgs
     {
