@@ -1,33 +1,43 @@
 using System;
-using System.Globalization;
-using Android.Content;
-using System.Threading.Tasks;
-using Xamarin.Auth._MobileServices;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using Android.Content;
+using Xamarin.Auth._MobileServices;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
-    internal class MobileServiceUIAuthentication : MobileServiceAuthentication
+    internal class MobileServiceUIAuthentication : MobileServicePKCEAuthentication
     {
-        public MobileServiceUIAuthentication (Context context, IMobileServiceClient client, string providerName, IDictionary<string, string> parameters)
-            : base (client, providerName, parameters)
+        public MobileServiceUIAuthentication (Context context, MobileServiceClient client, string providerName, string uriScheme, IDictionary<string, string> parameters)
+            : base (client, providerName, uriScheme, parameters)
         {
             this.context = context;
         }
 
         private Context context;
+        
+        internal static WebAuthenticator CurrentAuthenticator;
 
-        protected override Task<string> LoginAsyncOverride()
+        protected override Task<string> GetAuthorizationCodeAsync()
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var auth = new WebRedirectAuthenticator (StartUri, EndUri);
-            auth.ShowUIErrors = false;
-            auth.ClearCookiesBeforeLogin = false;
+            if (CurrentAuthenticator != null)
+            {
+                tcs.TrySetException(new InvalidOperationException("Authentication is already in progress."));
+                return tcs.Task;
+            }
+            
+            CurrentAuthenticator = new WebRedirectAuthenticator (LoginUri, CallbackUri)
+            {
+                IsUsingNativeUI = true, // Xamarin.Auth takes care about fallback
+                ClearCookiesBeforeLogin = false
+            };
 
-            Intent intent = auth.GetUI (this.context);
+            Intent intent = CurrentAuthenticator.GetUI (this.context);
 
-            auth.Error += (sender, e) =>
+            CurrentAuthenticator.Error += (sender, e) =>
             {
                 string message = String.Format (CultureInfo.InvariantCulture, "Authentication failed with HTTP response code {0}.", e.Message);
                 InvalidOperationException ex = (e.Exception == null)
@@ -35,14 +45,25 @@ namespace Microsoft.WindowsAzure.MobileServices
                     : new InvalidOperationException (message, e.Exception);
 
                 tcs.TrySetException (ex);
+                CurrentAuthenticator = null;
             };
 
-            auth.Completed += (sender, e) =>
+            CurrentAuthenticator.Completed += (sender, e) =>
             {
+                string authorizationCode;
                 if (!e.IsAuthenticated)
-                    tcs.TrySetException (new InvalidOperationException ("Authentication was cancelled by the user."));
+                {
+                    tcs.TrySetException(new InvalidOperationException ("Authentication was cancelled by the user."));
+                }
+                else if (!e.Account.Properties.TryGetValue("authorization_code", out authorizationCode))
+                {
+                    tcs.TrySetException(new InvalidOperationException("Authentication failed: could not found \"authorization_code\"."));
+                }
                 else
-                    tcs.TrySetResult(e.Account.Properties["token"]);
+                {
+                    tcs.TrySetResult(authorizationCode);
+                }
+                CurrentAuthenticator = null;
             };
 
             context.StartActivity (intent);
