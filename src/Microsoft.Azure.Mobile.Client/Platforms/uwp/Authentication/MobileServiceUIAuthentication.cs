@@ -58,15 +58,17 @@ namespace Microsoft.WindowsAzure.MobileServices
                 {
                     tcs.TrySetResult(e.AuthorizationCode);
                 }
+                CurrentAuthenticator = null;
             };
 
             CurrentAuthenticator.Error += (o, e) =>
             {
                 tcs.TrySetException(new Exception(e.Message));
+                CurrentAuthenticator = null;
             };
 
             var browserLaunched = Windows.System.Launcher.LaunchUriAsync(LoginUri);
-            //if (!browserLaunched.) {
+            //if (!browserLaunched) {
             //    tcs.TrySetException(new Exception("Could not start browser."));
             //}
             return tcs.Task;
