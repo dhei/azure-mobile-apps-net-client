@@ -24,7 +24,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private const string uriScheme = "zumoe2etestapp";
 
-        private static MobileServiceClient client;
+        internal static MobileServiceClient client;
 
         /// <summary>
         /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> 
