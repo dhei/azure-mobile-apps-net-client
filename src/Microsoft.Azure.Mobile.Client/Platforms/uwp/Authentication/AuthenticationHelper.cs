@@ -6,6 +6,9 @@ namespace Microsoft.WindowsAzure.MobileServices
 {
     internal class AuthenticationHelper
     {
+
+        private static readonly string EasyAuthCallbackUrlSegment = "easyauth.callback";
+
         /// <summary>
         /// Occurs when authentication has been successfully or unsuccessfully completed.
         /// </summary>
@@ -18,6 +21,12 @@ namespace Microsoft.WindowsAzure.MobileServices
 
         internal void OnResponseReceived(Uri uri)
         {
+            if (!isValidUrl(uri))
+            {
+                Error?.Invoke(this, new AuthenticatorErrorEventArgs("The url returned by the server is invalid"));
+                return;
+            }
+
             if (!uri.Fragment.Contains("authorization_code"))
             {
                 Error?.Invoke(this, new AuthenticatorErrorEventArgs("Authorization code not found in server response"));
@@ -29,6 +38,15 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
         }
 
+        private bool isValidUrl(Uri uri)
+        {
+            if (uri != null && uri.Scheme != null && uri.Host != null && uri.Host == EasyAuthCallbackUrlSegment)
+            {
+                return true;
+            }
+            return false;
+        }
+
         private Dictionary<string, string> decodeResponse(string encodedString)
         {
             var inputs = new Dictionary<string, string>();
@@ -36,7 +54,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             if (encodedString.Length > 0)
             {
                 char firstChar = encodedString[0];
-                if (firstChar == '?' || firstChar == '#')
+                if (firstChar == '#')
                 {
                     encodedString = encodedString.Substring(1);
                 }
@@ -58,8 +76,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                         }
                         else
                         {
-                            key = Uri.UnescapeDataString(part);
-                            value = string.Empty;
+                            throw new InvalidOperationException($"Query parameter: {part} value is empty");
                         }
 
                         inputs[key] = value;

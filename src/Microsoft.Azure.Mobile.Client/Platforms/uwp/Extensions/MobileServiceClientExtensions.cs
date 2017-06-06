@@ -91,10 +91,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <summary>
         /// Resume login process with the specified URL.
         /// </summary>
-        public static bool ResumeWithURL(this MobileServiceClient client, Uri uri)
+        public static void ResumeWithURL(this MobileServiceClient client, Uri uri)
         {
             MobileServiceUIAuthentication.CurrentAuthenticator?.OnResponseReceived(uri);
-            return true;
         }
 
         /// <summary>

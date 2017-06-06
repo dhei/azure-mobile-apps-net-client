@@ -21,6 +21,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <param name="provider">
         /// The authentication provider.
         /// </param>
+        /// <param name="uriScheme">
+        /// The uri scheme.
+        /// </param>
         /// <param name="parameters">
         /// Provider specific extra parameters that are sent as query string parameters to login endpoint.
         /// </param>
@@ -30,10 +33,10 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
-        /// Provides Login logic by showing a login UI.
+        /// Provides login UI to start authentication process.
         /// </summary>
         /// <returns>
-        /// Task that will complete with the response string when the user has finished authentication.
+        /// Task that will complete with the authorization code when the user will finish authentication.
         /// </returns>
         protected override Task<string> GetAuthorizationCodeAsync()
         {
@@ -62,14 +65,11 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             CurrentAuthenticator.Error += (o, e) =>
             {
-                tcs.TrySetException(new Exception(e.Message));
+                tcs.TrySetException(new InvalidOperationException(e.Message));
                 CurrentAuthenticator = null;
             };
 
             var browserLaunched = Windows.System.Launcher.LaunchUriAsync(LoginUri);
-            //if (!browserLaunched) {
-            //    tcs.TrySetException(new Exception("Could not start the browser."));
-            //}
             return tcs.Task;
         }
     }
