@@ -484,7 +484,9 @@ namespace Microsoft.WindowsAzure.MobileServices.SQLiteStore
             foreach (var column in columns)
             {
                 if (colCount > 0)
+                {
                     sql.Append(",");
+                }
 
                 sql.Append(AddParameter(item, parameters, column));
 

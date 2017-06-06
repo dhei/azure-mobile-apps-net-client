@@ -15,6 +15,8 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         private const string MobileServiceUriKey = "MobileServiceUri";
         private const string TagsKey = "Tags";
 
+        private const string uriScheme = "zumoe2etestapp";
+
         private EditText uriText, tagsText;
 
         protected override void OnCreate (Bundle bundle)
@@ -65,7 +67,7 @@ namespace Microsoft.WindowsAzure.Mobile.Android.Test
         private async void OnClickLogin(object sender, EventArgs eventArgs)
         {
             var client = new MobileServiceClient(this.uriText.Text);
-            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount);
+            var user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.MicrosoftAccount, uriScheme);
             System.Diagnostics.Debug.WriteLine(user.UserId);
         }
     }

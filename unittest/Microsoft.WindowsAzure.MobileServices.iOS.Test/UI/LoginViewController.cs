@@ -40,6 +40,8 @@ namespace MicrosoftWindowsAzureMobileiOSTest
         private const string MobileServiceUriKey = "MobileServiceUri";
         private const string TagsKey = "Tags";
 
+        private const string uriScheme = "zumoe2etestapp";
+
         private readonly EntryElement uriEntry;
         private readonly EntryElement tagsEntry;
 
@@ -67,7 +69,8 @@ namespace MicrosoftWindowsAzureMobileiOSTest
         private async void Login(MobileServiceAuthenticationProvider provider)
         {
             var client = new MobileServiceClient(this.uriEntry.Value);
-            var user = await client.LoginAsync(this, provider);
+            AppDelegate.ResumeWithURL = url => url.Scheme == uriScheme && client.ResumeWithURL(url);
+            var user = await client.LoginAsync(this, provider, uriScheme);
             var alert = new UIAlertView("Welcome", "Your userId is: " + user.UserId, null, "OK");
             alert.Show();
         }

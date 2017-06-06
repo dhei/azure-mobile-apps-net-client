@@ -14,32 +14,42 @@ using MonoTouch.UIKit;
 
 namespace Microsoft.WindowsAzure.MobileServices
 {
-    internal class MobileServiceUIAuthentication : MobileServiceAuthentication
+    internal class MobileServiceUIAuthentication : MobileServicePKCEAuthentication
     {
         private readonly RectangleF rect;
         private readonly object view;
 
-        public MobileServiceUIAuthentication(RectangleF rect, object view, IMobileServiceClient client, string providerName, IDictionary<string, string> parameters)
-            : base(client, providerName, parameters)
+        public MobileServiceUIAuthentication(RectangleF rect, object view, MobileServiceClient client, string providerName, string uriScheme, IDictionary<string, string> parameters)
+            : base(client, providerName, uriScheme, parameters)
         {
             this.rect = rect;
             this.view = view;
         }
 
-        protected override Task<string> LoginAsyncOverride()
+        internal static WebAuthenticator CurrentAuthenticator;
+
+        protected override Task<string> GetAuthorizationCodeAsync()
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var auth = new WebRedirectAuthenticator(StartUri, EndUri);
-            auth.ShowUIErrors = false;
-            auth.ClearCookiesBeforeLogin = false;
+            if (CurrentAuthenticator != null)
+            {
+                tcs.TrySetException(new InvalidOperationException("Authentication is already in progress."));
+                return tcs.Task;
+            }
 
-            UIViewController c = auth.GetUI();
+            CurrentAuthenticator = new WebRedirectAuthenticator(LoginUri, CallbackUri)
+            {
+                IsUsingNativeUI = ObjCRuntime.Class.GetHandle("SFSafariViewController") != IntPtr.Zero,
+                ClearCookiesBeforeLogin = false
+            };
+
+            UIViewController c = CurrentAuthenticator.GetUI();
 
             UIViewController controller = null;
             UIPopoverController popover = null;
 
-            auth.Error += (o, e) =>
+            CurrentAuthenticator.Error += (o, e) =>
             {
                 NSAction completed = () =>
                 {
@@ -48,31 +58,48 @@ namespace Microsoft.WindowsAzure.MobileServices
                 };
 
                 if (controller != null)
+                {
                     controller.DismissViewController(true, completed);
+                }
+
                 if (popover != null)
                 {
                     popover.Dismiss(true);
                     completed();
                 }
+                CurrentAuthenticator = null;
             };
 
-            auth.Completed += (o, e) =>
+            CurrentAuthenticator.Completed += (o, e) =>
             {
                 NSAction completed = () =>
                 {
+                    string authorizationCode;
                     if (!e.IsAuthenticated)
+                    {
                         tcs.TrySetException(new InvalidOperationException("Authentication was cancelled by the user."));
+                    }
+                    else if (!e.Account.Properties.TryGetValue("authorization_code", out authorizationCode))
+                    {
+                        tcs.TrySetException(new InvalidOperationException("Authentication failed: could not found \"authorization_code\"."));
+                    }
                     else
-                        tcs.TrySetResult(e.Account.Properties["token"]);
+                    {
+                        tcs.TrySetResult(authorizationCode);
+                    }
                 };
 
                 if (controller != null)
+                {
                     controller.DismissViewController(true, completed);
+                }
+
                 if (popover != null)
                 {
                     popover.Dismiss(true);
                     completed();
                 }
+                CurrentAuthenticator = null;
             };
 
             controller = view as UIViewController;
@@ -88,9 +115,13 @@ namespace Microsoft.WindowsAzure.MobileServices
                 popover = new UIPopoverController(c);
 
                 if (barButton != null)
+                {
                     popover.PresentFromBarButtonItem(barButton, UIPopoverArrowDirection.Any, true);
+                }
                 else
+                {
                     popover.PresentFromRect(rect, v, UIPopoverArrowDirection.Any, true);
+                }
             }
 
             return tcs.Task;

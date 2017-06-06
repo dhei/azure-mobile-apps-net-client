@@ -131,6 +131,36 @@ namespace Microsoft.WindowsAzure.MobileServices
         }
 
         /// <summary>
+        /// Concatenates the URI path string to the URI scheme.
+        /// </summary>
+        /// <param name="scheme">
+        /// The URI scheme.
+        /// </param>
+        /// <param name="path">
+        /// The URI path.
+        /// </param>
+        /// <returns>
+        /// The concatenated URI scheme and path string.
+        /// </returns>
+        public static string CombileSchemeAndPath(string scheme, string path)
+        {
+            if (string.IsNullOrEmpty(scheme))
+            {
+                throw new ArgumentException("scheme");
+            }
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException("path");
+            }
+
+            return string.Format(CultureInfo.InvariantCulture,
+                                 "{0}{1}{2}",
+                                 scheme,
+                                 SchemeDelimiter,
+                                 path);
+        }
+
+        /// <summary>
         /// Appends a slash ('/') to <paramref name="uri"/> if it is missing a trailing slash.
         /// </summary>
         /// <param name="uri">

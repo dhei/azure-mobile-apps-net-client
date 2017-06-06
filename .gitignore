@@ -1,25 +1,32 @@
 *.xam
 xpkg
-*.suo
 lib
-*.user
-*.userprefs
-#ignore build files
+.vs/
+*.bak
+*.pfx
+_ReSharper*
+
+# Build results
 bin
 obj
-packages
-.nuget/nuget.exe
 src/*/Strings/*
 Components
-*.pfx #certs are binary
 e2etest/**/AppPackages/*
 e2etest/output/*
 src/**/AppPackages/*
 unittest/**/AppPackages/*
-.vs/
+
+# Ignore generated resource files
+[Rr]esource.[Dd]esigner.cs
+
+# User-specific files
+*.suo
+*.user
+*.userprefs
+
+# NuGet
+packages
+*.lock.json
+.nuget/nuget.exe
 *.nuget.targets
 *.nuget.props
-*.bak
-*.lock.json
-*.pfx
-_ReSharper*
