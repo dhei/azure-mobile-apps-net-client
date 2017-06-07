@@ -27,14 +27,18 @@ namespace Microsoft.WindowsAzure.MobileServices
                 return;
             }
 
-            if (!uri.Fragment.Contains("authorization_code"))
-            {
-                Error?.Invoke(this, new AuthenticatorErrorEventArgs("Authorization code not found in server response"));
-            }
-            else
+            try
             {
                 var fragments = decodeResponse(uri.Fragment);
                 Completed?.Invoke(this, new AuthenticatorCompletedEventArgs(fragments["authorization_code"]));
+            }
+            catch (KeyNotFoundException e)
+            {
+                Error?.Invoke(this, new AuthenticatorErrorEventArgs("Authorization code not found in server response"));
+            }
+            catch (Exception e)
+            {
+                Error?.Invoke(this, new AuthenticatorErrorEventArgs(e.Message));
             }
         }
 
