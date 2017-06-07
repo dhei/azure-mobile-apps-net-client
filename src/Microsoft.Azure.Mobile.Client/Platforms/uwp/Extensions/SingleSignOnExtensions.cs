@@ -1,7 +1,7 @@
 ﻿// ----------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ----------------------------------------------------------------------------'
-
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +9,10 @@ namespace Microsoft.WindowsAzure.MobileServices
 {
     /// <summary>
     /// Provides extension methods for single sign-on.
+    /// Single Sign-On is no longer supported for Google. 
+    /// For server flow authentication with Google, please use LoginAsync methods with uriScheme parameter.
     /// </summary>
+    [Obsolete]
     public static class SingleSignOnExtensions
     {
         /// <summary>
@@ -30,9 +33,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, MobileServiceAuthenticationProvider provider, string uriScheme, bool useSingleSignOn)
+        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider, bool useSingleSignOn)
         {
-            return LoginAsync(client, provider, uriScheme, useSingleSignOn, parameters: null);
+            return LoginAsync(client, provider, useSingleSignOn, parameters: null);
         }
 
         /// <summary>
@@ -56,9 +59,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, MobileServiceAuthenticationProvider provider, string uriScheme, bool useSingleSignOn, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, MobileServiceAuthenticationProvider provider, bool useSingleSignOn, IDictionary<string, string> parameters)
         {
-            return LoginAsync(client, provider.ToString(), uriScheme, useSingleSignOn, parameters);
+            return LoginAsync(client, provider.ToString(), useSingleSignOn, parameters);
         }
 
         /// <summary>
@@ -79,9 +82,9 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, string provider, string uriScheme, bool useSingleSignOn)
+        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, string provider, bool useSingleSignOn)
         {
-            return LoginAsync(client, provider, uriScheme, useSingleSignOn, parameters: null);
+            return LoginAsync(client, provider, useSingleSignOn, parameters: null);
         }
 
         /// <summary>
@@ -105,11 +108,11 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// <returns>
         /// Task that will complete when the user has finished authentication.
         /// </returns>
-        public static Task<MobileServiceUser> LoginAsync(this MobileServiceClient client, string provider, string uriScheme, bool useSingleSignOn, IDictionary<string, string> parameters)
+        public static Task<MobileServiceUser> LoginAsync(this IMobileServiceClient client, string provider, bool useSingleSignOn, IDictionary<string, string> parameters)
         {
             if (!useSingleSignOn)
             {
-                return client.LoginAsync(provider, uriScheme, parameters);
+                throw new InvalidOperationException("This api is deprecated. Please use LoginSync method with uriScheme parameter.");
             }
 
             MobileServiceSingleSignOnAuthentication auth = new MobileServiceSingleSignOnAuthentication(client, provider, parameters);
