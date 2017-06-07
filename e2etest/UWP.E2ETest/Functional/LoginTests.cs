@@ -230,11 +230,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
         {
             if (singleSignOn)
             {
-                return client.LoginAsync(MobileServiceAuthenticationProvider.Google, singleSignOn, parameters);
+                return client.LoginAsync(provider, singleSignOn, parameters);
             }
             else
             {
-                return client.LoginAsync(MobileServiceAuthenticationProvider.Google, uriScheme, parameters);
+                return client.LoginAsync(provider, uriScheme, parameters);
             }
         }
 
