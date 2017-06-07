@@ -36,7 +36,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         /// Provides login UI to start authentication process.
         /// </summary>
         /// <returns>
-        /// Task that will complete with the authorization code when the user will finish authentication.
+        /// Task that will complete with the authorization code when the user finishes authentication.
         /// </returns>
         protected override Task<string> GetAuthorizationCodeAsync()
         {

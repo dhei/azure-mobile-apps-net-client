@@ -12,7 +12,7 @@ namespace Microsoft.WindowsAzure.MobileServices
     /// Single Sign-On is no longer supported for Google. 
     /// For server flow authentication with Google, please use LoginAsync methods with uriScheme parameter.
     /// </summary>
-    [Obsolete]
+    [Obsolete("Please use LoginAsync in MobileServiceClientExtensions instead")]
     public static class SingleSignOnExtensions
     {
         /// <summary>

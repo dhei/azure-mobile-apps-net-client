@@ -23,7 +23,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             if (!isValidUrl(uri))
             {
-                Error?.Invoke(this, new AuthenticatorErrorEventArgs("The url returned by the server is invalid"));
+                Error?.Invoke(this, new AuthenticatorErrorEventArgs("Invalid redirect url returned by the server"));
                 return;
             }
 
@@ -34,7 +34,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             }
             catch (KeyNotFoundException e)
             {
-                Error?.Invoke(this, new AuthenticatorErrorEventArgs("Authorization code not found in server response"));
+                Error?.Invoke(this, new AuthenticatorErrorEventArgs("authorization_code not found in server response"));
             }
             catch (Exception e)
             {
