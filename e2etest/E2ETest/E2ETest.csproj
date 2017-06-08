@@ -6,6 +6,8 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'MonoAndroid71' ">
+    <TargetFrameworkIdentifier>MonoAndroid</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <DefineConstants>$(DefineConstants);PLATFORM_ANDROID;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
