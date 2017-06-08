@@ -120,8 +120,8 @@ namespace Microsoft.WindowsAzure.MobileServices
             {
                 hash = sha256.ComputeHash(bytes);
             }
-            return Convert.ToBase64String(hash);
 #endif
+            return Convert.ToBase64String(hash);
         }
     }
 }
