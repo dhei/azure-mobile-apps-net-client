@@ -182,6 +182,39 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Assert.AreEqual(user.UserId, refreshedUser.UserId);
             Assert.AreNotEqual(authToken, refreshedAuthToken);
 
+            return string.Format("User Login and Refresh succeeded. UserId: {0} Token: {1}", refreshedUser.UserId, refreshedUser.MobileServiceAuthenticationToken);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="MobileServiceClient.LoginAsync"/> and <see cref="MobileServiceClient.RefreshUserAsync"/> functionality of Google
+        /// </summary>
+        /// <param name="useSingleSignOn">
+        /// use single sign-on to login the user.
+        /// </param>
+        /// <returns>
+        /// The UserId and MobileServiceAuthentication token obtained after refresh
+        /// </returns>
+        private static async Task<string> TestGoogleRefreshUserAsyncWithTokenRecovation(bool useSingleSignOn)
+        {
+            // Firstly, login user with Google account with offline permission
+            MobileServiceUser user = await LoginAsync(MobileServiceAuthenticationProvider.Google, uriScheme, useSingleSignOn,
+                new Dictionary<string, string>()
+                {
+                    { "access_type", "offline" }
+                });
+
+            // save user.MobileServiceAuthenticationToken value for later use
+            // because RefreshUserAsync() will override user.MobileServiceAuthenticationToken
+            // in single sign-on scenario
+            string authToken = user.MobileServiceAuthenticationToken;
+
+            // Secondly, refresh user using refresh token
+            MobileServiceUser refreshedUser = await client.RefreshUserAsync();
+            string refreshedAuthToken = refreshedUser.MobileServiceAuthenticationToken;
+
+            Assert.AreEqual(user.UserId, refreshedUser.UserId);
+            Assert.AreNotEqual(authToken, refreshedAuthToken);
+
             // Then, get refresh token from /.auth/me endpoint of the backend
             string googleAccessToken = await GetGoogleAccessToken(client.MobileAppUri.AbsoluteUri, refreshedUser.MobileServiceAuthenticationToken);
 
