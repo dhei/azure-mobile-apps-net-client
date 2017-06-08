@@ -1,5 +1,17 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 4.0.0
+- Support of .NET Standard 1.4
+- [Xamarin.Android] Support of server login flow to use Chrome CustomTabs on Android. It supports OAuth 2.0 [PKCE](https://tools.ietf.org/html/rfc7636) extension.
+- [Xamarin.iOS] Support of server login flow to use SafariViewController on iOS. It supports OAuth 2.0 [PKCE](https://tools.ietf.org/html/rfc7636) extension.
+- [UWP] Support of server login flow to use browser on Windows. It supports OAuth 2.0 [PKCE](https://tools.ietf.org/html/rfc7636) extension.
+
+### Version 3.1.0
+- Fix issue [#193](https://github.com/Azure/azure-mobile-apps-net-client/issues/193)
+- Fix issue [#196](https://github.com/Azure/azure-mobile-apps-net-client/issues/196)
+- Fix issue [#215](https://github.com/Azure/azure-mobile-apps-net-client/issues/215)
+- Fix issue [#237](https://github.com/Azure/azure-mobile-apps-net-client/issues/237)
+
 ### Version 3.0.3
 - Fix [#244](https://github.com/Azure/azure-mobile-apps-net-client/issues/244) Exception if not specifying full MobileServiceSQLiteStore path
 
