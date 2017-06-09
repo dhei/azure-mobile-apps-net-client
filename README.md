@@ -29,7 +29,7 @@ Other versions may work.  We do not test them and thus cannot support them.
 
 ## Managed Windows Client SDK
 
-Our managed portable library for Window and Xamarin makes it easy to use Azure Mobile Apps from your managed client applications. The [Azure Mobile Client SDK](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client/) is available as a NuGet package or you can download the source using the instructions above. The managed portable library also supports .NET Standard 1.1 and .NET Standard 1.4.
+Our managed portable library for Window and Xamarin makes it easy to use Azure Mobile Apps from your managed client applications. The [Azure Mobile Client SDK](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client/) is available as a NuGet package or you can download the source using the instructions above.
 
 To learn more about the client library, see [How to use the managed client for Azure Mobile Apps](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-dotnet-how-to-use-client-library/).
 
