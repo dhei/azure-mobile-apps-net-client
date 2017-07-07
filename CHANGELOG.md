@@ -1,8 +1,8 @@
 # Azure Mobile Apps Managed SDK Change Log
 
 ### Version 4.0.1
-- Fix issue [#339](https://github.com/Azure/azure-mobile-apps-net-client/pull/339) to check null in RedirectUrlActivity
-- Address issue [#349](https://github.com/Azure/azure-mobile-apps-net-client/pull/349)
+- Fix [#339](https://github.com/Azure/azure-mobile-apps-net-client/pull/339) Check null in RedirectUrlActivity
+- Fix [#348](https://github.com/Azure/azure-mobile-apps-net-client/issues/348) Downgrade Xamarin.Android.Support.CustomTabs to 23.3.0
 
 ### Version 4.0.0
 - Support of .NET Standard 1.4
