@@ -1,5 +1,9 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 4.0.1
+- Fix issue [#339](https://github.com/Azure/azure-mobile-apps-net-client/pull/339) to check null in RedirectUrlActivity
+- Address issue [#349](https://github.com/Azure/azure-mobile-apps-net-client/pull/349)
+
 ### Version 4.0.0
 - Support of .NET Standard 1.4
 - [Xamarin.Android] Support of server login flow to use Chrome CustomTabs on Android. It supports OAuth 2.0 [PKCE](https://tools.ietf.org/html/rfc7636) extension.
