@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-#if PLATFORM_ANDROID || PLATFORM_IOS
+#if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_PCL
 using PCLCrypto;
 #else
 using System.Security.Cryptography;
@@ -91,7 +91,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         private static string GetCodeVerifier()
         {
             byte[] randomBytes;
-#if PLATFORM_ANDROID || PLATFORM_IOS
+#if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_PCL
             randomBytes = WinRTCrypto.CryptographicBuffer.GenerateRandom(32);
 #else
             randomBytes = new byte[32];
@@ -112,7 +112,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             var bytes = Encoding.UTF8.GetBytes(data);
             byte[] hash;
-#if PLATFORM_ANDROID || PLATFORM_IOS
+#if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_PCL
             var sha256 = WinRTCrypto.HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Sha256);
             hash = sha256.HashData(bytes);
 #else
