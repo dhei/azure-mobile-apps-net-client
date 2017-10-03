@@ -18,8 +18,9 @@ To get the source code of our SDKs and samples via **git** just type:
 ## Supported platforms
 
 * .NET Standard 1.4
-* Xamarin Android releases for API 19 through 24 (KitKat through Nougat)
-* Xamarin iOS releases for iOS versions 8.0 through 10.0
+* Xamarin Android for API 19 through 24 (KitKat through Nougat)
+* Xamarin iOS for iOS versions 8.0 through 10.0
+* Xamarin.Forms (Android, iOS and UWP)
 * Universal Windows Platform
 
 Other versions may work.  We do not test them and thus cannot support them.

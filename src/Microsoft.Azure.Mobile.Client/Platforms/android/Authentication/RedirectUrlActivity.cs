@@ -14,11 +14,14 @@ namespace Microsoft.WindowsAzure.MobileServices
 
             global::Android.Net.Uri uri_android = Intent.Data;
 
-            // Convert Android.Net.Url to C#/netxf/BCL System.Uri - common API
-            Uri uri_netfx = new Uri(uri_android.ToString());
+            if (uri_android != null)
+            {
+                // Convert Android.Net.Url to C#/netxf/BCL System.Uri - common API
+                Uri uri_netfx = new Uri(uri_android.ToString());
 
-            // load redirect_url Page for parsing
-            MobileServiceUIAuthentication.CurrentAuthenticator.OnPageLoading(uri_netfx);
+                // load redirect_url Page for parsing
+                MobileServiceUIAuthentication.CurrentAuthenticator?.OnPageLoading(uri_netfx);
+            }
 
             this.Finish();
         }
