@@ -190,7 +190,15 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             string itemStr = obj.Value<string>("item");
             JObject item = itemStr == null ? null : JObject.Parse(itemStr);
             string rawResult = obj.Value<string>("rawResult");
-            var result = rawResult.ParseToJToken(settings) as JObject;
+            JObject result = null;
+            try
+            {
+                result = rawResult.ParseToJToken(settings) as JObject;
+            }
+            catch (JsonReaderException)
+            {
+                // Ignore JsonReaderException, because 'rawResult' might not be JSON.
+            }
 
             return new MobileServiceTableOperationError(id,
                                                         operationVersion,
