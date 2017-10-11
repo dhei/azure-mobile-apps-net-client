@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -12,7 +13,6 @@ using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 using Newtonsoft.Json.Linq;
-using SQLitePCL;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
@@ -419,7 +419,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 var itemId = (string)operation.Item[MobileServiceSystemColumns.Id];
                 if (this.AbortCondition(itemId))
                 {
-                    this.test.Log("Found id to abort ({0}), aborting the push operation");
+                    this.test.Log("Found id to abort ({0}), aborting the push operation", itemId);
                     operation.AbortPush();
                 }
                 else
@@ -475,7 +475,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                     await localTable.InsertAsync(item);
                 }
 
-                Log("Inserted {0} items in the local table. Now pushing those");
+                Log("Inserted {0} items in the local table. Now pushing those", items.Length);
 
                 try
                 {
@@ -736,77 +736,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         private static void ClearStore()
         {
-            List<string> tableNames = GetAllTableNames(StoreFileName);
-            foreach (var tableName in tableNames)
-            {
-                DropTestTable(StoreFileName, tableName);
-            }
-        }
-
-        private static List<string> GetAllTableNames(string dbName)
-        {
-            List<string> tableNames = new List<string>();
-            Batteries.Init();
-            sqlite3 connection;
-            int rc = raw.sqlite3_open(dbName, out connection);
-            VerifySQLiteResponse(rc, raw.SQLITE_OK, connection);
-            using (connection)
-            {
-                sqlite3_stmt statement;
-                rc = raw.sqlite3_prepare_v2(connection, "SELECT name FROM sqlite_master WHERE type = 'table'", out statement);
-                VerifySQLiteResponse(rc, raw.SQLITE_OK, connection);
-                using (statement)
-                {
-                    int index = 0;
-                    while ((rc = raw.sqlite3_step(statement)) == raw.SQLITE_ROW)
-                    {
-                        string tableName = raw.sqlite3_column_text(statement, index);
-                        index++;
-                        if (tableName != null)
-                        {
-                            tableNames.Add(tableName);
-                        }
-                    }
-                }
-            }
-            return tableNames;
-        }
-
-        internal static void VerifySQLiteResponse(int result, int expectedResult, sqlite3 db)
-        {
-            if (result != expectedResult)
-            {
-                string sqliteErrorMessage = raw.sqlite3_errmsg(db);
-                throw new SQLiteException(string.Format("Error executing SQLite command: '{0}'.", sqliteErrorMessage));
-            }
-        }
-
-        private static void DropTestTable(string dbName, string tableName)
-        {
-            ExecuteNonQuery(dbName, "DROP TABLE IF EXISTS " + tableName);
-        }
-
-        private static void ExecuteNonQuery(string dbName, string sql)
-        {
-            Batteries.Init();
-            sqlite3 connection;
-            int rc = raw.sqlite3_open(dbName, out connection);
-            if (rc != raw.SQLITE_OK)
-            {
-                string errorMsg = raw.sqlite3_errmsg(connection);
-            }
-            using (connection)
-            {
-                sqlite3_stmt statement;
-                rc = raw.sqlite3_prepare_v2(connection, sql, out statement);
-                using (statement)
-                {
-                    if (raw.sqlite3_step(statement) != raw.SQLITE_DONE)
-                    {
-                        throw new InvalidOperationException();
-                    }
-                }
-            }
+            File.Delete(StoreFileName);
         }
     }
 }
