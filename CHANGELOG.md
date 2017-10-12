@@ -1,5 +1,10 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 4.0.2
+- Support [#338](https://github.com/Azure/azure-mobile-apps-net-client/pull/338) PCL-based Xamarin.Forms projects. PCL-based projects were previously supported in v3.1.0 but not in v4.0.1. They are now supported in v4.0.2.
+- Fix [#339](https://github.com/Azure/azure-mobile-apps-net-client/pull/339) a bug of RedirectUrlActivity in authentication
+- Fix [Azure/azure-mobile-services-xamarin-auth/11](https://github.com/Azure/azure-mobile-services-xamarin-auth/pull/11) LaunchUrl method missing
+
 ### Version 4.0.1
 - Fix [#339](https://github.com/Azure/azure-mobile-apps-net-client/pull/339) Check null in RedirectUrlActivity
 - Fix [#348](https://github.com/Azure/azure-mobile-apps-net-client/issues/348) Downgrade Xamarin.Android.Support.CustomTabs to 23.3.0
