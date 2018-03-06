@@ -1,6 +1,6 @@
 # Azure Mobile Apps: .NET Client SDK
 
-With Azure Mobile Apps you can add a scalable backend to your connected client applications in minutes. 
+With Azure Mobile Apps you can add a scalable backend to your connected client applications in minutes.
 
 ## Getting Started
 
@@ -14,6 +14,8 @@ To get the source code of our SDKs and samples via **git** just type:
     cd ./azure-mobile-apps-net-client/
     git submodule init
     git submodule update
+
+Please note this project uses git submodules which don't include in the archive if you are using "Download ZIP" button on GitHub.
 
 ## Supported platforms
 
