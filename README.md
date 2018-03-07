@@ -15,7 +15,7 @@ To get the source code of our SDKs and samples via **git** just type:
     git submodule init
     git submodule update
 
-Please note this project uses git submodules which don't include in the archive if you are using "Download ZIP" button on GitHub.
+Please note that this project uses git submodules which isn't included in the archive if you are using "Download ZIP" button on GitHub.
 
 ## Supported platforms
 
