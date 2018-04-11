@@ -66,6 +66,10 @@ the E2E tests prior to publication.
 If you are an Azure Mobile Apps team member, you can set the appropriate e2etest project as active, build, and use a configured
 endpoint.
 
+## Future of Azure Mobile Apps
+ 
+Microsoft is committed to fully supporting Azure Mobile Apps, including **support for the latest OS release, bug fixes, documentation improvements, and community PR reviews**. Please note that the product team is **not currently investing in any new feature work** for Azure Mobile Apps. We highly appreciate community contributions to all areas of Azure Mobile Apps. 
+
 ## Useful Resources
 
 * [Quickstarts](https://github.com/Azure/azure-mobile-apps-quickstarts)
