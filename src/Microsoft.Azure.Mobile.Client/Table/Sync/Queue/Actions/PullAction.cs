@@ -94,8 +94,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             var deletedIds = new List<string>();
             var upsertList = new List<JObject>();
 
-            foreach (JObject item in items)
+            foreach (var token in items)
             {
+                var item = token as JObject;
+                if (item == null)
+                {
+                    continue;
+                }
+
                 if (!this.cursor.OnNext())
                 {
                     break;
