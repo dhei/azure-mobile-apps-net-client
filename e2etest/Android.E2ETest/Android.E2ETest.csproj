@@ -53,9 +53,6 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GCM.Client">
-      <HintPath>..\..\Components\GCMClient-1.0\lib\android\GCM.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -119,10 +116,9 @@
     <ProjectReference Include="..\..\src\Microsoft.Azure.Mobile.Client.SQLiteStore\Microsoft.Azure.Mobile.Client.SQLiteStore.csproj" Name="Microsoft.Azure.Mobile.Client.SQLiteStore" />
   </ItemGroup>
   <ItemGroup>
-    <XamarinComponentReference Include="GCMClient">
-      <Visible>False</Visible>
-      <Version>1.0</Version>
-    </XamarinComponentReference>
+    <PackageReference Include="Xamarin.Android.GCMClient">
+      <Version>1.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
