@@ -1418,6 +1418,36 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             Assert.AreEqual(odata, odata2);
         }
 
+        [AsyncTestMethod]
+        public async Task InsertAsync_Throws_WhenObjectIsNull()
+        {
+            var service = new MobileServiceClient(MobileAppUriValidator.DummyMobileApp);
+            await service.SyncContext.InitializeAsync(new MobileServiceLocalStoreMock(), new MobileServiceSyncHandler());
+            var table = service.GetSyncTable<StringIdType>();
+            
+            await ThrowsAsync<ArgumentNullException>(() => table.InsertAsync(null));
+        }
+
+        [AsyncTestMethod]
+        public async Task UpdateAsync_Throws_WhenObjectIsNull()
+        {
+            var service = new MobileServiceClient(MobileAppUriValidator.DummyMobileApp);
+            await service.SyncContext.InitializeAsync(new MobileServiceLocalStoreMock(), new MobileServiceSyncHandler());
+            var table = service.GetSyncTable<StringIdType>();
+
+            await ThrowsAsync<ArgumentNullException>(() => table.UpdateAsync(null));
+        }
+
+        [AsyncTestMethod]
+        public async Task DeleteAsync_Throws_WhenObjectIsNull()
+        {
+            var service = new MobileServiceClient(MobileAppUriValidator.DummyMobileApp);
+            await service.SyncContext.InitializeAsync(new MobileServiceLocalStoreMock(), new MobileServiceSyncHandler());
+            var table = service.GetSyncTable<StringIdType>();
+
+            await ThrowsAsync<ArgumentNullException>(() => table.DeleteAsync(null));
+        }
+
         /// <summary>
         /// Tests that the second operation on the same item will cancel one of the two operations how ever other operations between the two (on other items) are not reordered
         /// </summary>
