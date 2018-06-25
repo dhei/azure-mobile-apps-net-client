@@ -103,8 +103,12 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
 
         public async Task InsertAsync(T instance)
         {
-            MobileServiceSerializer serializer = this.MobileServiceClient.Serializer;
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
 
+            MobileServiceSerializer serializer = this.MobileServiceClient.Serializer;
             var value = serializer.Serialize(instance) as JObject;
             // remove system properties since the jtoken insert overload doesn't remove them
             value = RemoveSystemPropertiesKeepVersion(value);
@@ -116,16 +120,24 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
 
         public Task UpdateAsync(T instance)
         {
-            MobileServiceSerializer serializer = this.MobileServiceClient.Serializer;
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
 
+            MobileServiceSerializer serializer = this.MobileServiceClient.Serializer;
             var value = serializer.Serialize(instance) as JObject;
             return base.UpdateAsync(value);
         }
 
         public Task DeleteAsync(T instance)
         {
-            MobileServiceSerializer serializer = this.MobileServiceClient.Serializer;
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
 
+            MobileServiceSerializer serializer = this.MobileServiceClient.Serializer;
             var value = serializer.Serialize(instance) as JObject;
             return base.DeleteAsync(value);
         }
