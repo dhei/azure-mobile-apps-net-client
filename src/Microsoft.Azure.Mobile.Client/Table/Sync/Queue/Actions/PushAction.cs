@@ -170,13 +170,12 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
 
             await TryUpdateOperationState(operation, MobileServiceTableOperationState.Attempted, batch);
 
-            // strip out system properties before executing the operation
-            operation.Item = MobileServiceSyncTable.RemoveSystemPropertiesKeepVersion(operation.Item);
-
             JObject result = null;
             Exception error = null;
             try
             {
+                // strip out system properties before executing the operation
+                operation.Item = MobileServiceSyncTable.RemoveSystemPropertiesKeepVersion(operation.Item);
                 result = await batch.SyncHandler.ExecuteTableOperationAsync(operation);
             }
             catch (Exception ex)
