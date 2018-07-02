@@ -94,6 +94,49 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Unit.Table.Sync.Queue.Actio
         }
 
         [TestMethod]
+        public async Task ExecuteAsync_FailToLoadTheItem_DoNotBlockOthers()
+        {
+            MobileServiceTableOperation op1 = new InsertOperation("table", MobileServiceTableKind.Table, "id1") { Sequence = 1 };
+            MobileServiceTableOperation op2 = new InsertOperation("table", MobileServiceTableKind.Table, "id2") { Item = new JObject(), Sequence = 2 };
+            this.store.Setup(s => s.LookupAsync("table", "id1")).Returns(Task.FromResult<JObject>(null));
+
+            // picks up the operations
+            this.opQueue.Setup(q => q.PeekAsync(0, MobileServiceTableKind.Table, It.IsAny<IEnumerable<string>>()))
+                .Returns(() => Task.FromResult(op1));
+            this.opQueue.Setup(q => q.PeekAsync(1, MobileServiceTableKind.Table, It.IsAny<IEnumerable<string>>()))
+                .Returns(() => Task.FromResult(op2));
+            this.opQueue.Setup(q => q.PeekAsync(2, MobileServiceTableKind.Table, It.IsAny<IEnumerable<string>>()))
+                .Returns(() => Task.FromResult<MobileServiceTableOperation>(null));
+            this.opQueue.Setup(q => q.DeleteAsync(op2.Id, It.IsAny<long>())).Returns(Task.FromResult(true));
+            // executes the operation via handler
+            this.handler.Setup(h => h.ExecuteTableOperationAsync(op2)).Returns(Task.FromResult<JObject>(null));
+            // loads sync errors
+            string syncError = @"[]";
+            this.store.Setup(s => s.ReadAsync(It.Is<MobileServiceTableQueryDescription>(q => q.TableName == MobileServiceLocalSystemTables.SyncErrors)))
+                .Returns(Task.FromResult(JToken.Parse(syncError)));
+            // calls push complete
+            this.handler.Setup(h => h.OnPushCompleteAsync(It.IsAny<MobileServicePushCompletionResult>()))
+                .Returns(Task.FromResult(0))
+                .Callback<MobileServicePushCompletionResult>(r =>
+                {
+                    Assert.AreEqual(r.Status, MobileServicePushStatus.Complete);
+                    Assert.AreEqual(r.Errors.Count(), 0);
+                });
+            // deletes the errors
+            this.store.Setup(s => s.DeleteAsync(It.Is<MobileServiceTableQueryDescription>(q => q.TableName == MobileServiceLocalSystemTables.SyncErrors)))
+                .Returns(Task.FromResult(0));
+
+            await this.action.ExecuteAsync();
+
+            this.store.VerifyAll();
+            this.opQueue.VerifyAll();
+            this.opQueue.Verify(q => q.DeleteAsync(op1.Id, It.IsAny<long>()), Times.Never());
+            this.handler.VerifyAll();
+
+            await action.CompletionTask;
+        }
+
+        [TestMethod]
         public async Task ExecuteAsync_SavesTheResult_IfExecuteTableOperationDoesNotThrow()
         {
             var op = new InsertOperation("table", MobileServiceTableKind.Table, "id") { Item = new JObject() };

@@ -169,7 +169,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                 { "operationKind", (int)this.OperationKind },
                 { "tableName", this.TableName },
                 { "tableKind", (int)this.TableKind },
-                { "item", this.Item.ToString(Formatting.None) },
+                { "item", this.Item?.ToString(Formatting.None) },
                 { "rawResult", this.RawResult }
             };
         }

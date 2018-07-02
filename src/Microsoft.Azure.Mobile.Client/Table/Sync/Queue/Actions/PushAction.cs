@@ -163,7 +163,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             operation.Table = await this.context.GetTable(operation.TableName);
             await this.LoadOperationItem(operation, batch);
 
-            if (this.CancellationToken.IsCancellationRequested)
+            if (operation.Item == null || this.CancellationToken.IsCancellationRequested)
             {
                 return false;
             }
