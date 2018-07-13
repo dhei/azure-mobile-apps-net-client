@@ -59,6 +59,10 @@
     <MtouchOptimizePNGs>True</MtouchOptimizePNGs>
     <IOSDebugOverWiFi>False</IOSDebugOverWiFi>
     <IOSDebuggerPort>10000</IOSDebuggerPort>
+    <CodesignProvision />
+    <CodesignExtraArgs />
+    <CodesignResourceRules />
+    <CodesignEntitlements />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -92,6 +96,7 @@
   <ItemGroup>
     <Compile Include="Functional\PushFunctional.Test.cs" />
     <Compile Include="TestPlatform\PushTestUtility.cs" />
+    <None Include="Entitlements.plist" />
     <None Include="readme.txt" />
     <Compile Include="..\UWP.E2ETest\TestPlatform\CurrentTestPlatform.cs">
       <Link>TestPlatform\CurrentTestPlatform.cs</Link>
