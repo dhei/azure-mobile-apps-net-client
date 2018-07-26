@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Microsoft.WindowsAzure.MobileServices.Query
 {
@@ -407,14 +408,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Query
             {
                 case 'M':
                     decimal mVal;
-                    if (Decimal.TryParse(text, out mVal))
+                    if (Decimal.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out mVal))
                     {
                         value = mVal;
                     }
                     break;
                 case 'F':
                     float fVal;
-                    if (Single.TryParse(text, out fVal))
+                    if (Single.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out fVal))
                     {
                         value = fVal;
                     }
@@ -422,7 +423,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Query
                 case 'D':
                 default:
                     double dVal;
-                    if (Double.TryParse(text, out dVal))
+                    if (Double.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out dVal))
                     {
                         value = dVal;
                     }
