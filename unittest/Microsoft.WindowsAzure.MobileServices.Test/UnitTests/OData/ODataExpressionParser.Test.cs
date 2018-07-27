@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Microsoft.WindowsAzure.MobileServices.Query;
 using Microsoft.WindowsAzure.MobileServices.TestFramework;
 
@@ -8,6 +10,58 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.UnitTests.OData
     [Tag("odata")]
     public class ODataExpressionParserTest : TestBase
     {
+        class CurrentCultureHelper : IDisposable
+        {
+            private CultureInfo previous;
+
+            public static CultureInfo CurrentCulture
+            {
+#if NET45
+                get => Thread.CurrentThread.CurrentCulture;
+                set => Thread.CurrentThread.CurrentCulture = value;
+#else
+                get => CultureInfo.CurrentCulture;
+                set => CultureInfo.CurrentCulture = value;
+#endif
+            }
+
+            public CurrentCultureHelper(string name)
+            {
+                previous = CurrentCulture;
+                CurrentCulture = new CultureInfo(name);
+            }
+
+            public void Dispose()
+            {
+                CurrentCulture = previous;
+            }
+        }
+
+        [TestMethod]
+        public void ParseFilter_Real_NumberDecimalSeparator()
+        {
+            // Set some CultureInfo with different decimal separator
+            using (var _ = new CurrentCultureHelper("ru-RU"))
+            {
+                QueryNode queryNode = ODataExpressionParser.ParseFilter("Field eq 42.42");
+
+                Assert.IsNotNull(queryNode);
+
+                var comparisonNode = queryNode as BinaryOperatorNode;
+                Assert.IsNotNull(comparisonNode);
+
+                var left = comparisonNode.LeftOperand as MemberAccessNode;
+                Assert.IsNotNull(left);
+
+                var right = comparisonNode.RightOperand as ConstantNode;
+                Assert.IsNotNull(right);
+
+                Assert.AreEqual("Field", left.MemberName);
+                Assert.AreEqual(BinaryOperatorKind.Equal, comparisonNode.OperatorKind);
+                Assert.AreEqual(42.42, right.Value);
+            }
+        }
+
         [TestMethod]
         public void ParseFilter_Guid()
         {
