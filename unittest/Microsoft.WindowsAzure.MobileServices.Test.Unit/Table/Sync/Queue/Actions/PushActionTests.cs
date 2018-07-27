@@ -110,6 +110,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Test.Unit.Table.Sync.Queue.Actio
             this.opQueue.Setup(q => q.DeleteAsync(op2.Id, It.IsAny<long>())).Returns(Task.FromResult(true));
             // executes the operation via handler
             this.handler.Setup(h => h.ExecuteTableOperationAsync(op2)).Returns(Task.FromResult<JObject>(null));
+            // store sync error
+            this.store.Setup(s => s.UpsertAsync(MobileServiceLocalSystemTables.SyncErrors, It.IsAny<JObject[]>(), false))
+                .Returns(Task.FromResult(0));
             // loads sync errors
             string syncError = @"[]";
             this.store.Setup(s => s.ReadAsync(It.Is<MobileServiceTableQueryDescription>(q => q.TableName == MobileServiceLocalSystemTables.SyncErrors)))

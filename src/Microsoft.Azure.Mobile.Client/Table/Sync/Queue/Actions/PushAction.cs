@@ -247,6 +247,24 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                 {
                     operation.Item = await this.Store.LookupAsync(operation.TableName, operation.ItemId) as JObject;
                 }, batch, "Failed to read the item from local store.");
+
+                // Add sync error if item is not found.
+                if (operation.Item == null)
+                {
+                    // Create an item with only id to be able handle error properly.
+                    var item = new JObject(new JProperty(MobileServiceSystemColumns.Id, operation.ItemId));
+                    var syncError = new MobileServiceTableOperationError(operation.Id,
+                                                                         operation.Version,
+                                                                         operation.Kind,
+                                                                         null,
+                                                                         operation.TableName,
+                                                                         item, null, null)
+                    {
+                        TableKind = this.tableKind,
+                        Context = this.context
+                    };
+                    await batch.AddSyncErrorAsync(syncError);
+                }
             }
         }
 
