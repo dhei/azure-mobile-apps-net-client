@@ -15,7 +15,7 @@
     <DefineConstants>$(DefineConstants);PLATFORM_IOS;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.3" PrivateAssets="All" />
+     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.5" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.2.3" />
