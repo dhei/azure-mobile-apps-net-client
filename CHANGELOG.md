@@ -6,6 +6,7 @@
 - [#443](https://github.com/Azure/azure-mobile-apps-net-client/pull/443) [#449](https://github.com/Azure/azure-mobile-apps-net-client/pull/449) Fix a bug that missing operation item is not added to sync errors and causing `NullReferenceException` in offline sync.
 - [#448](https://github.com/Azure/azure-mobile-apps-net-client/pull/448) Fix a i18n bug of parsing number literal where different locale could have different decimal separator.
 - [#458](https://github.com/Azure/azure-mobile-apps-net-client/pull/458) Treat `TimeoutException` as network error in `MobileServiceHttpClient`.
+- [#478](https://github.com/Azure/azure-mobile-apps-net-client/pull/478) Update 'Microsoft.NETCore.UniversalWindowsPlatform' package to v5.2.6. 
 
 ### Version 4.0.2
 - Support [#338](https://github.com/Azure/azure-mobile-apps-net-client/pull/338) PCL-based Xamarin.Forms projects. PCL-based projects were previously supported in v3.1.0 but not in v4.0.1. They are now supported in v4.0.2.
