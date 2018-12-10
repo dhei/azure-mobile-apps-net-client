@@ -5,7 +5,7 @@
     <Version>4.1.0</Version>
     <PackageTitle>Azure Mobile SQLiteStore</PackageTitle>
     <Title>Azure Mobile SQLiteStore</Title>
-    <Authors>Microsoft, mobile-center</Authors>
+    <Authors>Microsoft</Authors>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkId=286110</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Azure/azure-mobile-apps-net-client</PackageProjectUrl>
@@ -17,6 +17,7 @@
     <RepositoryUrl>https://github.com/Azure/azure-mobile-apps-net-client</RepositoryUrl>
     <PackageTags>microsoft;windows;azure;mobile;apps;services;windowsazureofficial</PackageTags>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <!-- Workaround until Xamarin supports PPDB -->
     <DebugType>full</DebugType>
     <RootNamespace>Microsoft.WindowsAzure.MobileServices.SQLiteStore</RootNamespace>
