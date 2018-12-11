@@ -1,5 +1,8 @@
 # Azure Mobile Apps Managed SDK Change Log
 
+### Version 4.1.1
+- Fix assembly signing.
+
 ### Version 4.1.0
 - [#409](https://github.com/Azure/azure-mobile-apps-net-client/pull/409) Fix a bug that causes `InvalidCastException` in `PullAsync`.
 - [#439](https://github.com/Azure/azure-mobile-apps-net-client/pull/439) Fix a parameter validation bug in `MobileServiceSyncTable`.
