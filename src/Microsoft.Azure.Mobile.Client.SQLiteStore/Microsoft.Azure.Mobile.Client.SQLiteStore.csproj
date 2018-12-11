@@ -28,12 +28,6 @@
       <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
       <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-    <DelaySign>true</DelaySign>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
-    <DefineConstants>Sign;TRACE</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.5" PrivateAssets="All" />
     <ProjectReference Include="..\Microsoft.Azure.Mobile.Client\Microsoft.Azure.Mobile.Client.csproj" />
