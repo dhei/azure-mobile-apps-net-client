@@ -621,6 +621,11 @@ namespace Microsoft.WindowsAzure.MobileServices
                 if (response.Content != null)
                 {
                     contentLength = response.Content.Headers.ContentLength;
+                    IEnumerable<string> contentLengthHeader;
+                    if (response.Content.Headers.TryGetValues("Content-Length", out contentLengthHeader))
+                    {
+                        contentLength = Convert.ToInt64(contentLengthHeader.FirstOrDefault() ?? "0");
+                    }
                 }
 
                 if (contentLength == null || contentLength <= 0)
