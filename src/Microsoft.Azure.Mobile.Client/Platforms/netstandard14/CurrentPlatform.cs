@@ -63,7 +63,7 @@ namespace Microsoft.WindowsAzure.MobileServices
         {
             if (!File.Exists(path))
             {
-                File.Create(path).Close();
+                File.Create(path).Dispose();
             }
         }
     }
