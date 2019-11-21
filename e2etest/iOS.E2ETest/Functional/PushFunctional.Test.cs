@@ -8,12 +8,12 @@ using Microsoft.WindowsAzure.MobileServices.TestFramework;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System;
 using Foundation;
 using System.Globalization;
 using Newtonsoft.Json;
-using System.Text;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
