@@ -193,6 +193,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
 
         internal static NSData NSDataFromDescription(string hexString)
         {
+            hexString = hexString.Trim('<', '>').Replace(" ", string.Empty);
             NSMutableData data = new NSMutableData();
             byte[] hexAsBytes = new byte[hexString.Length / 2];
             for (int index = 0; index < hexAsBytes.Length; index += 2)
