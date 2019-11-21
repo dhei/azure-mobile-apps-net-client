@@ -13,6 +13,7 @@ using System;
 using Foundation;
 using System.Globalization;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Microsoft.WindowsAzure.MobileServices.Test
 {
@@ -177,19 +178,26 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             {
                 throw new ArgumentNullException("deviceToken");
             }
-
-            return deviceToken.Trim('<', '>').Replace(" ", string.Empty).ToUpperInvariant();
+            byte[] byteArray = Encoding.ASCII.GetBytes(deviceToken);
+            if (byteArray.Length == 0)
+            {
+                throw new ArgumentException("deviceToken bytes is empty array.");
+            }
+            StringBuilder hex = new StringBuilder(byteArray.Length * 2);
+            foreach (byte b in byteArray)
+            {
+                hex.AppendFormat("{0:x2}", b);
+            }
+            return hex.ToString();
         }
 
         internal static NSData NSDataFromDescription(string hexString)
         {
-            hexString = hexString.Trim('<', '>').Replace(" ", string.Empty);
             NSMutableData data = new NSMutableData();
             byte[] hexAsBytes = new byte[hexString.Length / 2];
-            for (int index = 0; index < hexAsBytes.Length; index++)
+            for (int index = 0; index < hexAsBytes.Length; index += 2)
             {
-                string byteValue = hexString.Substring(index * 2, 2);
-                hexAsBytes[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                hexAsBytes[index / 2] = Convert.ToByte(hexString.Substring(index, 2), 16);
             }
 
             data.AppendBytes(hexAsBytes);
