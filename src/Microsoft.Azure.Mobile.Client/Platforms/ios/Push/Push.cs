@@ -111,7 +111,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             byte[] byteArray = deviceToken.ToArray();
             if (byteArray.Length == 0)
             {
-                throw new ArgumentException("deviceToken.ToArray() returned empty array.");
+                throw new ArgumentException("deviceToken cannot be empty.");
             }
             StringBuilder hex = new StringBuilder(byteArray.Length * 2);
             foreach (byte b in byteArray)
