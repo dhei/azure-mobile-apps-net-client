@@ -8,6 +8,7 @@ using Microsoft.WindowsAzure.MobileServices.TestFramework;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System;
 using Foundation;
@@ -32,7 +33,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             NSData channelUri = NSDataFromDescription(this.pushTestUtility.GetPushHandle());
             Dictionary<string, string> channelUriParam = new Dictionary<string, string>()
             {
-                {"channelUri", TrimDeviceToken(channelUri.Description)}
+                {"channelUri", TrimDeviceToken(channelUri)}
             };
             await this.GetClient().InvokeApiAsync("deleteRegistrationsForChannel", HttpMethod.Delete, channelUriParam);
         }
@@ -45,7 +46,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             await push.RegisterAsync(channelUri);
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
-                {"channelUri", TrimDeviceToken(channelUri.Description)}
+                {"channelUri", TrimDeviceToken(channelUri)}
             };
             await VerifyRegistration(parameters, push);
         }
@@ -58,7 +59,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             NSData channelUri = NSDataFromDescription(this.pushTestUtility.GetPushHandle());
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
-                {"channelUri", TrimDeviceToken(channelUri.Description)}
+                {"channelUri", TrimDeviceToken(channelUri)}
             };
             var push = this.GetClient().GetPush();
             await push.RegisterAsync(channelUri);
@@ -86,14 +87,14 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 await push.RegisterAsync(channelUri);
                 Dictionary<string, string> parameters = new Dictionary<string, string>()
                 {
-                    {"channelUri", TrimDeviceToken(channelUri.Description)},
+                    {"channelUri", TrimDeviceToken(channelUri)},
                 };
                 await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
 
                 await push.RegisterAsync(channelUri, templates);
                 parameters = new Dictionary<string, string>()
                 {
-                    {"channelUri", TrimDeviceToken(channelUri.Description)},
+                    {"channelUri", TrimDeviceToken(channelUri)},
                     {"templates", JsonConvert.SerializeObject(expectedTemplates)}
                 };
                 await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
@@ -101,7 +102,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
                 await push.RegisterAsync(channelUri);
                 parameters = new Dictionary<string, string>()
                 {
-                    {"channelUri", TrimDeviceToken(channelUri.Description)},
+                    {"channelUri", TrimDeviceToken(channelUri)},
                 };
                 await this.GetClient().InvokeApiAsync("verifyRegisterInstallationResult", HttpMethod.Get, parameters);
             }
@@ -123,7 +124,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             {
                 Dictionary<string, string> parameters = new Dictionary<string, string>()
                 {
-                     {"channelUri", TrimDeviceToken(channelUri.Description)},
+                     {"channelUri", TrimDeviceToken(channelUri)},
                      {"templates", JsonConvert.SerializeObject(expectedTemplates)}
                 };
                 await push.RegisterAsync(channelUri, templates);
@@ -171,25 +172,32 @@ namespace Microsoft.WindowsAzure.MobileServices.Test
             return templates;
         }
 
-        internal static string TrimDeviceToken(string deviceToken)
+        internal static string TrimDeviceToken(NSData deviceToken)
         {
             if (deviceToken == null)
             {
                 throw new ArgumentNullException("deviceToken");
             }
-
-            return deviceToken.Trim('<', '>').Replace(" ", string.Empty).ToUpperInvariant();
+            byte[] byteArray = deviceToken.ToArray();
+            if (byteArray.Length == 0)
+            {
+                throw new ArgumentException("deviceToken bytes is empty array.");
+            }
+            StringBuilder hex = new StringBuilder(byteArray.Length * 2);
+            foreach (byte b in byteArray)
+            {
+                hex.AppendFormat("{0:x2}", b);
+            }
+            return hex.ToString();
         }
 
         internal static NSData NSDataFromDescription(string hexString)
         {
-            hexString = hexString.Trim('<', '>').Replace(" ", string.Empty);
             NSMutableData data = new NSMutableData();
             byte[] hexAsBytes = new byte[hexString.Length / 2];
             for (int index = 0; index < hexAsBytes.Length; index++)
             {
-                string byteValue = hexString.Substring(index * 2, 2);
-                hexAsBytes[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                hexAsBytes[index] = Convert.ToByte(hexString.Substring(index * 2, 2), 16);
             }
 
             data.AppendBytes(hexAsBytes);
