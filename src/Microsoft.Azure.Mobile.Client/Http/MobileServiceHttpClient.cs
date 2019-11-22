@@ -635,16 +635,24 @@ namespace Microsoft.WindowsAzure.MobileServices
             if (ensureResponseContent)
             {
                 long? contentLength = null;
+                bool decompressionUsed = IsDecompressionUsed(request);
                 if (response.Content != null)
                 {
-                    IEnumerable<string> contentLengthHeader;
-                    if (response.Content.Headers.TryGetValues("Content-Length", out contentLengthHeader))
+                    if (decompressionUsed) 
                     {
-                        contentLength = Convert.ToInt64(contentLengthHeader.FirstOrDefault() ?? "0");
+                        IEnumerable<string> contentLengthHeader;
+                        if (response.Content.Headers.TryGetValues("Content-Length", out contentLengthHeader))
+                        {
+                            contentLength = Convert.ToInt64(contentLengthHeader.FirstOrDefault() ?? "0");
+                        }
+                    }
+                    else
+                    {
+                        contentLength = response.Content.Headers.ContentLength;
                     }
                 }
 
-                if ((contentLength == null || contentLength <= 0) && !IsDecompressionUsed(request))
+                if (contentLength == null || contentLength <= 0)
                 {
                     throw new MobileServiceInvalidOperationException("The server did not provide a response with the expected content.", request, response);
                 }
