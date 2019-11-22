@@ -573,6 +573,23 @@ namespace Microsoft.WindowsAzure.MobileServices
             return request;
         }
 
+        public static bool IsDecompressionUsed(HttpRequestMessage request)
+        {
+            IEnumerable<string> AcceptEncodingList;
+            request.Headers.TryGetValues("Accept-Encoding", out AcceptEncodingList);
+            if (AcceptEncodingList == null) 
+            {
+                return false;
+            }
+            string AcceptEncoding = AcceptEncodingList.FirstOrDefault();
+            if (!string.IsNullOrEmpty(AcceptEncoding) &&
+                 (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate")))
+            {
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Sends the <paramref name="request"/> with the given <paramref name="client"/>.
         /// </summary>
@@ -627,7 +644,7 @@ namespace Microsoft.WindowsAzure.MobileServices
                     }
                 }
 
-                if (contentLength == null || contentLength <= 0)
+                if ((contentLength == null || contentLength <= 0) && !IsDecompressionUsed(request))
                 {
                     throw new MobileServiceInvalidOperationException("The server did not provide a response with the expected content.", request, response);
                 }
