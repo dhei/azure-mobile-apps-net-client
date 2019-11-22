@@ -638,21 +638,13 @@ namespace Microsoft.WindowsAzure.MobileServices
                 bool decompressionUsed = IsDecompressionUsed(request);
                 if (response.Content != null)
                 {
-                    if (decompressionUsed) 
-                    {
-                        IEnumerable<string> contentLengthHeader;
-                        if (response.Content.Headers.TryGetValues("Content-Length", out contentLengthHeader))
-                        {
-                            contentLength = Convert.ToInt64(contentLengthHeader.FirstOrDefault() ?? "0");
-                        }
-                    }
-                    else
+                    if (!decompressionUsed) 
                     {
                         contentLength = response.Content.Headers.ContentLength;
                     }
                 }
 
-                if (contentLength == null || contentLength <= 0)
+                if (!decompressionUsed && (contentLength == null || contentLength <= 0))
                 {
                     throw new MobileServiceInvalidOperationException("The server did not provide a response with the expected content.", request, response);
                 }
