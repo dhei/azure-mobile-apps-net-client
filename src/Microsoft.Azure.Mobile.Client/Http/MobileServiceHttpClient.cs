@@ -582,12 +582,8 @@ namespace Microsoft.WindowsAzure.MobileServices
                 return false;
             }
             string AcceptEncoding = AcceptEncodingList.FirstOrDefault();
-            if (!string.IsNullOrEmpty(AcceptEncoding) &&
-                 (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate")))
-            {
-                return true;
-            }
-            return false;
+            return !string.IsNullOrEmpty(AcceptEncoding) &&
+                 (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate"));
         }
 
         /// <summary>
