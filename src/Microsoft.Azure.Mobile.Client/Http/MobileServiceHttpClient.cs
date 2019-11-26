@@ -581,7 +581,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             {
                 return false;
             }
-            string allAcceptEncodingValues = AcceptEncodingList.Aggregate((allValues, next) => allValues += next);
+            string allAcceptEncodingValues = AcceptEncodingList.Aggregate((allValues, next) => allValues = allValues + ";" + next);
             return !string.IsNullOrEmpty(allAcceptEncodingValues) &&
                  (allAcceptEncodingValues.Contains("gzip") ||
                  allAcceptEncodingValues.Contains("deflate") ||
@@ -634,12 +634,11 @@ namespace Microsoft.WindowsAzure.MobileServices
             // If there was supposed to be response content and there was not, throw
             if (ensureResponseContent)
             {
-                long? contentLength = null;
                 bool decompressionUsed = IsDecompressionUsed(request);
 
                 if (!decompressionUsed && response.Content != null)
                 {
-                    contentLength = response.Content.Headers.ContentLength;
+                    long? contentLength = response.Content.Headers.ContentLength;
                     if (contentLength == null || contentLength <= 0)
                     {
                         throw new MobileServiceInvalidOperationException("The server did not provide a response with the expected content.", request, response);
