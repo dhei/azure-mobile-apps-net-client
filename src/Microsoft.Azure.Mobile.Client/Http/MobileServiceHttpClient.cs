@@ -586,7 +586,6 @@ namespace Microsoft.WindowsAzure.MobileServices
                  (allAcceptEncodingValues.Contains("gzip") ||
                  allAcceptEncodingValues.Contains("deflate") ||
                  allAcceptEncodingValues.Contains("br") ||
-                 allAcceptEncodingValues.Contains("identity") ||
                  allAcceptEncodingValues.Contains("compress"));
         }
 
