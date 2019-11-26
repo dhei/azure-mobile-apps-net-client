@@ -581,9 +581,13 @@ namespace Microsoft.WindowsAzure.MobileServices
             {
                 return false;
             }
-            string AcceptEncoding = AcceptEncodingList.FirstOrDefault();
-            return !string.IsNullOrEmpty(AcceptEncoding) &&
-                 (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate"));
+            string allAcceptEncodingValues = AcceptEncodingList.Aggregate((allValues, next) => allValues += next);
+            return !string.IsNullOrEmpty(allAcceptEncodingValues) &&
+                 (allAcceptEncodingValues.Contains("gzip") ||
+                 allAcceptEncodingValues.Contains("deflate") ||
+                 allAcceptEncodingValues.Contains("br") ||
+                 allAcceptEncodingValues.Contains("identity") ||
+                 allAcceptEncodingValues.Contains("compress"));
         }
 
         /// <summary>
@@ -632,17 +636,14 @@ namespace Microsoft.WindowsAzure.MobileServices
             {
                 long? contentLength = null;
                 bool decompressionUsed = IsDecompressionUsed(request);
-                if (response.Content != null)
-                {
-                    if (!decompressionUsed) 
-                    {
-                        contentLength = response.Content.Headers.ContentLength;
-                    }
-                }
 
-                if (!decompressionUsed && (contentLength == null || contentLength <= 0))
+                if (!decompressionUsed && response.Content != null)
                 {
-                    throw new MobileServiceInvalidOperationException("The server did not provide a response with the expected content.", request, response);
+                    contentLength = response.Content.Headers.ContentLength;
+                    if (contentLength == null || contentLength <= 0)
+                    {
+                        throw new MobileServiceInvalidOperationException("The server did not provide a response with the expected content.", request, response);
+                    }
                 }
             }
 
