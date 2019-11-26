@@ -573,7 +573,7 @@ namespace Microsoft.WindowsAzure.MobileServices
             return request;
         }
 
-        public static bool IsDecompressionUsed(HttpRequestMessage request)
+        private static bool IsDecompressionUsed(HttpRequestMessage request)
         {
             IEnumerable<string> AcceptEncodingList;
             request.Headers.TryGetValues("Accept-Encoding", out AcceptEncodingList);
