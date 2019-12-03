@@ -1,6 +1,6 @@
 # Azure Mobile Apps Managed SDK Change Log
 
-### Unreleased
+### Version 4.1.2
 - [#488](https://github.com/Azure/azure-mobile-apps-net-client/pull/488) Fix canceling callback in iOS login view.
 - [#524](https://github.com/Azure/azure-mobile-apps-net-client/pull/524) Fix parsing token for Push notifications on iOS 13.
 - [#526](https://github.com/Azure/azure-mobile-apps-net-client/pull/526) Fix the validation of HTTP responses with AutomaticDecompression enabled.
