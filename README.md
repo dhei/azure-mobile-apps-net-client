@@ -20,8 +20,8 @@ Please note that this project uses git submodules which isn't included in the ar
 ## Supported platforms
 
 * .NET Standard 1.4
-* Xamarin Android for API 19 through 24 (KitKat through Nougat)
-* Xamarin iOS for iOS versions 8.0 through 10.0
+* Xamarin.Android (Android 4.4 - 10.0)
+* Xamarin.iOS (iOS 8.0 - 13.0)
 * Xamarin.Forms (Android, iOS and UWP)
 * Universal Windows Platform
 
