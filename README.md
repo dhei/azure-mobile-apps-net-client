@@ -63,9 +63,8 @@ Microsoft is committed to fully supporting Azure Mobile Apps, including **suppor
 
 ## Useful Resources
 
-* [Quickstarts](https://github.com/Azure/azure-mobile-apps-quickstarts)
-* [Samples](https://azure.microsoft.com/en-us/documentation/samples/?service=app-service&term=mobile)
-* [Azure Mobile Developer Center](http://azure.microsoft.com/en-us/develop/mobile).
+* [Quickstarts](https://docs.microsoft.com/azure/developer/mobile-apps/azure-mobile-apps/overview).
+* [Azure Mobile Developer Center](https://docs.microsoft.com/azure/developer/mobile-apps/).
 * StackOverflow: tag [azure-mobile-services](http://stackoverflow.com/questions/tagged/azure-mobile-services).
 * [Instructions on enabling VisualStudio to load symbols from SymbolSource](http://www.symbolsource.org/Public/Wiki/Using)
 
