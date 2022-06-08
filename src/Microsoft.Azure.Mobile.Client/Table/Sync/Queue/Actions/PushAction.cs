@@ -17,11 +17,11 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
     /// </summary>
     internal class PushAction : SyncAction
     {
-        private IMobileServiceSyncHandler syncHandler;
-        private MobileServiceClient client;
-        private MobileServiceSyncContext context;
-        private IEnumerable<string> tableNames;
-        private MobileServiceTableKind tableKind;
+        private readonly IMobileServiceSyncHandler syncHandler;
+        private readonly MobileServiceClient client;
+        private readonly MobileServiceSyncContext context;
+        private readonly IEnumerable<string> tableNames;
+        private readonly MobileServiceTableKind tableKind;
 
         public PushAction(OperationQueue operationQueue,
                           IMobileServiceLocalStore store,
@@ -163,7 +163,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             operation.Table = await this.context.GetTable(operation.TableName);
             await this.LoadOperationItem(operation, batch);
 
-            if (this.CancellationToken.IsCancellationRequested)
+            if (operation.Item == null || this.CancellationToken.IsCancellationRequested)
             {
                 return false;
             }
@@ -205,8 +205,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             {
                 HttpStatusCode? statusCode = null;
                 string rawResult = null;
-                var iox = error as MobileServiceInvalidOperationException;
-                if (iox != null && iox.Response != null)
+                if (error is MobileServiceInvalidOperationException iox && iox.Response != null)
                 {
                     statusCode = iox.Response.StatusCode;
                     Tuple<string, JToken> content = await MobileServiceTable.ParseContent(iox.Response, this.client.SerializerSettings);
@@ -247,6 +246,24 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                 {
                     operation.Item = await this.Store.LookupAsync(operation.TableName, operation.ItemId) as JObject;
                 }, batch, "Failed to read the item from local store.");
+
+                // Add sync error if item is not found.
+                if (operation.Item == null)
+                {
+                    // Create an item with only id to be able handle error properly.
+                    var item = new JObject(new JProperty(MobileServiceSystemColumns.Id, operation.ItemId));
+                    var syncError = new MobileServiceTableOperationError(operation.Id,
+                                                                         operation.Version,
+                                                                         operation.Kind,
+                                                                         null,
+                                                                         operation.TableName,
+                                                                         item, null, null)
+                    {
+                        TableKind = this.tableKind,
+                        Context = this.context
+                    };
+                    await batch.AddSyncErrorAsync(syncError);
+                }
             }
         }
 

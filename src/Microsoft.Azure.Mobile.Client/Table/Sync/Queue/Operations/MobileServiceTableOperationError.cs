@@ -104,10 +104,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
         /// <returns>Task that completes when operation is cancelled.</returns>
         public async Task CancelAndUpdateItemAsync(JObject item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
+            Arguments.IsNotNull(item, nameof(item));
 
             await this.Context.CancelAndUpdateItemAsync(this, item);
             this.Handled = true;
@@ -121,10 +118,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
         /// <returns>Task that completes when operation is updated.</returns>
         public async Task UpdateOperationAsync(JObject item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
+            Arguments.IsNotNull(item, nameof(item));
 
             await this.Context.UpdateOperationAsync(this, item);
             this.Handled = true;
@@ -169,7 +163,7 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
                 { "operationKind", (int)this.OperationKind },
                 { "tableName", this.TableName },
                 { "tableKind", (int)this.TableKind },
-                { "item", this.Item.ToString(Formatting.None) },
+                { "item", this.Item?.ToString(Formatting.None) },
                 { "rawResult", this.RawResult }
             };
         }
@@ -190,7 +184,15 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             string itemStr = obj.Value<string>("item");
             JObject item = itemStr == null ? null : JObject.Parse(itemStr);
             string rawResult = obj.Value<string>("rawResult");
-            var result = rawResult.ParseToJToken(settings) as JObject;
+            JObject result = null;
+            try
+            {
+                result = rawResult.ParseToJToken(settings) as JObject;
+            }
+            catch (JsonReaderException)
+            {
+                // Ignore JsonReaderException, because 'rawResult' might not be JSON.
+            }
 
             return new MobileServiceTableOperationError(id,
                                                         operationVersion,

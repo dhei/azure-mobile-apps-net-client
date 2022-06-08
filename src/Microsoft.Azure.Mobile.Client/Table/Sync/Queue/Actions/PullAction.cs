@@ -16,9 +16,9 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
     {
         private static readonly DateTimeOffset Epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
-        private IDictionary<string, string> parameters;
-        private MobileServiceRemoteTableOptions options; // the supported options on remote table 
-        private PullOptions pullOptions;
+        private readonly IDictionary<string, string> parameters;
+        private readonly MobileServiceRemoteTableOptions options; // the supported options on remote table 
+        private readonly PullOptions pullOptions;
         private readonly PullCursor cursor;
         private Task pendingAction;
         private PullStrategy strategy;
@@ -94,8 +94,13 @@ namespace Microsoft.WindowsAzure.MobileServices.Sync
             var deletedIds = new List<string>();
             var upsertList = new List<JObject>();
 
-            foreach (JObject item in items)
+            foreach (var token in items)
             {
+                if (!(token is JObject item))
+                {
+                    continue;
+                }
+
                 if (!this.cursor.OnNext())
                 {
                     break;
